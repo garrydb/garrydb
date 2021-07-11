@@ -1,0 +1,46 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using DependsOnExamplePlugin;
+
+using ExamplePlugin.Shared;
+
+using GarryDb.Platform.Plugins;
+using GarryDb.Platform.Plugins.Inpections;
+using GarryDb.Platform.Plugins.Loading;
+using GarryDb.Plugins;
+using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
+
+using NUnit.Framework;
+
+namespace GarryDb.Specs.Platform.Plugins
+{
+    public static class PluginGraphSpecs
+    {
+        [TestFixture]
+        public class When_loading_plugins : Specification<PluginLoaderFactory>
+        {
+            private IList<PluginLoader> pluginLoaders;
+            private IList<Plugin> plugins;
+
+            protected override PluginLoaderFactory Given()
+            {
+                return new PluginLoaderFactory();
+            }
+
+            protected override void When(PluginLoaderFactory subject)
+            {
+                InspectedPlugin plugin1 = new InspectedPluginBuilder().Build();
+                InspectedPlugin plugin2 = new InspectedPluginBuilder().For<DependsOnExample>().References<ExampleShared>().Build();
+
+                pluginLoaders = subject.Create(plugin1, plugin2).ToList();
+                plugins = pluginLoaders.Select(x => x.Load()).ToList();
+            }
+
+            [Test]
+            public void It_should()
+            {
+            }
+        }
+    }
+}

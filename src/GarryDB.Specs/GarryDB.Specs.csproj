@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+        <PackageReference Include="NUnit" Version="3.13.1" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+        <PackageReference Include="coverlet.collector" Version="3.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
+      <ProjectReference Include="..\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
+      <ProjectReference Include="..\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
+      <ProjectReference Include="..\ExamplePlugin\ExamplePlugin.csproj" />
+      <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
+    </ItemGroup>
+
+</Project>

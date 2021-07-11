@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <DllFiles Include="$(TargetDir)\**\*.*" />
+    </ItemGroup>
+
+    <Target Name="CopyToPlugins" AfterTargets="CopyFilesToOutputDirectory">
+        <Copy SourceFiles="@(DllFiles)" DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
+    </Target>
+
+    <ItemGroup>
+        <Folder Include="Models\" />
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+    </ItemGroup>
+</Project>

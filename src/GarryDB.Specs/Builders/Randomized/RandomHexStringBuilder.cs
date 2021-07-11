@@ -1,0 +1,23 @@
+﻿namespace GarryDb.Specs.Builders.Randomized
+{
+    public sealed class RandomHexStringBuilder : TestDataBuilder<string>
+    {
+        private long value;
+
+        public RandomHexStringBuilder()
+        {
+            value = new RandomIntegerBuilder().Build();
+        }
+
+        protected override string OnBuild()
+        {
+            return value.ToString("X");
+        }
+
+        public RandomHexStringBuilder ForValue(long value)
+        {
+            this.value = value;
+            return this;
+        }
+    }
+}
