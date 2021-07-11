@@ -34,22 +34,27 @@ namespace GarryDb.Platform.Plugins.Loading
         /// <returns>The plugin.</returns>
         public Plugin Load()
         {
-            pluginLoadContext.LoadFromAssemblyName(typeof(Plugin).Assembly.GetName());
-
             Assembly pluginAssembly = pluginLoadContext.LoadFromStream(inspectedPlugin.PluginAssembly.Load());
-            TypeInfo pluginType = pluginAssembly.DefinedTypes.Single(x => x.IsPluginType());
+            // foreach (ProvidedAssembly providedAssembly in inspectedPlugin.ProvidedAssemblies)
+            // {
+            //     pluginLoadContext.LoadFromStream(providedAssembly.Load());
+            // }
+            //
+            // foreach (ReferencedAssembly referencedAssembly in inspectedPlugin.ReferencedAssemblies)
+            // {
+            //     pluginLoadContext.LoadFromStream(referencedAssembly.Load());
+            // }
+            Type? pluginType = pluginAssembly.GetType(inspectedPlugin.PluginAssembly.PluginType)!;
+            if (inspectedPlugin.PluginIdentity.Name == "GarryDB.Avalonia")
+            {
+                var plugin1 = (Plugin)Activator.CreateInstance(pluginType, pluginLoadContext)!;
 
+                return plugin1;
+                
+            }
             var plugin = (Plugin)Activator.CreateInstance(pluginType)!;
 
             return plugin;
-        }
-
-        public void LoadDependencies()
-        {
-            foreach (ReferencedAssembly referencedAssembly in inspectedPlugin.ReferencedAssemblies)
-            {
-                pluginLoadContext.LoadFromStream(referencedAssembly.Load());
-            }
         }
     }
 }

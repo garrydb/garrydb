@@ -54,16 +54,16 @@ namespace GarryDb.Platform
                     .Select(pluginLoader => pluginLoader.Load())
                     .ToList();
 
-                foreach (PluginLoader loader in loaders)
-                {
-                    loader.LoadDependencies();
-                }
-
                 system.RegisterOnTermination(() => Debug.WriteLine("TERMINATION"));
 
                 foreach (Plugin plugin in plugins)
                 {
                     await plugin.StartAsync();
+                }
+
+                foreach (Plugin plugin in plugins)
+                {
+                    await plugin.AllStartedAsync();
                 }
 
                 shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));

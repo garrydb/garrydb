@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -7,9 +7,9 @@ using ReactiveUI;
 
 namespace GarryDB.Avalonia.Views
 {
-    public class MainWindow : ReactiveWindow<MainWindowViewModel>
+    public class FirstView : ReactiveUserControl<FirstViewModel>
     {
-        public MainWindow()
+        public FirstView()
         {
             this.WhenActivated(disposables => { });
             AvaloniaXamlLoader.Load(this);
