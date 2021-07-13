@@ -11,7 +11,7 @@
     <Canvas Margin="10,10,10,10" x:Name="Canvas">
           <TextBlock Height="21" VerticalAlignment="Top" TextAlignment="Center" Text="{Binding Phase}" Width="800" Canvas.Top="250" />
           <TextBlock Height="21" VerticalAlignment="Top" TextAlignment="Center" Text="{Binding CurrentPlugin.Name}" Width="{Binding ActualWidth, ElementName=Canvas}" Canvas.Top="300" />
-          <ProgressBar Minimum="0" Maximum="{Binding NumberOfPlugins}" Value="{Binding NumberOfPluginsLoaded}" Height="20" Width="{Binding ActualWidth, ElementName=Canvas}" Canvas.Top="356" />
+          <ProgressBar Minimum="0" Maximum="{Binding NumberOfSteps}" Value="{Binding CurrentStep}" Height="20" Width="{Binding ActualWidth, ElementName=Canvas}" Canvas.Top="356" />
       </Canvas>
   </Border>
 </Window>

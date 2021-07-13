@@ -128,37 +128,47 @@
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginFound">
             <summary>
-            
+                Raised when a plugin has been found.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginLoading">
             <summary>
-            
+                Raised when a plugin is being loaded.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginLoaded">
             <summary>
-            
+                Raised when a plugin has been loaded.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginStarting">
             <summary>
-            
+                Raised when a plugin is being started.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginStarted">
             <summary>
-            
+                Raised when a plugin has been started.
+            </summary>
+        </member>
+        <member name="E:GarryDb.Platform.Garry.PluginConfiguring">
+            <summary>
+                Raised when a plugin is being configured.
+            </summary>
+        </member>
+        <member name="E:GarryDb.Platform.Garry.PluginConfigured">
+            <summary>
+                Raised when a plugin has been configured.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginStopping">
             <summary>
-            
+                Raised when a plugin is being stopped.
             </summary>
         </member>
         <member name="E:GarryDb.Platform.Garry.PluginStopped">
             <summary>
-            
+                Raised when a plugin has been stopped.
             </summary>
         </member>
         <member name="M:GarryDb.Platform.Garry.#ctor(GarryDb.Platform.Infrastructure.FileSystem)">

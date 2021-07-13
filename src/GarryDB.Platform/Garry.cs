@@ -25,37 +25,47 @@ namespace GarryDb.Platform
         private readonly AutoResetEvent shutdownRequested;
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin has been found.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginFound = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin is being loaded.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginLoading = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin has been loaded.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginLoaded = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin is being started.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginStarting = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin has been started.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginStarted = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin is being configured.
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginConfiguring = delegate { };
+
+        /// <summary>
+        ///     Raised when a plugin has been configured.
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginConfigured = delegate { };
+
+        /// <summary>
+        ///     Raised when a plugin is being stopped.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginStopping = delegate { };
 
         /// <summary>
-        /// 
+        ///     Raised when a plugin has been stopped.
         /// </summary>
         public event EventHandler<PluginEventArgs> PluginStopped = delegate { };
 
@@ -89,6 +99,8 @@ namespace GarryDb.Platform
                 }
 
                 IEnumerable<LoadedPlugin> plugins = LoadPlugins(new PluginLoaderFactory(), inspectedPlugins).ToList();
+
+                await ConfigurePlugins(plugins);
 
                 system.RegisterOnTermination(() => Debug.WriteLine("TERMINATION"));
                 await StartPluginsAsync(plugins);
@@ -124,6 +136,17 @@ namespace GarryDb.Platform
                 yield return loader.Load();
 
                 PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
+            }
+        }
+
+        private async Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
+        {
+            foreach (LoadedPlugin loadedPlugin in plugins)
+            {
+                PluginConfiguring(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 100));
+
+                PluginConfigured(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
         }
 

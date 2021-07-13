@@ -14,6 +14,24 @@ namespace GarryDB.Wpf.Host
             InitializeComponent();
         }
 
+        public static readonly DependencyProperty NumberOfStepsProperty = DependencyProperty.Register(
+            "NumberOfSteps", typeof(int), typeof(SplashScreen), new PropertyMetadata(int.MaxValue));
+
+        public int NumberOfSteps
+        {
+            get { return (int) GetValue(NumberOfStepsProperty); }
+            set { SetValue(NumberOfStepsProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentStepProperty = DependencyProperty.Register(
+            "CurrentStep", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int)));
+
+        public int CurrentStep
+        {
+            get { return (int) GetValue(CurrentStepProperty); }
+            set { SetValue(CurrentStepProperty, value); }
+        }
+
         public static readonly DependencyProperty NumberOfPluginsProperty = DependencyProperty.Register(
             "NumberOfPlugins", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int)));
 
@@ -21,15 +39,6 @@ namespace GarryDB.Wpf.Host
         {
             get { return (int) GetValue(NumberOfPluginsProperty); }
             set { SetValue(NumberOfPluginsProperty, value); }
-        }
-
-        public static readonly DependencyProperty NumberOfPluginsLoadedProperty = DependencyProperty.Register(
-            "NumberOfPluginsLoaded", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int)));
-
-        public int NumberOfPluginsLoaded
-        {
-            get { return (int) GetValue(NumberOfPluginsLoadedProperty); }
-            set { SetValue(NumberOfPluginsLoadedProperty, value); }
         }
 
         public static readonly DependencyProperty NumberOfPluginsStartedProperty = DependencyProperty.Register(
