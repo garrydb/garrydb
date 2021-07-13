@@ -52,7 +52,7 @@ namespace GarryDb.Plugins
         /// <summary>
         ///     Called when the plugin is being started.
         /// </summary>
-        public virtual void Start()
+        protected virtual void Start()
         {
         }
         
@@ -66,25 +66,9 @@ namespace GarryDb.Plugins
         }
 
         /// <summary>
-        ///     Called when the plugin is being started.
-        /// </summary>
-        public virtual void AllStarted()
-        {
-        }
-        
-        /// <summary>
-        ///     Called when the plugin is being started.
-        /// </summary>
-        public virtual Task AllStartedAsync()
-        {
-            AllStarted();
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
         ///     Called when the plugin is being stopped.
         /// </summary>
-        public virtual void Stop()
+        protected virtual void Stop()
         {
         }
 

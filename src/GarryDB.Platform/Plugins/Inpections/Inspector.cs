@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
+using System.Runtime.InteropServices;
 
 using GarryDb.Platform.Extensions;
 using GarryDb.Platform.Infrastructure;
@@ -33,15 +34,27 @@ namespace GarryDb.Platform.Plugins.Inpections
         {
             IEnumerable<string> files = fileSystem.GetFiles(directory, "*.dll").ToList();
 
-            var loadContext = new AssemblyLoadContext("inspect", true);
-            using (loadContext.EnterContextualReflection())
+            PathAssemblyResolver resolver = CreateResolver(files);
+
+            using (var loadContext = new MetadataLoadContext(resolver))
             {
                 IList<Assembly> assemblies = files.Select(file => loadContext.LoadFromAssemblyPath(file)).ToList();
-
                 InspectedPlugin? result = Inspect(assemblies);
-                loadContext.Unload();
+
                 return result;
             }
+        }
+
+        private PathAssemblyResolver CreateResolver(IEnumerable<string> files)
+        {
+            string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var paths = new List<string>(runtimeAssemblies)
+            {
+                typeof(Plugin).Assembly.Location
+            };
+            paths.AddRange(files);
+            
+            return new PathAssemblyResolver(paths);
         }
 
         private InspectedPlugin? Inspect(IList<Assembly> assemblies)
@@ -54,8 +67,7 @@ namespace GarryDb.Platform.Plugins.Inpections
                 return null;
             }
 
-            IEnumerable<Assembly> providedAssemblies =
-                assemblies.Where(assembly => IsProvidedAssembly(assembly, pluginAssembly)).ToList();
+            IEnumerable<Assembly> providedAssemblies = assemblies.Where(assembly => IsProvidedAssembly(assembly, pluginAssembly)).ToList();
             IEnumerable<Assembly> referencedAssemblies = assemblies.Except(pluginAssembly).Except(providedAssemblies).ToList();
 
             return new InspectedPlugin(

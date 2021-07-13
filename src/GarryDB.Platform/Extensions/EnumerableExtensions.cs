@@ -16,7 +16,8 @@ namespace GarryDb.Platform.Extensions
         /// <typeparam name="T">The type of the <see cref="IEnumerable{T}" />.</typeparam>
         /// <returns>
         ///     An <see cref="IEnumerable{T}" /> where <paramref name="item" /> is added,
-        ///     unless <paramref name="item" /> is <c>null</c>.</returns>
+        ///     unless <paramref name="item" /> is <c>null</c>.
+        /// </returns>
         public static IEnumerable<T> Concat<T>(this IEnumerable<T> enumerable, T? item)
         {
             return enumerable.Concat(item.AsEnumerable());

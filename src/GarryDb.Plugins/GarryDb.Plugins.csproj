@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Projects\Temp\GarryDb\src\GarryDb.Plugins\GarryDb.Plugins.xml</DocumentationFile>
+    <DocumentationFile>..\..\docs\GarryDb.Plugins.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>

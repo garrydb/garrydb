@@ -19,7 +19,8 @@ namespace GarryDb.Platform.Plugins
         /// <returns>An <see cref="IEnumerable{T}" /> containing the <see cref="PluginLoader" />s for every plugin.</returns>
         public IEnumerable<PluginLoader> Create(params InspectedPlugin[] inspectedPlugins)
         {
-            IDictionary<InspectedPlugin, PluginLoadContext> mapping = inspectedPlugins.ToDictionary(x => x, x => new PluginLoadContext(x));
+            IDictionary<InspectedPlugin, PluginLoadContext> mapping =
+                inspectedPlugins.ToDictionary(x => x, x => new PluginLoadContext(x));
 
             foreach ((InspectedPlugin plugin, PluginLoadContext context) in mapping)
             {
@@ -28,6 +29,7 @@ namespace GarryDb.Platform.Plugins
                 {
                     InspectedPlugin? provider =
                         inspectedPlugins.SingleOrDefault(p => p.ProvidedAssemblies.Any(x => x.IsCompatibleWith(assembly.AssemblyName)));
+
                     if (provider != null)
                     {
                         context.AddProvider(mapping[provider]);

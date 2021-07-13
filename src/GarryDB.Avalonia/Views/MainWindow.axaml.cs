@@ -1,8 +1,8 @@
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
+
 using GarryDB.Avalonia.ViewModels;
+
 using ReactiveUI;
 
 namespace GarryDB.Avalonia.Views

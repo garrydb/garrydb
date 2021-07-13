@@ -1,22 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB.Windows.Host", "src\GarryDB.Windows.Host\GarryDB.Windows.Host.csproj", "{16D6C241-A89C-4B7B-ADF4-FE57E077EFFC}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Windows.Host", "src\GarryDB.Windows.Host\GarryDB.Windows.Host.csproj", "{16D6C241-A89C-4B7B-ADF4-FE57E077EFFC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4723879-F33B-45E8-83E8-196F1FCE9DFC} = {C4723879-F33B-45E8-83E8-196F1FCE9DFC}
+		{9E2F84CF-3261-4213-89BB-4AEDE7F9D9EC} = {9E2F84CF-3261-4213-89BB-4AEDE7F9D9EC}
+		{4982CEEC-0AEC-4035-92CA-DFA6E957EBD4} = {4982CEEC-0AEC-4035-92CA-DFA6E957EBD4}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB.Platform", "src\GarryDB.Platform\GarryDB.Platform.csproj", "{39D8B37B-23F9-4DE1-ACB4-50F0B5673955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Platform", "src\GarryDB.Platform\GarryDB.Platform.csproj", "{39D8B37B-23F9-4DE1-ACB4-50F0B5673955}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB.Specs", "src\GarryDB.Specs\GarryDB.Specs.csproj", "{83CA0A0C-44B2-41A8-8054-01E2C99CF179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Specs", "src\GarryDB.Specs\GarryDB.Specs.csproj", "{83CA0A0C-44B2-41A8-8054-01E2C99CF179}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDb.Plugins", "src\GarryDb.Plugins\GarryDb.Plugins.csproj", "{463C8D9E-5C58-4843-91FB-6CB5B6841429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDb.Plugins", "src\GarryDb.Plugins\GarryDb.Plugins.csproj", "{463C8D9E-5C58-4843-91FB-6CB5B6841429}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamplePlugin.Shared", "src\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj", "{4CA2A90B-622C-42E7-A646-1F0F74742C17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Shared", "src\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj", "{4CA2A90B-622C-42E7-A646-1F0F74742C17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamplePlugin.Contract", "src\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj", "{64D68BB1-DC3D-4DF3-9B90-3AD3E928324B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Contract", "src\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj", "{64D68BB1-DC3D-4DF3-9B90-3AD3E928324B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamplePlugin", "src\ExamplePlugin\ExamplePlugin.csproj", "{9E2F84CF-3261-4213-89BB-4AEDE7F9D9EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin", "src\ExamplePlugin\ExamplePlugin.csproj", "{9E2F84CF-3261-4213-89BB-4AEDE7F9D9EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependsOnExamplePlugin", "src\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj", "{4982CEEC-0AEC-4035-92CA-DFA6E957EBD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependsOnExamplePlugin", "src\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj", "{4982CEEC-0AEC-4035-92CA-DFA6E957EBD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB.Avalonia", "src\GarryDB.Avalonia\GarryDB.Avalonia.csproj", "{C4723879-F33B-45E8-83E8-196F1FCE9DFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Avalonia", "src\GarryDB.Avalonia\GarryDB.Avalonia.csproj", "{C4723879-F33B-45E8-83E8-196F1FCE9DFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,5 +68,11 @@ Global
 		{C4723879-F33B-45E8-83E8-196F1FCE9DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4723879-F33B-45E8-83E8-196F1FCE9DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4723879-F33B-45E8-83E8-196F1FCE9DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D6C06C0-8AA3-4D76-9CB8-C34B6BB614DA}
 	EndGlobalSection
 EndGlobal

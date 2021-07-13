@@ -61,11 +61,6 @@ namespace GarryDb.Platform
                     await plugin.StartAsync();
                 }
 
-                foreach (Plugin plugin in plugins)
-                {
-                    await plugin.AllStartedAsync();
-                }
-
                 shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
 
                 foreach (Plugin plugin in plugins)

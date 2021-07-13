@@ -5,12 +5,19 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DocumentationFile>..\..\docs\GarryDB.Platform.xml</DocumentationFile>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Akka" Version="1.4.21" />
+      <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
     </ItemGroup>
 
 </Project>

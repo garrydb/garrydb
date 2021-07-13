@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+
 using GarryDb.Platform;
 using GarryDb.Platform.Infrastructure;
 
@@ -11,7 +12,7 @@ namespace GarryDB.Windows.Host
         [STAThread]
         public static async Task Main()
         {
-            var garry = new Garry(fileSystem: new WindowsFileSystem());
+            var garry = new Garry(new WindowsFileSystem());
             await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins");
 
             Debug.WriteLine("Ending application");

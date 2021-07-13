@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,36 +9,37 @@ using System.Runtime.Loader;
 using GarryDb.Platform.Extensions;
 using GarryDb.Platform.Plugins.Inpections;
 
+using GarryDB.Platform.Plugins.Loading.Extensions;
+
+using GarryDb.Plugins;
+
 namespace GarryDb.Platform.Plugins.Loading
 {
     /// <summary>
-    /// 
+    ///     Loads the assemblies of a <see cref="Plugin" /> into their own scoped <see cref="AssemblyLoadContext" />.
     /// </summary>
     public sealed class PluginLoadContext : AssemblyLoadContext
     {
         private readonly InspectedPlugin inspectedPlugin;
         private readonly IList<AssemblyLoadContext> providers;
         private readonly AssemblyDependencyResolver resolver;
-        private readonly ConcurrentDictionary<AssemblyName, Assembly> loadedAssemblies;
-        private readonly object locker = new object();
 
         /// <summary>
-        ///     
+        ///     Initializes a new <see cref="PluginLoadContext" />.
         /// </summary>
-        /// <param name="inspectedPlugin"></param>
+        /// <param name="inspectedPlugin">The inpected plugin.</param>
         public PluginLoadContext(InspectedPlugin inspectedPlugin)
-            : base(inspectedPlugin.PluginAssembly.PluginIdentity.Name)
+            : base(inspectedPlugin.PluginIdentity.ToString())
         {
             providers = new List<AssemblyLoadContext>();
             resolver = new AssemblyDependencyResolver(inspectedPlugin.Path);
-            loadedAssemblies = new ConcurrentDictionary<AssemblyName, Assembly>();
             this.inspectedPlugin = inspectedPlugin;
         }
 
         /// <summary>
-        /// 
+        ///     Add a provider of assemblies to this load context.
         /// </summary>
-        /// <param name="provider"></param>
+        /// <param name="provider">An <see cref="AssemblyLoadContext" /> that can provide references.</param>
         public void AddProvider(AssemblyLoadContext provider)
         {
             providers.Add(provider);
@@ -60,78 +60,49 @@ namespace GarryDb.Platform.Plugins.Loading
                 return Assemblies.Single(x => x.GetName().IsCompatibleWith(name));
             }
 
-            if (Default.Assemblies.Any(x => x.GetName().IsCompatibleWith(name)))
-            {
-                return Default.Assemblies.Single(x => x.GetName().IsCompatibleWith(name));
-            }
-
             Assembly? assemblyFromParent =
-                providers.Except(Default).Select(x =>
-                    {
-                        try
-                        {
-                            return x.LoadFromAssemblyName(name);
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            return null;
-                        }
-                    })
-                    .FirstOrDefault(x => x != null);
+                providers
+                    .Select(x => new {Success = x.TryLoad(name, out Assembly? assembly), Assembly = assembly})
+                    .Where(x => x.Success)
+                    .Select(x => x.Assembly!)
+                    .FirstOrDefault();
 
             if (assemblyFromParent != null)
             {
                 return assemblyFromParent;
             }
 
-            lock (locker)
+            Assembly? result = null;
+            ProvidedAssembly? providedAssembly =
+                inspectedPlugin.ProvidedAssemblies.SingleOrDefault(p => name.IsCompatibleWith(p.AssemblyName));
+            string? assemblyPath = resolver.ResolveAssemblyToPath(name);
+
+            if (providedAssembly != null)
             {
-                var alreadyLoaded =
-                    loadedAssemblies
-                        .Where(x => x.Key.IsCompatibleWith(name))
-                        .Select(x => x.Value)
-                        .ToList();
-
-                if (alreadyLoaded.Count == 1)
-                {
-                    return alreadyLoaded.Single();
-                }
-
-                Assembly? result = null;
-                ProvidedAssembly? providedAssembly =
-                    inspectedPlugin.ProvidedAssemblies.SingleOrDefault(p => name.IsCompatibleWith(p.AssemblyName));
-                ReferencedAssembly? referencedAssembly =
-                    inspectedPlugin.ReferencedAssemblies.SingleOrDefault(p => name.IsCompatibleWith(p.AssemblyName));
-                string? assemblyPath = resolver.ResolveAssemblyToPath(name);
-
-                if (providedAssembly != null)
-                {
-                    result = LoadFromStream(providedAssembly.Load());
-                }
-                // else if (referencedAssembly != null)
-                // {
-                //     var loadedFromStream = LoadFromStream(referencedAssembly.Load());
-                //
-                //     result = loadedFromStream;
-                // }
-                else if (assemblyPath != null)
-                {
-                    result = LoadFromAssemblyPath(assemblyPath);
-                }
-
-                if (result != null)
-                {
-                    loadedAssemblies[name] = result;
-                }
-
-                return result;
+                result = LoadFromStream(providedAssembly.Load());
             }
+            else if (assemblyPath != null)
+            {
+                result = LoadFromAssemblyPath(assemblyPath);
+            }
+
+            return result;
         }
 
+        /// <inheritdoc />
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             string assemblyPath = Path.GetDirectoryName(inspectedPlugin.Path)!;
+
+            string fullPath = DetermineFullPath(unmanagedDllName, assemblyPath);
+
+            return File.Exists(fullPath) ? LoadUnmanagedDllFromPath(fullPath) : base.LoadUnmanagedDll(unmanagedDllName);
+        }
+
+        private static string DetermineFullPath(string unmanagedDllName, string assemblyPath)
+        {
             string arch = Environment.Is64BitProcess ? "-x64" : "-x86";
+
             string fullPath;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -141,18 +112,12 @@ namespace GarryDb.Platform.Plugins.Loading
             {
                 fullPath = Path.Combine(assemblyPath, "runtimes", "linux" + arch, "native", $"{unmanagedDllName}.so");
             }
-            else // RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            else
             {
                 fullPath = Path.Combine(assemblyPath, "runtimes", "win" + arch, "native", $"{unmanagedDllName}.dll");
             }
 
-            if (File.Exists(fullPath))
-            {
-                IntPtr result = LoadUnmanagedDllFromPath(fullPath);
-                return result;
-            }
-
-            return IntPtr.Zero;
+            return fullPath;
         }
     }
 }

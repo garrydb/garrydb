@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Text;
+﻿using System.Reactive;
+
 using ReactiveUI;
 
 namespace GarryDB.Avalonia.ViewModels

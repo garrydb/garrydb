@@ -61,5 +61,11 @@ namespace GarryDb.Platform.Plugins.Inpections
         {
             get { return Assembly.Location; }
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return System.IO.Path.GetFileName(Path);
+        }
     }
 }
