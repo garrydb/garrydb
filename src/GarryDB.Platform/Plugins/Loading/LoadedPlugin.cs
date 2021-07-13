@@ -12,10 +12,12 @@ namespace GarryDb.Platform.Plugins.Loading
         /// </summary>
         /// <param name="pluginIdentity">The identity of the plugin.</param>
         /// <param name="plugin">The plugin.</param>
-        public LoadedPlugin(PluginIdentity pluginIdentity, Plugin plugin)
+        /// <param name="startupOrder">The startup order of the plugin.</param>
+        public LoadedPlugin(PluginIdentity pluginIdentity, Plugin plugin, int startupOrder)
         {
             PluginIdentity = pluginIdentity;
             Plugin = plugin;
+            StartupOrder = startupOrder;
         }
 
         /// <summary>
@@ -27,5 +29,10 @@ namespace GarryDb.Platform.Plugins.Loading
         ///     Gets the plugin.
         /// </summary>
         public Plugin Plugin { get; }
+
+        /// <summary>
+        ///     Gets the startup order.
+        /// </summary>
+        public int StartupOrder { get; }
     }
 }

@@ -34,19 +34,19 @@ namespace GarryDB.Wpf.Host
                   });
                   garry.PluginLoading += (_, args) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.Phase = "Loading...";
+                      splashScreen.Phase = "Loading plugins";
                       splashScreen.CurrentPlugin = args.PluginIdentity;
                   });
                   garry.PluginLoaded += (_, _) => Dispatcher.Invoke(() => splashScreen.CurrentStep++);
                   garry.PluginConfiguring += (_, args) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.Phase = "Configuring...";
+                      splashScreen.Phase = "Configuring plugins";
                       splashScreen.CurrentPlugin = args.PluginIdentity;
                       splashScreen.CurrentStep++;
                   });
                   garry.PluginStarting += (_, args) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.Phase = "Starting...";
+                      splashScreen.Phase = "Starting plugins";
                       splashScreen.CurrentPlugin = args.PluginIdentity;
                       splashScreen.CurrentStep++;
                   });

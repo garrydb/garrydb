@@ -130,7 +130,11 @@ namespace GarryDb.Platform
             }
         }
 
-        private IEnumerable<LoadedPlugin> LoadPlugins(IActorRef pluginsActor, PluginLoaderFactory pluginLoaderFactory, IEnumerable<InspectedPlugin> inspectedPlugins)
+        private IEnumerable<LoadedPlugin> LoadPlugins(
+            IActorRef pluginsActor,
+            PluginLoaderFactory pluginLoaderFactory,
+            IEnumerable<InspectedPlugin> inspectedPlugins
+        )
         {
             IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
 
@@ -160,7 +164,7 @@ namespace GarryDb.Platform
 
         private async Task StartPluginsAsync(IEnumerable<LoadedPlugin> plugins)
         {
-            foreach (LoadedPlugin loadedPlugin in plugins)
+            foreach (LoadedPlugin loadedPlugin in plugins.OrderBy(x => x.StartupOrder))
             {
                 PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
                 await loadedPlugin.Plugin.StartAsync();

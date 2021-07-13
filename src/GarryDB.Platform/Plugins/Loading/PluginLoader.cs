@@ -41,7 +41,7 @@ namespace GarryDb.Platform.Plugins.Loading
             Type pluginType = pluginAssembly.GetType(inspectedPlugin.PluginAssembly.PluginType)!;
             var plugin = (Plugin)Activator.CreateInstance(pluginType)!;
 
-            return new LoadedPlugin(inspectedPlugin.PluginIdentity, plugin);
+            return new LoadedPlugin(inspectedPlugin.PluginIdentity, plugin, inspectedPlugin.StartupOrder);
         }
     }
 }

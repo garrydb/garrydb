@@ -18,8 +18,19 @@ namespace GarryDb.Platform.Plugins.Inpections
             : base(assembly)
         {
             PluginType = assembly.DefinedTypes.Single(type => type.IsPluginType()).FullName!;
+            StartupOrder =
+                assembly
+                    .GetCustomAttributesData()
+                    .Where(x => x.AttributeType.Name == nameof(StartupOrderAttribute))
+                    .Select(x => (int?) x.ConstructorArguments.Single().Value ?? 0)
+                    .SingleOrDefault();
         }
-        
+
+        /// <summary>
+        ///     Gets the startup order.
+        /// </summary>
+        public int StartupOrder { get; }
+
         /// <summary>
         ///     Gets the full name of the plugin type.
         /// </summary>

@@ -48,10 +48,7 @@ namespace GarryDb.Platform.Plugins.Inpections
         private PathAssemblyResolver CreateResolver(IEnumerable<string> files)
         {
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-            var paths = new List<string>(runtimeAssemblies)
-            {
-                typeof(Plugin).Assembly.Location
-            };
+            var paths = new List<string>(runtimeAssemblies);
             paths.AddRange(files);
             
             return new PathAssemblyResolver(paths);

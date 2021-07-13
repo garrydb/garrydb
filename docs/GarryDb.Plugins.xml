@@ -76,5 +76,21 @@
                 Called when the plugin is being stopped.
             </summary>
         </member>
+        <member name="T:GarryDb.Plugins.StartupOrderAttribute">
+            <summary>
+                Indicates the startup order of the plugin.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.StartupOrderAttribute.#ctor(System.Int32)">
+            <summary>
+                Initializes a new <see cref="T:GarryDb.Plugins.StartupOrderAttribute" />.
+            </summary>
+            <param name="order">The order of the plugin.</param>
+        </member>
+        <member name="P:GarryDb.Plugins.StartupOrderAttribute.Order">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
     </members>
 </doc>

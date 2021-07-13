@@ -287,6 +287,11 @@
             <param name="providedAssemblies">The assemblies the <see cref="T:GarryDb.Plugins.Plugin" /> provides.</param>
             <param name="referencedAssemblies">The assemblies the <see cref="T:GarryDb.Plugins.Plugin" /> references,</param>
         </member>
+        <member name="P:GarryDb.Platform.Plugins.Inpections.InspectedPlugin.StartupOrder">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
         <member name="P:GarryDb.Platform.Plugins.Inpections.InspectedPlugin.PluginIdentity">
             <summary>
                 Gets the <see cref="P:GarryDb.Platform.Plugins.Inpections.InspectedPlugin.PluginIdentity" /> of the plugin.
@@ -349,6 +354,11 @@
             </summary>
             <param name="assembly">The <see cref="T:System.Reflection.Assembly" /> containing the plugin.</param>
         </member>
+        <member name="P:GarryDb.Platform.Plugins.Inpections.PluginAssembly.StartupOrder">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
         <member name="P:GarryDb.Platform.Plugins.Inpections.PluginAssembly.PluginType">
             <summary>
                 Gets the full name of the plugin type.
@@ -386,12 +396,13 @@
                 A plugin that has been loaded.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin,System.Int32)">
             <summary>
                 Initializes a new <see cref="T:GarryDb.Platform.Plugins.Loading.LoadedPlugin" />.
             </summary>
             <param name="pluginIdentity">The identity of the plugin.</param>
             <param name="plugin">The plugin.</param>
+            <param name="startupOrder">The startup order of the plugin.</param>
         </member>
         <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.PluginIdentity">
             <summary>
@@ -401,6 +412,11 @@
         <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.Plugin">
             <summary>
                 Gets the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.StartupOrder">
+            <summary>
+                Gets the startup order.
             </summary>
         </member>
         <member name="T:GarryDb.Platform.Plugins.Loading.PluginLoadContext">

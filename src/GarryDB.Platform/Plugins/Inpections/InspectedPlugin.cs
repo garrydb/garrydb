@@ -29,6 +29,14 @@ namespace GarryDb.Platform.Plugins.Inpections
         }
 
         /// <summary>
+        ///     Gets the startup order.
+        /// </summary>
+        public int StartupOrder
+        {
+            get { return PluginAssembly.StartupOrder; }
+        }
+
+        /// <summary>
         ///     Gets the <see cref="PluginIdentity" /> of the plugin.
         /// </summary>
         public PluginIdentity PluginIdentity
