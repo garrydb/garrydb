@@ -7,11 +7,20 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
-  <Border Cursor="AppStarting" BorderThickness="2,2,2,2" BorderBrush="Black">
-    <Canvas Margin="10,10,10,10" x:Name="Canvas">
-          <TextBlock Height="21" VerticalAlignment="Top" TextAlignment="Center" Text="{Binding Phase}" Width="800" Canvas.Top="250" />
-          <TextBlock Height="21" VerticalAlignment="Top" TextAlignment="Center" Text="{Binding CurrentPlugin.Name}" Width="{Binding ActualWidth, ElementName=Canvas}" Canvas.Top="300" />
-          <ProgressBar Minimum="0" Maximum="{Binding NumberOfSteps}" Value="{Binding CurrentStep}" Height="20" Width="{Binding ActualWidth, ElementName=Canvas}" Canvas.Top="356" />
-      </Canvas>
-  </Border>
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Assets/gr-stocks-Iq9SaJezkOE-unsplash.jpg" />
+    </Window.Background>
+    <Border Cursor="AppStarting" BorderThickness="2,2,2,2" BorderBrush="Black">
+        <Canvas Margin="10,10,10,10" Background="Transparent">
+
+            <TextBlock Height="21" TextAlignment="Center" Text="{Binding Phase}" Width="451" Canvas.Top="206"
+                 Foreground="White" Canvas.Left="325" />
+            <TextBlock Height="21" TextAlignment="Center" Text="{Binding CurrentPlugin.Name}" Width="451" Canvas.Top="232"
+                 Canvas.Left="325" Foreground="White" />
+            <Border Canvas.Top="258" Canvas.Left="325" BorderBrush="White" Height="20" Width="451" BorderThickness="1">
+                <ProgressBar Minimum="0" Maximum="{Binding NumberOfSteps}" Value="{Binding CurrentStep}"
+                     Foreground="White" BorderBrush="Transparent" Background="Transparent" Margin="2" />
+            </Border>
+        </Canvas>
+    </Border>
 </Window>

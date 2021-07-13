@@ -51,7 +51,7 @@ namespace GarryDB.Wpf.Host
         }
 
         public static readonly DependencyProperty PhaseProperty = DependencyProperty.Register(
-            "Phase", typeof(string), typeof(SplashScreen), new PropertyMetadata("Loading"));
+            "Phase", typeof(string), typeof(SplashScreen), new PropertyMetadata(default(string)));
 
         public string Phase
         {

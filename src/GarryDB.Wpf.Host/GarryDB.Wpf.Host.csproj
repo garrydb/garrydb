@@ -10,4 +10,8 @@
     <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\gr-stocks-Iq9SaJezkOE-unsplash.jpg" />
+  </ItemGroup>
+
 </Project>

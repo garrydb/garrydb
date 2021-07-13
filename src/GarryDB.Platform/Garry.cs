@@ -133,6 +133,7 @@ namespace GarryDb.Platform
             foreach (PluginLoader loader in loaders)
             {
                 PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
+                Thread.Sleep(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
                 yield return loader.Load();
 
                 PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
@@ -144,7 +145,7 @@ namespace GarryDb.Platform
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginConfiguring(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 100));
+                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
 
                 PluginConfigured(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
@@ -155,6 +156,7 @@ namespace GarryDb.Platform
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
                 await loadedPlugin.Plugin.StartAsync();
                 PluginStarted(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }

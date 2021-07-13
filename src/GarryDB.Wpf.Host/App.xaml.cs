@@ -32,23 +32,26 @@ namespace GarryDB.Wpf.Host
                           splashScreen.NumberOfSteps += 3;
                       }
                   });
-                  garry.PluginLoading += (_, args) => Dispatcher.Invoke(() => splashScreen.CurrentPlugin = args.PluginIdentity);
+                  garry.PluginLoading += (_, args) => Dispatcher.Invoke(() =>
+                  {
+                      splashScreen.Phase = "Loading...";
+                      splashScreen.CurrentPlugin = args.PluginIdentity;
+                  });
                   garry.PluginLoaded += (_, _) => Dispatcher.Invoke(() => splashScreen.CurrentStep++);
                   garry.PluginConfiguring += (_, args) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.Phase = "Configuring";
+                      splashScreen.Phase = "Configuring...";
                       splashScreen.CurrentPlugin = args.PluginIdentity;
                       splashScreen.CurrentStep++;
                   });
                   garry.PluginStarting += (_, args) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.Phase = "Starting";
+                      splashScreen.Phase = "Starting...";
                       splashScreen.CurrentPlugin = args.PluginIdentity;
                       splashScreen.CurrentStep++;
                   });
                   garry.PluginStarted += (_, _) => Dispatcher.Invoke(() =>
                   {
-                      splashScreen.CurrentStep++;
                       splashScreen.NumberOfPluginsStarted++;
                       if (splashScreen.NumberOfPluginsStarted == splashScreen.NumberOfPlugins)
                       {
