@@ -1,20 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Clean;Build">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
     <ProjectReference Include="..\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
     <ProjectReference Include="..\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
-    <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <DllFiles Include="$(TargetDir)\**\*.*" />
-  </ItemGroup>
-
-  <Target Name="CopyToPlugins" Condition="True" AfterTargets="AfterBuild">
-    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="..\..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
-  </Target>
 </Project>

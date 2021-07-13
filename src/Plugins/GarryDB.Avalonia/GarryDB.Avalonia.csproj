@@ -3,18 +3,11 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>disable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <RootNamespace>GarryDB.Avalonia</RootNamespace>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
-
-    <ItemGroup>
-        <DllFiles Include="$(TargetDir)\**\*.*" />
-    </ItemGroup>
-
-    <Target Name="CopyToPlugins" Condition="True" AfterTargets="AfterBuild">
-        <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False" DestinationFolder="..\..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
-    </Target>
 
     <ItemGroup>
         <Folder Include="Models\" />

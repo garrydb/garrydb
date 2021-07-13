@@ -5,17 +5,36 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>Garry</AssemblyName>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
 
   <ItemGroup>
-    <PluginProject Include="..\Plugins\**\*.csproj" />
+    <PluginProjects Include="..\Plugins\**\*.csproj" Exclude="..\Plugins\**\*Contract.csproj;..\Plugins\**\*Shared.csproj" />
   </ItemGroup>
-  
-  <Target Name="RebuildPlugins" Condition="True" AfterTargets="AfterBuild">
-    <Message Importance="high" Text="*** Building plugins @(PluginProject)" />
-    <RemoveDir Directories="..\..\Plugins\$(MSBuildProjectName)" />
+  <PropertyGroup>
+    <Garry_RootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'GarryDB.sln'))</Garry_RootDirectory>
+    <Garry_PluginsDirectory>$([System.IO.Path]::Combine($(Garry_RootDirectory), 'Plugins'))</Garry_PluginsDirectory>
+  </PropertyGroup>
 
-    <MSBuild Projects="@(PluginProject)" BuildInParallel="true" Targets="Rebuild" />
+  <Target Name="RebuildPlugins" Condition="True" AfterTargets="AfterBuild" Inputs="@(PluginProjects)" Outputs="%(Identity).Dummy">
+    <PropertyGroup>
+      <Garry_OutputDirectory>$([System.IO.Path]::Combine($(Garry_PluginsDirectory), %(PluginProjects.Filename)))</Garry_OutputDirectory>
+    </PropertyGroup>
+
+    <Message Text="Removing plugin directory $(Garry_OutputDirectory)" Importance="high" />
+    <RemoveDir Directories="$(Garry_OutputDirectory)" />
+    
+    <Message Text="Compiling plugin %(PluginProjects.Filename)" Importance="high" />
+    <MSBuild Projects="%(PluginProjects.Identity)" Targets="Build">
+      <Output TaskParameter="TargetOutputs" ItemName="CollectedBuildOutput" />
+    </MSBuild>
+
+    <ItemGroup>
+      <DllFiles Include="%(CollectedBuildOutput.RelativeDir)\**\*.*" />
+    </ItemGroup>
+
+    <Message Text="Copying output to plugin directory $(Garry_OutputDirectory)" Importance="high" />
+    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="$(Garry_OutputDirectory)\%(RecursiveDir)" />
   </Target>
   
   <ItemGroup>
