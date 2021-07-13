@@ -478,6 +478,52 @@
             <param name="inspectedPlugins">The inspected plugins.</param>
             <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing the <see cref="T:GarryDb.Platform.Plugins.Loading.PluginLoader" />s for every plugin.</returns>
         </member>
+        <member name="T:GarryDB.Platform.Messaging.Messages.PluginLoaded">
+            <summary>
+                The message that is sent when a <see cref="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.Plugin" /> has been loaded.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Messages.PluginLoaded.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.Messages.PluginLoaded" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.Plugin">
+            <summary>
+                Gets the plugin.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.PluginActor">
+            <summary>
+                The actor responsible for a plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginActor.Props(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.PluginsActor">
+            <summary>
+                The actor responsible for all plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginsActor.Props">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+            </summary>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.</returns>
+        </member>
         <member name="T:GarryDB.Platform.Plugins.Loading.Extensions.AssemblyLoadContextExtensions">
             <summary>
                 Extends <see cref="T:System.Runtime.Loader.AssemblyLoadContext" />.

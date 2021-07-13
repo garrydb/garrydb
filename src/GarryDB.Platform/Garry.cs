@@ -8,6 +8,10 @@ using Akka.Actor;
 using Akka.Event;
 
 using GarryDb.Platform.Infrastructure;
+
+using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Messaging.Messages;
+
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
@@ -91,6 +95,8 @@ namespace GarryDb.Platform
                 IActorRef deadletterWatchActorRef = system.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
+                IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), ActorPaths.Plugins.Name);
+
                 IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
 
                 foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
@@ -98,11 +104,9 @@ namespace GarryDb.Platform
                     PluginFound(this, new PluginEventArgs(inspectedPlugin.PluginIdentity));
                 }
 
-                IEnumerable<LoadedPlugin> plugins = LoadPlugins(new PluginLoaderFactory(), inspectedPlugins).ToList();
+                IEnumerable<LoadedPlugin> plugins = LoadPlugins(pluginsActor, new PluginLoaderFactory(), inspectedPlugins).ToList();
 
                 await ConfigurePlugins(plugins);
-
-                system.RegisterOnTermination(() => Debug.WriteLine("TERMINATION"));
                 await StartPluginsAsync(plugins);
 
                 shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
@@ -126,29 +130,32 @@ namespace GarryDb.Platform
             }
         }
 
-        private IEnumerable<LoadedPlugin> LoadPlugins(PluginLoaderFactory pluginLoaderFactory, IEnumerable<InspectedPlugin> inspectedPlugins)
+        private IEnumerable<LoadedPlugin> LoadPlugins(IActorRef pluginsActor, PluginLoaderFactory pluginLoaderFactory, IEnumerable<InspectedPlugin> inspectedPlugins)
         {
             IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
 
             foreach (PluginLoader loader in loaders)
             {
                 PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
-                Thread.Sleep(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
-                yield return loader.Load();
+                LoadedPlugin plugin = loader.Load();
+                pluginsActor.Tell(new PluginLoaded(plugin.PluginIdentity, plugin.Plugin));
+
+                yield return plugin;
 
                 PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
             }
         }
 
-        private async Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
+        private Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
         {
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginConfiguring(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
 
                 PluginConfigured(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task StartPluginsAsync(IEnumerable<LoadedPlugin> plugins)
@@ -156,7 +163,6 @@ namespace GarryDb.Platform
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await Task.Delay(TimeSpan.FromMilliseconds(new Random().NextDouble() * 1000));
                 await loadedPlugin.Plugin.StartAsync();
                 PluginStarted(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
