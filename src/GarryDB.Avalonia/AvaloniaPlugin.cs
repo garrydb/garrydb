@@ -12,19 +12,18 @@ namespace GarryDB.Avalonia
 {
     public class AvaloniaPlugin : Plugin
     {
-        private static AppBuilder BuildAvaloniaApp()
-        {
-            return AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .UseReactiveUI()
-                .LogToTrace();
-        }
+        public static readonly AutoResetEvent StartupCompleted = new AutoResetEvent(false);
 
-        private static void Foo()
+        private void Foo()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN AvaloniaPlugin.Foo");
 
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(new string[0]);
+            AppBuilder
+                .Configure<App>()
+                .UsePlatformDetect()
+                .UseReactiveUI()
+                .LogToTrace()
+                .StartWithClassicDesktopLifetime(new string[0]);
 
             Debug.WriteLine($"{DateTimeOffset.Now:s} END AvaloniaPlugin.Foo");
         }
@@ -37,7 +36,9 @@ namespace GarryDB.Avalonia
             var mainThread = new Thread(Foo);
             mainThread.SetApartmentState(ApartmentState.STA);
             mainThread.Start();
-            
+
+            StartupCompleted.WaitOne();
+
             Debug.WriteLine($"{DateTimeOffset.Now:s} END AvaloniaPlugin.Start");
         }
 

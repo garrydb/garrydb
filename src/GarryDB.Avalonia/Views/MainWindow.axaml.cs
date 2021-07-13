@@ -3,15 +3,13 @@ using Avalonia.ReactiveUI;
 
 using GarryDB.Avalonia.ViewModels;
 
-using ReactiveUI;
-
 namespace GarryDB.Avalonia.Views
 {
     public class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         public MainWindow()
         {
-            this.WhenActivated(disposables => { });
+            Opened += (_, _) => AvaloniaPlugin.StartupCompleted.Set();
             AvaloniaXamlLoader.Load(this);
         }
     }

@@ -23,19 +23,25 @@ namespace GarryDb.Platform.Plugins.Loading
         {
             this.inspectedPlugin = inspectedPlugin;
             this.pluginLoadContext = pluginLoadContext;
+            PluginIdentity = inspectedPlugin.PluginIdentity;
         }
+
+        /// <summary>
+        ///     Gets the identity of the plugin.
+        /// </summary>
+        public PluginIdentity PluginIdentity { get; }
 
         /// <summary>
         ///     Loads the <see cref="Plugin" />.
         /// </summary>
         /// <returns>The plugin.</returns>
-        public Plugin Load()
+        public LoadedPlugin Load()
         {
             Assembly pluginAssembly = pluginLoadContext.LoadFromStream(inspectedPlugin.PluginAssembly.Load());
             Type pluginType = pluginAssembly.GetType(inspectedPlugin.PluginAssembly.PluginType)!;
             var plugin = (Plugin)Activator.CreateInstance(pluginType)!;
 
-            return plugin;
+            return new LoadedPlugin(inspectedPlugin.PluginIdentity, plugin);
         }
     }
 }

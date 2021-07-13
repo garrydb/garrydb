@@ -11,7 +11,6 @@ using GarryDb.Platform.Infrastructure;
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
-using GarryDb.Plugins;
 
 using Debug = System.Diagnostics.Debug;
 
@@ -28,6 +27,41 @@ namespace GarryDb.Platform
         /// <summary>
         /// 
         /// </summary>
+        public event EventHandler<PluginEventArgs> PluginFound = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginLoading = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginLoaded = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginStarting = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginStarted = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginStopping = delegate { };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<PluginEventArgs> PluginStopped = delegate { };
+
+        /// <summary>
+        ///     Initializes <see cref="Garry" />.
+        /// </summary>
         /// <param name="fileSystem"></param>
         public Garry(FileSystem fileSystem)
         {
@@ -36,9 +70,9 @@ namespace GarryDb.Platform
         }
 
         /// <summary>
-        /// 
+        ///     Start <see cref="Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
         /// </summary>
-        /// <param name="pluginsDirectory"></param>
+        /// <param name="pluginsDirectory">The directory containing the plugins.</param>
         public async Task StartAsync(string pluginsDirectory)
         {
             using (ActorSystem system = ActorSystem.Create(ActorPaths.Garry.Name))
@@ -48,25 +82,20 @@ namespace GarryDb.Platform
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
-                
-                IEnumerable<PluginLoader> loaders = new PluginLoaderFactory().Create(inspectedPlugins.ToArray()).ToList();
-                IEnumerable<Plugin> plugins = loaders
-                    .Select(pluginLoader => pluginLoader.Load())
-                    .ToList();
+
+                foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
+                {
+                    PluginFound(this, new PluginEventArgs(inspectedPlugin.PluginIdentity));
+                }
+
+                IEnumerable<LoadedPlugin> plugins = LoadPlugins(new PluginLoaderFactory(), inspectedPlugins).ToList();
 
                 system.RegisterOnTermination(() => Debug.WriteLine("TERMINATION"));
-
-                foreach (Plugin plugin in plugins)
-                {
-                    await plugin.StartAsync();
-                }
+                await StartPluginsAsync(plugins);
 
                 shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
 
-                foreach (Plugin plugin in plugins)
-                {
-                    await plugin.StopAsync();
-                }
+                await StopPluginsAsync(plugins);
 
                 Debug.WriteLine("END");
             }
@@ -84,68 +113,38 @@ namespace GarryDb.Platform
                 }
             }
         }
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class DeadletterMonitor : ReceiveActor
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public DeadletterMonitor()
+        private IEnumerable<LoadedPlugin> LoadPlugins(PluginLoaderFactory pluginLoaderFactory, IEnumerable<InspectedPlugin> inspectedPlugins)
         {
-            Receive<DeadLetter>(dl => HandleDeadletter(dl));
+            IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
+
+            foreach (PluginLoader loader in loaders)
+            {
+                PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
+                yield return loader.Load();
+
+                PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
+            }
         }
 
-        private void HandleDeadletter(DeadLetter dl)
+        private async Task StartPluginsAsync(IEnumerable<LoadedPlugin> plugins)
         {
-            Debug.WriteLine($"DeadLetter captured: {dl.Message}, sender: {dl.Sender}, recipient: {dl.Recipient}");
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class ActorPaths
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly ActorMetadata Garry = new ActorMetadata("garry");
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly ActorMetadata Plugins = new ActorMetadata("plugins");
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ActorMetadata
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parent"></param>
-        public ActorMetadata(string name, ActorMetadata? parent = null)
-        {
-            Name = name;
-            string parentPath = (parent == null) ? "/user" : parent.Path;
-            Path = $"{parentPath}/{name}";
+            foreach (LoadedPlugin loadedPlugin in plugins)
+            {
+                PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                await loadedPlugin.Plugin.StartAsync();
+                PluginStarted(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Path { get; }
+        private async Task StopPluginsAsync(IEnumerable<LoadedPlugin> plugins)
+        {
+            foreach (LoadedPlugin loadedPlugin in plugins)
+            {
+                PluginStopping(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                await loadedPlugin.Plugin.StopAsync();
+                PluginStopped(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+            }
+        }
     }
 }

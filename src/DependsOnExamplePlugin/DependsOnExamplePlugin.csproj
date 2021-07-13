@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Clean;Build">
+﻿<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Clean;Build">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="CopyFilesToOutputDirectory">
-    <Copy SourceFiles="@(DllFiles)" DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
+    <Message Text="CopyToPlugins: $(TargetDir) to ..\..\Plugins\$(MSBuildProjectName)" />
+    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
   </Target>
-
 </Project>

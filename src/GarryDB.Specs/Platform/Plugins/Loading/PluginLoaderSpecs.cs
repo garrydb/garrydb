@@ -6,7 +6,6 @@ using FluentAssertions;
 
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
-using GarryDb.Plugins;
 using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
 
 using NUnit.Framework;
@@ -18,7 +17,7 @@ namespace GarryDb.Specs.Platform.Plugins.Loading
         [TestFixture]
         public class When_loading_the_example_plugin : Specification<PluginLoader>
         {
-            private Plugin plugin;
+            private LoadedPlugin plugin;
 
             protected override PluginLoader Given()
             {
@@ -35,7 +34,7 @@ namespace GarryDb.Specs.Platform.Plugins.Loading
             public void It_should_instantiate_the_plugin()
             {
                 plugin.Should().NotBeNull();
-                plugin.GetType().FullName.Should().Be(typeof(Example).FullName);
+                plugin.Plugin.GetType().FullName.Should().Be(typeof(Example).FullName);
             }
         }
     }

@@ -14,7 +14,8 @@
     </ItemGroup>
 
     <Target Name="CopyToPlugins" AfterTargets="CopyFilesToOutputDirectory">
-        <Copy SourceFiles="@(DllFiles)" DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
+        <Message Text="CopyToPlugins: $(TargetDir) to ..\..\Plugins\$(MSBuildProjectName)" />
+        <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
     </Target>
 
     <ItemGroup>

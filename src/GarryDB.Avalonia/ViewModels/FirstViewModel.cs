@@ -1,12 +1,9 @@
 ﻿using System;
+
 using ReactiveUI;
 
 namespace GarryDB.Avalonia.ViewModels
 {
-    public class SplashScreenWindowViewModel : ViewModel
-    {
-        
-    }
     public class FirstViewModel : ReactiveObject, IRoutableViewModel
     {
         // Reference to IScreen that owns the routable view model.

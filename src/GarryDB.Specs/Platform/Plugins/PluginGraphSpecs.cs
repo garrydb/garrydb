@@ -8,7 +8,6 @@ using ExamplePlugin.Shared;
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
-using GarryDb.Plugins;
 using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
 
 using NUnit.Framework;
@@ -21,7 +20,7 @@ namespace GarryDb.Specs.Platform.Plugins
         public class When_loading_plugins : Specification<PluginLoaderFactory>
         {
             private IList<PluginLoader> pluginLoaders;
-            private IList<Plugin> plugins;
+            private IList<LoadedPlugin> plugins;
 
             protected override PluginLoaderFactory Given()
             {
