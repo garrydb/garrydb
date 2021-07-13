@@ -1,4 +1,4 @@
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
 using GarryDB.Avalonia.ViewModels;
@@ -9,7 +9,6 @@ namespace GarryDB.Avalonia.Views
     {
         public MainWindow()
         {
-            Opened += (_, _) => AvaloniaPlugin.StartupCompleted.Set();
             AvaloniaXamlLoader.Load(this);
         }
     }

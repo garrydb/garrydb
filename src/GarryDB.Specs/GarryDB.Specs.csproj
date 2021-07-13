@@ -15,10 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
-      <ProjectReference Include="..\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
-      <ProjectReference Include="..\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
-      <ProjectReference Include="..\ExamplePlugin\ExamplePlugin.csproj" />
+      <ProjectReference Include="..\Plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
+      <ProjectReference Include="..\Plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
+      <ProjectReference Include="..\Plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
+      <ProjectReference Include="..\Plugins\ExamplePlugin\ExamplePlugin.csproj" />
       <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
     </ItemGroup>
 

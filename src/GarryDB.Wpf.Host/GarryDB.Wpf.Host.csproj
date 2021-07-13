@@ -4,8 +4,20 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <AssemblyName>Garry</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PluginProject Include="..\Plugins\**\*.csproj" />
+  </ItemGroup>
+  
+  <Target Name="RebuildPlugins" Condition="True" AfterTargets="AfterBuild">
+    <Message Importance="high" Text="*** Building plugins @(PluginProject)" />
+    <RemoveDir Directories="..\..\Plugins\$(MSBuildProjectName)" />
+
+    <MSBuild Projects="@(PluginProject)" BuildInParallel="true" Targets="Rebuild" />
+  </Target>
+  
   <ItemGroup>
     <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
   </ItemGroup>

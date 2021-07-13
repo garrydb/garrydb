@@ -4,7 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+
+using GarryDB.Avalonia.Views;
 
 using GarryDb.Plugins;
 
@@ -12,8 +15,6 @@ namespace GarryDB.Avalonia
 {
     public class AvaloniaPlugin : Plugin
     {
-        public static readonly AutoResetEvent StartupCompleted = new AutoResetEvent(false);
-
         private void Foo()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN AvaloniaPlugin.Foo");
@@ -32,12 +33,17 @@ namespace GarryDB.Avalonia
         protected override void Start()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN AvaloniaPlugin.Start");
+            var startupCompleted = new AutoResetEvent(false);
+
+            IDisposable eventSubscription =
+                Window.WindowOpenedEvent.AddClassHandler(typeof(MainWindow), (_, _) => startupCompleted.Set());
             
             var mainThread = new Thread(Foo);
             mainThread.SetApartmentState(ApartmentState.STA);
             mainThread.Start();
 
-            StartupCompleted.WaitOne();
+            startupCompleted.WaitOne();
+            startupCompleted.Dispose();
 
             Debug.WriteLine($"{DateTimeOffset.Now:s} END AvaloniaPlugin.Start");
         }

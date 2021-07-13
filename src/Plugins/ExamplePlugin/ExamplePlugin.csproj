@@ -7,15 +7,14 @@
   <ItemGroup>
     <ProjectReference Include="..\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
     <ProjectReference Include="..\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
-    <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+    <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <DllFiles Include="$(TargetDir)\**\*.*" />
   </ItemGroup>
 
-  <Target Name="CopyToPlugins" AfterTargets="CopyFilesToOutputDirectory">
-    <Message Text="CopyToPlugins: $(TargetDir) to ..\..\Plugins\$(MSBuildProjectName)" />
-    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
+  <Target Name="CopyToPlugins" Condition="True" AfterTargets="AfterBuild">
+    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="..\..\..\Plugins\$(MSBuildProjectName)\%(RecursiveDir)" />
   </Target>
 </Project>
