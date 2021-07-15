@@ -1,9 +1,9 @@
 ﻿using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
-using GarryDB.Avalonia.ViewModels;
+using GarryDB.UI.ViewModels;
 
-namespace GarryDB.Avalonia.Views
+namespace GarryDB.UI.Views
 {
     public class MainWindow : ReactiveWindow<MainWindowViewModel>
     {

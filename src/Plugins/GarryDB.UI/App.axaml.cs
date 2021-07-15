@@ -2,14 +2,14 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using GarryDB.Avalonia.ViewModels;
-using GarryDB.Avalonia.Views;
+using GarryDB.UI.ViewModels;
+using GarryDB.UI.Views;
 
 using ReactiveUI;
 
 using Splat;
 
-namespace GarryDB.Avalonia
+namespace GarryDB.UI
 {
     public class App : Application
     {

@@ -7,17 +7,17 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 
-using GarryDB.Avalonia.Views;
-
 using GarryDb.Plugins;
 
-namespace GarryDB.Avalonia
+using GarryDB.UI.Views;
+
+namespace GarryDB.UI
 {
-    public class AvaloniaPlugin : Plugin
+    public class UIPlugin : Plugin
     {
         private void Foo()
         {
-            Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN AvaloniaPlugin.Foo");
+            Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Foo");
 
             AppBuilder
                 .Configure<App>()
@@ -26,13 +26,13 @@ namespace GarryDB.Avalonia
                 .LogToTrace()
                 .StartWithClassicDesktopLifetime(new string[0]);
 
-            Debug.WriteLine($"{DateTimeOffset.Now:s} END AvaloniaPlugin.Foo");
+            Debug.WriteLine($"{DateTimeOffset.Now:s} END UIPlugin.Foo");
         }
 
         [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         protected override void Start()
         {
-            Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN AvaloniaPlugin.Start");
+            Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Start");
             var startupCompleted = new AutoResetEvent(false);
 
             IDisposable eventSubscription =
@@ -44,8 +44,9 @@ namespace GarryDB.Avalonia
 
             startupCompleted.WaitOne();
             startupCompleted.Dispose();
+            eventSubscription.Dispose();
 
-            Debug.WriteLine($"{DateTimeOffset.Now:s} END AvaloniaPlugin.Start");
+            Debug.WriteLine($"{DateTimeOffset.Now:s} END UIPlugin.Start");
         }
 
         protected override void Stop()

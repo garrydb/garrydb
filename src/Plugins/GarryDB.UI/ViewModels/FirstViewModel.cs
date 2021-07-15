@@ -2,7 +2,7 @@
 
 using ReactiveUI;
 
-namespace GarryDB.Avalonia.ViewModels
+namespace GarryDB.UI.ViewModels
 {
     public class FirstViewModel : ReactiveObject, IRoutableViewModel
     {

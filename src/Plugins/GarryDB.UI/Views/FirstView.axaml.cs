@@ -1,9 +1,11 @@
 ﻿using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
-using GarryDB.Avalonia.ViewModels;
+
+using GarryDB.UI.ViewModels;
+
 using ReactiveUI;
 
-namespace GarryDB.Avalonia.Views
+namespace GarryDB.UI.Views
 {
     public class FirstView : ReactiveUserControl<FirstViewModel>
     {

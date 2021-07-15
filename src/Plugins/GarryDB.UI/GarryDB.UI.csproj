@@ -3,7 +3,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>disable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <RootNamespace>GarryDB.Avalonia</RootNamespace>
+        <RootNamespace>GarryDB.UI</RootNamespace>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
