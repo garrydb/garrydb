@@ -396,22 +396,16 @@
                 A plugin that has been loaded.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin,System.Int32)">
+        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Platform.Plugins.PluginIdentity,System.Int32)">
             <summary>
                 Initializes a new <see cref="T:GarryDb.Platform.Plugins.Loading.LoadedPlugin" />.
             </summary>
             <param name="pluginIdentity">The identity of the plugin.</param>
-            <param name="plugin">The plugin.</param>
             <param name="startupOrder">The startup order of the plugin.</param>
         </member>
         <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.PluginIdentity">
             <summary>
                 Gets the identity of the plugin.
-            </summary>
-        </member>
-        <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.Plugin">
-            <summary>
-                Gets the plugin.
             </summary>
         </member>
         <member name="P:GarryDb.Platform.Plugins.Loading.LoadedPlugin.StartupOrder">
@@ -459,10 +453,11 @@
                 Gets the identity of the plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.Loading.PluginLoader.Load">
+        <member name="M:GarryDb.Platform.Plugins.Loading.PluginLoader.Load(Autofac.ContainerBuilder)">
             <summary>
                 Loads the <see cref="T:GarryDb.Plugins.Plugin" />.
             </summary>
+            <param name="containerBuilder">The Autofac container builder.</param>
             <returns>The plugin.</returns>
         </member>
         <member name="T:GarryDb.Platform.Plugins.PluginIdentity">

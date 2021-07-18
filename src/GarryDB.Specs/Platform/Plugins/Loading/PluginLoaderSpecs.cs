@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Loader;
 
+using Autofac;
+
 using ExamplePlugin;
 
 using FluentAssertions;
@@ -27,14 +29,14 @@ namespace GarryDb.Specs.Platform.Plugins.Loading
 
             protected override void When(PluginLoader subject)
             {
-                plugin = subject.Load();
+                plugin = subject.Load(new ContainerBuilder());
             }
 
             [Test]
             public void It_should_instantiate_the_plugin()
             {
                 plugin.Should().NotBeNull();
-                plugin.Plugin.GetType().FullName.Should().Be(typeof(Example).FullName);
+                plugin.PluginType.FullName.Should().Be(typeof(Example).FullName);
             }
         }
     }

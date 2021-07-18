@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.Event;
 
+using Autofac;
+
 using GarryDb.Platform.Infrastructure;
 
 using GarryDB.Platform.Messaging;
@@ -15,6 +17,7 @@ using GarryDB.Platform.Messaging.Messages;
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
+using GarryDb.Plugins;
 
 using Debug = System.Diagnostics.Debug;
 
@@ -96,13 +99,32 @@ namespace GarryDb.Platform
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), ActorPaths.Plugins.Name);
-                IEnumerable<LoadedPlugin> plugins = LoadPlugins(pluginsActor, pluginsDirectory).ToList();
-                await ConfigurePlugins(plugins);
-                await StartPluginsAsync(plugins);
+                
+                var containerBuilder = new ContainerBuilder();
+                
+                IEnumerable<LoadedPlugin> loadedPlugins = LoadPlugins(pluginsDirectory, containerBuilder).ToList();
 
-                shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
+                await using (IContainer container = containerBuilder.Build())
+                {
+                    await using (ILifetimeScope lifetimeScope = container.BeginLifetimeScope())
+                    {
+                        IDictionary<PluginIdentity, Plugin> plugins =
+                            loadedPlugins
+                                .OrderBy(plugin => plugin.StartupOrder)
+                                .ToDictionary(
+                                    plugin => plugin.PluginIdentity,
+                                    plugin => (Plugin) lifetimeScope.ResolveKeyed<Plugin>(plugin.PluginIdentity)
+                                );
 
-                await StopPluginsAsync(plugins);
+                        CreateActors(pluginsActor, plugins);
+                        await ConfigurePlugins(plugins).ConfigureAwait(false);
+                        await StartPluginsAsync(plugins).ConfigureAwait(false);
+
+                        shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
+
+                        await StopPluginsAsync(plugins).ConfigureAwait(false);
+                    }
+                }
 
                 Debug.WriteLine("END");
             }
@@ -126,7 +148,7 @@ namespace GarryDb.Platform
             }
         }
 
-        private IEnumerable<LoadedPlugin> LoadPlugins(IActorRef pluginsActor, string pluginsDirectory)
+        private IEnumerable<LoadedPlugin> LoadPlugins(string pluginsDirectory, ContainerBuilder containerBuilder)
         {
             var pluginLoaderFactory = new PluginLoaderFactory();
             IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
@@ -134,47 +156,54 @@ namespace GarryDb.Platform
 
             foreach (PluginLoader loader in loaders)
             {
-                yield return LoadPlugin(pluginsActor, loader);
+                yield return LoadPlugin(loader, containerBuilder);
             }
         }
 
-        private LoadedPlugin LoadPlugin(IActorRef pluginsActor, PluginLoader loader)
+        private LoadedPlugin LoadPlugin(PluginLoader loader, ContainerBuilder containerBuilder)
         {
             PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
-            LoadedPlugin plugin = loader.Load();
-            pluginsActor.Tell(new PluginLoaded(plugin.PluginIdentity, plugin.Plugin));
+            LoadedPlugin plugin = loader.Load(containerBuilder);
             PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
 
             return plugin;
         }
 
-        private async Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
+        private void CreateActors(IActorRef pluginsActor, IDictionary<PluginIdentity, Plugin> plugins)
         {
-            foreach (LoadedPlugin loadedPlugin in plugins)
+            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
             {
-                PluginConfiguring(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await loadedPlugin.Plugin.RouteAsync("configure", new object());
-                PluginConfigured(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                pluginsActor.Tell(new PluginLoaded(identity, plugin));
             }
         }
 
-        private async Task StartPluginsAsync(IEnumerable<LoadedPlugin> plugins)
+        private async Task ConfigurePlugins(IDictionary<PluginIdentity, Plugin> plugins)
         {
-            foreach (LoadedPlugin loadedPlugin in plugins.OrderBy(x => x.StartupOrder))
+            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
             {
-                PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await loadedPlugin.Plugin.RouteAsync("start", new object());
-                PluginStarted(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                PluginConfiguring(this, new PluginEventArgs(identity));
+                await plugin.RouteAsync("configure", new object()).ConfigureAwait(false);
+                PluginConfigured(this, new PluginEventArgs(identity));
             }
         }
 
-        private async Task StopPluginsAsync(IEnumerable<LoadedPlugin> plugins)
+        private async Task StartPluginsAsync(IDictionary<PluginIdentity, Plugin> plugins)
         {
-            foreach (LoadedPlugin loadedPlugin in plugins)
+            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
             {
-                PluginStopping(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await loadedPlugin.Plugin.RouteAsync("stop", new object());
-                PluginStopped(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
+                PluginStarting(this, new PluginEventArgs(identity));
+                await plugin.RouteAsync("start", new object()).ConfigureAwait(false);
+                PluginStarted(this, new PluginEventArgs(identity));
+            }
+        }
+
+        private async Task StopPluginsAsync(IDictionary<PluginIdentity, Plugin> plugins)
+        {
+            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
+            {
+                PluginStopping(this, new PluginEventArgs(identity));
+                await plugin.RouteAsync("stop", new object()).ConfigureAwait(false);
+                PluginStopped(this, new PluginEventArgs(identity));
             }
         }
     }

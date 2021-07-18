@@ -49,7 +49,7 @@ namespace GarryDb.Plugins
         {
             Func<object, Task<object?>> handlerWrapper = async message =>
             {
-                TResult? result = await handler((TMessage)message);
+                TResult? result = await handler((TMessage)message).ConfigureAwait(false);
                 return result;
             };
 

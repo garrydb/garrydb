@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Autofac;
+
 using DependsOnExamplePlugin;
 
 using ExamplePlugin.Shared;
@@ -33,7 +35,7 @@ namespace GarryDb.Specs.Platform.Plugins
                 InspectedPlugin plugin2 = new InspectedPluginBuilder().For<DependsOnExample>().References<ExampleShared>().Build();
 
                 pluginLoaders = subject.Create(plugin1, plugin2).ToList();
-                plugins = pluginLoaders.Select(x => x.Load()).ToList();
+                plugins = pluginLoaders.Select(x => x.Load(new ContainerBuilder())).ToList();
             }
 
             [Test]
