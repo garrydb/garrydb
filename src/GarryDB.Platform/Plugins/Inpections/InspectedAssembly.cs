@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 
 using GarryDb.Platform.Extensions;
 
@@ -17,16 +16,6 @@ namespace GarryDb.Platform.Plugins.Inpections
         protected InspectedAssembly(Assembly assembly)
         {
             Assembly = assembly;
-        }
-
-        /// <summary>
-        ///     Loads the assembly into a <see cref="Stream" />.
-        /// </summary>
-        /// <returns>A <see cref="Stream" /> containing the contents of the assembly.</returns>
-        public Stream Load()
-        {
-            byte[] contents = File.ReadAllBytes(Path);
-            return new MemoryStream(contents);
         }
 
         /// <summary>

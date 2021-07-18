@@ -73,15 +73,8 @@ namespace GarryDb.Platform.Plugins.Loading
             }
 
             Assembly? result = null;
-            ProvidedAssembly? providedAssembly =
-                inspectedPlugin.ProvidedAssemblies.SingleOrDefault(p => name.IsCompatibleWith(p.AssemblyName));
             string? assemblyPath = resolver.ResolveAssemblyToPath(name);
-
-            if (providedAssembly != null)
-            {
-                result = LoadFromStream(providedAssembly.Load());
-            }
-            else if (assemblyPath != null)
+            if (assemblyPath != null)
             {
                 result = LoadFromAssemblyPath(assemblyPath);
             }

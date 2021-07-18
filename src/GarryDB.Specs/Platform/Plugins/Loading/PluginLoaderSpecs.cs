@@ -2,8 +2,6 @@
 
 using Autofac;
 
-using ExamplePlugin;
-
 using FluentAssertions;
 
 using GarryDb.Platform.Plugins.Inpections;
@@ -36,7 +34,6 @@ namespace GarryDb.Specs.Platform.Plugins.Loading
             public void It_should_instantiate_the_plugin()
             {
                 plugin.Should().NotBeNull();
-                plugin.PluginType.FullName.Should().Be(typeof(Example).FullName);
             }
         }
     }

@@ -241,7 +241,7 @@
             </summary>
             <param name="assembly">The assembly that has been inspected.</param>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.Inpections.InspectedAssembly.Load">
+        <member name="M:GarryDb.Platform.Plugins.Inpections.InspectedAssembly.Load1">
             <summary>
                 Loads the assembly into a <see cref="T:System.IO.Stream" />.
             </summary>
