@@ -1,3 +1,5 @@
+using Autofac;
+
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -8,6 +10,7 @@ using GarryDB.UI.Views;
 using ReactiveUI;
 
 using Splat;
+using Splat.Autofac;
 
 namespace GarryDB.UI
 {
@@ -20,6 +23,11 @@ namespace GarryDB.UI
 
         public override void RegisterServices()
         {
+            //var builder = new ContainerBuilder();
+            //AutofacDependencyResolver resolver = builder.UseAutofacDependencyResolver();
+            //builder.RegisterInstance(resolver);
+            //resolver.InitializeReactiveUI();
+            
             base.RegisterServices();
             Locator.CurrentMutable.RegisterViewsForViewModels(GetType().Assembly);
         }

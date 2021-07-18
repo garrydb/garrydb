@@ -4,6 +4,47 @@
         <name>GarryDb.Plugins</name>
     </assembly>
     <members>
+        <member name="T:GarryDb.Plugins.ConfigurablePlugin">
+            <summary>
+                A plugin that can be configured
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin.Configure(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin.Configure">
+            <summary>
+                Called when the plugin is being configured.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin.ConfigureAsync(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin.ConfigureAsync">
+            <summary>
+                Called when the plugin is being configured.
+            </summary>
+        </member>
+        <member name="T:GarryDb.Plugins.ConfigurablePlugin`1">
+            <summary>
+                A plugin that can be configured
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDb.Plugins.ConfigurablePlugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.Configure(`0)">
+            <summary>
+                Called when the plugin is being configured.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.ConfigureAsync(`0)">
+            <summary>
+                Called when the plugin is being configured.
+            </summary>
+        </member>
         <member name="T:GarryDb.Plugins.Messaging.MessageRouter">
             <summary>
                 Routes messages to handlers.
@@ -38,6 +79,14 @@
             <summary>
                 Initializes a new plugin.
             </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.Plugin.Register``1(System.String,System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+                Register a handler for a named route.
+            </summary>
+            <param name="name">The name of the route.</param>
+            <param name="handler">The handler.</param>
+            <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
         </member>
         <member name="M:GarryDb.Plugins.Plugin.Register``2(System.String,System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <summary>

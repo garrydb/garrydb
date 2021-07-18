@@ -96,16 +96,7 @@ namespace GarryDb.Platform
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), ActorPaths.Plugins.Name);
-
-                IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
-
-                foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
-                {
-                    PluginFound(this, new PluginEventArgs(inspectedPlugin.PluginIdentity));
-                }
-
-                IEnumerable<LoadedPlugin> plugins = LoadPlugins(pluginsActor, new PluginLoaderFactory(), inspectedPlugins).ToList();
-
+                IEnumerable<LoadedPlugin> plugins = LoadPlugins(pluginsActor, pluginsDirectory).ToList();
                 await ConfigurePlugins(plugins);
                 await StartPluginsAsync(plugins);
 
@@ -120,46 +111,51 @@ namespace GarryDb.Platform
         private IEnumerable<InspectedPlugin> InspectPlugins(string pluginsDirectory)
         {
             var inspector = new Inspector(fileSystem);
-            foreach (string directory in fileSystem.GetTopLevelDirectories(pluginsDirectory))
+
+            IEnumerable<InspectedPlugin> inspectedPlugins =
+                fileSystem.GetTopLevelDirectories(pluginsDirectory)
+                .Select(directory => inspector.Inspect(directory))
+                .Where(plugin => plugin != null)
+                .Select(plugin => plugin!)
+                .ToList();
+            
+            foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
             {
-                InspectedPlugin? inspectedPlugin = inspector.Inspect(directory);
-                if (inspectedPlugin != null)
-                {
-                    yield return inspectedPlugin;
-                }
+                PluginFound(this, new PluginEventArgs(inspectedPlugin.PluginIdentity));
+                yield return inspectedPlugin;
             }
         }
 
-        private IEnumerable<LoadedPlugin> LoadPlugins(
-            IActorRef pluginsActor,
-            PluginLoaderFactory pluginLoaderFactory,
-            IEnumerable<InspectedPlugin> inspectedPlugins
-        )
+        private IEnumerable<LoadedPlugin> LoadPlugins(IActorRef pluginsActor, string pluginsDirectory)
         {
+            var pluginLoaderFactory = new PluginLoaderFactory();
+            IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
             IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
 
             foreach (PluginLoader loader in loaders)
             {
-                PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
-                LoadedPlugin plugin = loader.Load();
-                pluginsActor.Tell(new PluginLoaded(plugin.PluginIdentity, plugin.Plugin));
-
-                yield return plugin;
-
-                PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
+                yield return LoadPlugin(pluginsActor, loader);
             }
         }
 
-        private Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
+        private LoadedPlugin LoadPlugin(IActorRef pluginsActor, PluginLoader loader)
+        {
+            PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
+            LoadedPlugin plugin = loader.Load();
+            pluginsActor.Tell(new PluginLoaded(plugin.PluginIdentity, plugin.Plugin));
+            PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
+
+            return plugin;
+        }
+
+        private async Task ConfigurePlugins(IEnumerable<LoadedPlugin> plugins)
         {
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginConfiguring(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-
+                await loadedPlugin.Plugin.RouteAsync("configure", new object());
                 PluginConfigured(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
-
-            return Task.CompletedTask;
         }
 
         private async Task StartPluginsAsync(IEnumerable<LoadedPlugin> plugins)
@@ -167,7 +163,7 @@ namespace GarryDb.Platform
             foreach (LoadedPlugin loadedPlugin in plugins.OrderBy(x => x.StartupOrder))
             {
                 PluginStarting(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await loadedPlugin.Plugin.StartAsync();
+                await loadedPlugin.Plugin.RouteAsync("start", new object());
                 PluginStarted(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
         }
@@ -177,7 +173,7 @@ namespace GarryDb.Platform
             foreach (LoadedPlugin loadedPlugin in plugins)
             {
                 PluginStopping(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
-                await loadedPlugin.Plugin.StopAsync();
+                await loadedPlugin.Plugin.RouteAsync("stop", new object());
                 PluginStopped(this, new PluginEventArgs(loadedPlugin.PluginIdentity));
             }
         }

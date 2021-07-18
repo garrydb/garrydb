@@ -2,7 +2,7 @@
 
 namespace GarryDB.UI.ViewModels
 {
-    public class ViewModel : ReactiveObject
+    public abstract class ViewModel : ReactiveObject
     {
     }
 }

@@ -17,3 +17,4 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("ef7872b2-d297-47c1-984d-705181627d83")]
 [assembly: InternalsVisibleTo("GarryDb.Specs")]
+[assembly: InternalsVisibleTo("GarryDB.Platform")]
