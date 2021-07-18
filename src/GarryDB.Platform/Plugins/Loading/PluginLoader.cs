@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -45,10 +44,10 @@ namespace GarryDb.Platform.Plugins.Loading
         /// <returns>The plugin.</returns>
         public LoadedPlugin Load(ContainerBuilder containerBuilder)
         {
-            Assembly pluginAssembly = pluginLoadContext.LoadFromStream(inspectedPlugin.PluginAssembly.Load());
+            Assembly pluginAssembly = pluginLoadContext.LoadFromAssemblyName(inspectedPlugin.PluginAssembly.AssemblyName);
             IEnumerable<Assembly> referencedAssemblies =
                 inspectedPlugin.ReferencedAssemblies.Select(assembly =>
-                    pluginLoadContext.LoadFromStream(assembly.Load()));
+                    pluginLoadContext.LoadFromAssemblyName(assembly.AssemblyName));
 
             containerBuilder.RegisterAssemblyModules(referencedAssemblies.Concat(pluginAssembly).ToArray());
             

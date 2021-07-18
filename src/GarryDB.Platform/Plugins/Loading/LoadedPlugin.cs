@@ -1,8 +1,4 @@
-﻿using System;
-
-using GarryDb.Plugins;
-
-namespace GarryDb.Platform.Plugins.Loading
+﻿namespace GarryDb.Platform.Plugins.Loading
 {
     /// <summary>
     ///     A plugin that has been loaded.

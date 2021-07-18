@@ -1,5 +1,3 @@
-using Autofac;
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -10,7 +8,6 @@ using GarryDB.UI.Views;
 using ReactiveUI;
 
 using Splat;
-using Splat.Autofac;
 
 namespace GarryDB.UI
 {
