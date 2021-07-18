@@ -1,4 +1,6 @@
-﻿using GarryDb.Plugins;
+﻿using System;
+
+using GarryDb.Plugins;
 
 namespace GarryDb.Platform.Plugins.Loading
 {
@@ -11,12 +13,10 @@ namespace GarryDb.Platform.Plugins.Loading
         ///     Initializes a new <see cref="LoadedPlugin" />.
         /// </summary>
         /// <param name="pluginIdentity">The identity of the plugin.</param>
-        /// <param name="plugin">The plugin.</param>
         /// <param name="startupOrder">The startup order of the plugin.</param>
-        public LoadedPlugin(PluginIdentity pluginIdentity, Plugin plugin, int startupOrder)
+        public LoadedPlugin(PluginIdentity pluginIdentity, int startupOrder)
         {
             PluginIdentity = pluginIdentity;
-            Plugin = plugin;
             StartupOrder = startupOrder;
         }
 
@@ -24,11 +24,6 @@ namespace GarryDb.Platform.Plugins.Loading
         ///     Gets the identity of the plugin.
         /// </summary>
         public PluginIdentity PluginIdentity { get; }
-        
-        /// <summary>
-        ///     Gets the plugin.
-        /// </summary>
-        public Plugin Plugin { get; }
 
         /// <summary>
         ///     Gets the startup order.

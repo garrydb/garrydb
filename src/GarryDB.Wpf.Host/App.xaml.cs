@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 using GarryDb.Platform;
@@ -68,7 +69,15 @@ namespace GarryDB.Wpf.Host
                       }
                   });
 
-                  await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins");
+                  try
+                  {
+                      await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins").ConfigureAwait(false);
+                  }
+                  catch (Exception exception)
+                  {
+                      Console.WriteLine(exception);
+                      throw;
+                  }
               });
         }
     }
