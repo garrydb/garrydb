@@ -10,7 +10,9 @@ namespace GarryDb.Plugins
         /// <summary>
         ///     Initializes a new <see cref="ConfigurablePlugin" />.
         /// </summary>
-        protected ConfigurablePlugin()
+        /// <param name="pluginContext">The plugin context.</param>
+        protected ConfigurablePlugin(PluginContext pluginContext)
+            : base(pluginContext)
         {
             Register("configure", (TConfiguration configuration) => ConfigureAsync(configuration));
         }

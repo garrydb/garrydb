@@ -1,4 +1,4 @@
-﻿namespace GarryDb.Platform
+﻿namespace GarryDB.Platform.Messaging
 {
     /// <summary>
     /// 

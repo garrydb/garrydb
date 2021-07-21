@@ -15,12 +15,14 @@
         <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.3" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
+        <PackageReference Include="Avalonia" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
+        <PackageReference Include="Avalonia.ReactiveUI.Events" Version="0.10.6" />
         <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
         <PackageReference Include="Splat.Autofac" Version="11.1.1" />
+        <PackageReference Include="XamlNameReferenceGenerator" Version="1.2.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />

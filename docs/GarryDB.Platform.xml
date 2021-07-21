@@ -4,53 +4,6 @@
         <name>GarryDB.Platform</name>
     </assembly>
     <members>
-        <member name="T:GarryDb.Platform.ActorMetadata">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDb.Platform.ActorMetadata.#ctor(System.String,GarryDb.Platform.ActorMetadata)">
-            <summary>
-            
-            </summary>
-            <param name="name"></param>
-            <param name="parent"></param>
-        </member>
-        <member name="P:GarryDb.Platform.ActorMetadata.Name">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:GarryDb.Platform.ActorMetadata.Path">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDb.Platform.ActorPaths">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:GarryDb.Platform.ActorPaths.Garry">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:GarryDb.Platform.ActorPaths.Plugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDb.Platform.DeadletterMonitor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDb.Platform.DeadletterMonitor.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:GarryDb.Platform.Extensions.AssemblyNameExtensions">
             <summary>
                 Extends <see cref="T:System.Reflection.AssemblyName" />.
@@ -219,7 +172,7 @@
             
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.PluginEventArgs.#ctor(GarryDb.Platform.Plugins.PluginIdentity)">
+        <member name="M:GarryDb.Platform.PluginEventArgs.#ctor(GarryDb.Plugins.PluginIdentity)">
             <summary>
             
             </summary>
@@ -240,12 +193,6 @@
                 Initializes a new <see cref="T:GarryDb.Platform.Plugins.Inpections.InspectedAssembly" />.
             </summary>
             <param name="assembly">The assembly that has been inspected.</param>
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.Inpections.InspectedAssembly.Load1">
-            <summary>
-                Loads the assembly into a <see cref="T:System.IO.Stream" />.
-            </summary>
-            <returns>A <see cref="T:System.IO.Stream" /> containing the contents of the assembly.</returns>
         </member>
         <member name="M:GarryDb.Platform.Plugins.Inpections.InspectedAssembly.IsCompatibleWith(System.Reflection.AssemblyName)">
             <summary>
@@ -396,7 +343,7 @@
                 A plugin that has been loaded.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Platform.Plugins.PluginIdentity,System.Int32)">
+        <member name="M:GarryDb.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDb.Plugins.PluginIdentity,System.Int32)">
             <summary>
                 Initializes a new <see cref="T:GarryDb.Platform.Plugins.Loading.LoadedPlugin" />.
             </summary>
@@ -460,23 +407,6 @@
             <param name="containerBuilder">The Autofac container builder.</param>
             <returns>The plugin.</returns>
         </member>
-        <member name="T:GarryDb.Platform.Plugins.PluginIdentity">
-            <summary>
-                The identity of a <see cref="T:GarryDb.Plugins.Plugin" />.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.PluginIdentity.#ctor(System.String,System.String)">
-            <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Plugins.PluginIdentity" />.
-            </summary>
-            <param name="name">The name of the plugin.</param>
-            <param name="version">The version of the plugin.</param>
-        </member>
-        <member name="P:GarryDb.Platform.Plugins.PluginIdentity.Name">
-            <summary>
-                Gets the name of the plugin.
-            </summary>
-        </member>
         <member name="T:GarryDb.Platform.Plugins.PluginLoaderFactory">
             <summary>
                 Creates <see cref="T:GarryDb.Platform.Plugins.Loading.PluginLoader" />s.
@@ -489,12 +419,122 @@
             <param name="inspectedPlugins">The inspected plugins.</param>
             <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing the <see cref="T:GarryDb.Platform.Plugins.Loading.PluginLoader" />s for every plugin.</returns>
         </member>
+        <member name="T:GarryDB.Platform.Messaging.ActorMetadata">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.ActorMetadata.#ctor(System.String,GarryDB.Platform.Messaging.ActorMetadata)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="parent"></param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.ActorMetadata.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.ActorMetadata.Path">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.ActorPaths">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:GarryDB.Platform.Messaging.ActorPaths.Plugins">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:GarryDB.Platform.Messaging.ActorPaths.Garry">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.DeadletterMonitor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.DeadletterMonitor.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.#ctor(GarryDb.Plugins.PluginIdentity,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="pluginIdentity"></param>
+            <param name="handler"></param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Address.PluginIdentity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Address.Handler">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.CreateReturnAddress">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.MessageEnvelope">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.#ctor(GarryDB.Platform.Messaging.Address,GarryDB.Platform.Messaging.Address,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="destination"></param>
+            <param name="message"></param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.MessageEnvelope.Sender">
+            <summary>
+                Gets the address of the sender.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.MessageEnvelope.Destination">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.MessageEnvelope.Message">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.CreateReturnMessage(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
         <member name="T:GarryDB.Platform.Messaging.Messages.PluginLoaded">
             <summary>
                 The message that is sent when a <see cref="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.Plugin" /> has been loaded.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Messaging.Messages.PluginLoaded.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDB.Platform.Messaging.Messages.PluginLoaded.#ctor(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
             <summary>
                 Initializes a new <see cref="T:GarryDB.Platform.Messaging.Messages.PluginLoaded" />.
             </summary>
@@ -516,7 +556,14 @@
                 The actor responsible for a plugins.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Messaging.PluginActor.Props(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDB.Platform.Messaging.PluginActor.#ctor(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginActor.Props(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
             <summary>
                 Create the <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
             </summary>
@@ -529,11 +576,31 @@
                 The actor responsible for all plugins.
             </summary>
         </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginsActor.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+            </summary>
+        </member>
         <member name="M:GarryDB.Platform.Messaging.PluginsActor.Props">
             <summary>
                 Create the <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
             </summary>
             <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.AkkaPluginContext">
+            <summary>
+                The plugin context that uses Akka.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDb.Plugins.PluginIdentity)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.AkkaPluginContext" />.
+            </summary>
+            <param name="plugins">The reference to the plugins actor.</param>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.SendAsync(GarryDb.Plugins.PluginIdentity,System.String,System.Object)">
+            <inheritdoc />
         </member>
         <member name="T:GarryDB.Platform.Plugins.Loading.Extensions.AssemblyLoadContextExtensions">
             <summary>

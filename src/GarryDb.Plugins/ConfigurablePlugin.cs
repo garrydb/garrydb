@@ -7,6 +7,15 @@ namespace GarryDb.Plugins
     /// </summary>
     public abstract class ConfigurablePlugin : ConfigurablePlugin<object>
     {
+        /// <summary>
+        ///     Initializes a new <see cref="ConfigurablePlugin" />.
+        /// </summary>
+        /// <param name="pluginContext">The plugin context.</param>
+        protected ConfigurablePlugin(PluginContext pluginContext)
+            : base(pluginContext)
+        {
+        }
+
         /// <inheritdoc />
         protected sealed override void Configure(object configuration)
         {

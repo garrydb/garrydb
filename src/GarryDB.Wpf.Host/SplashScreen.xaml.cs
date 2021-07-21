@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-using GarryDb.Platform.Plugins;
+using GarryDb.Plugins;
 
 namespace GarryDB.Wpf.Host
 {

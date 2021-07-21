@@ -6,7 +6,8 @@ namespace DependsOnExamplePlugin
 {
     public class DependsOnExample : Plugin
     {
-        public DependsOnExample()
+        public DependsOnExample(PluginContext pluginContext)
+            : base(pluginContext)
         {
             Shared = new ExampleShared();
         }
