@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace GarryDB.UI.Views
 {
-    public class FirstView : ReactiveUserControl<FirstViewModel>
+    public partial class FirstView : ReactiveUserControl<FirstViewModel>
     {
         public FirstView()
         {

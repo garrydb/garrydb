@@ -99,15 +99,24 @@ namespace GarryDb.Platform.Plugins.Loading
             string fullPath;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                fullPath = Path.Combine(assemblyPath, "runtimes", "osx" + arch, "native", $"{unmanagedDllName}.dylib");
+                fullPath = Path.Combine(assemblyPath, "runtimes", "osx" + arch, "native", $"lib{unmanagedDllName}.dylib");
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                fullPath = Path.Combine(assemblyPath, "runtimes", "linux" + arch, "native", $"{unmanagedDllName}.so");
+                fullPath = Path.Combine(assemblyPath, "runtimes", "linux" + arch, "native", $"lib{unmanagedDllName}.so");
             }
             else
             {
+                if (unmanagedDllName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    unmanagedDllName = Path.GetFileNameWithoutExtension(unmanagedDllName);
+                }
+
                 fullPath = Path.Combine(assemblyPath, "runtimes", "win" + arch, "native", $"{unmanagedDllName}.dll");
+                if (!File.Exists(fullPath))
+                {
+                    fullPath = Path.Combine(assemblyPath, "runtimes", "win7" + arch, "native", $"{unmanagedDllName}.dll");
+                }
             }
 
             return fullPath;

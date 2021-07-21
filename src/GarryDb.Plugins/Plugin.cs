@@ -11,12 +11,15 @@ namespace GarryDb.Plugins
     public abstract class Plugin
     {
         private readonly MessageRouter messageRouter;
+        private readonly PluginContext pluginContext;
 
         /// <summary>
         ///     Initializes a new plugin.
         /// </summary>
-        protected Plugin()
+        /// <param name="pluginContext">The plugin context.</param>
+        protected Plugin(PluginContext pluginContext)
         {
+            this.pluginContext = pluginContext;
             messageRouter = new MessageRouter();
             
             Register("start", (object _) => StartAsync());
@@ -65,6 +68,17 @@ namespace GarryDb.Plugins
         internal Task<object?> RouteAsync(string name, object message)
         {
             return messageRouter.RouteAsync(name, message);
+        }
+
+        /// <summary>
+        ///     Sends <paramref name="message" /> to <paramref name="destination" />.
+        /// </summary>
+        /// <param name="destination">The destination plugin.</param>
+        /// <param name="handler">The name of the handler.</param>
+        /// <param name="message">The message.</param>
+        protected Task SendAsync(PluginIdentity destination, string handler, object message)
+        {
+            return pluginContext.SendAsync(destination, handler, message);
         }
 
         /// <summary>

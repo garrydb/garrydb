@@ -1,5 +1,4 @@
-﻿using GarryDb.Platform.Plugins;
-using GarryDb.Plugins;
+﻿using GarryDb.Plugins;
 
 namespace GarryDB.Platform.Messaging.Messages
 {

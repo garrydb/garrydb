@@ -9,6 +9,12 @@
                 A plugin that can be configured
             </summary>
         </member>
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin.#ctor(GarryDb.Plugins.PluginContext)">
+            <summary>
+                Initializes a new <see cref="T:GarryDb.Plugins.ConfigurablePlugin" />.
+            </summary>
+            <param name="pluginContext">The plugin context.</param>
+        </member>
         <member name="M:GarryDb.Plugins.ConfigurablePlugin.Configure(System.Object)">
             <inheritdoc />
         </member>
@@ -30,10 +36,11 @@
                 A plugin that can be configured
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.#ctor">
+        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.#ctor(GarryDb.Plugins.PluginContext)">
             <summary>
                 Initializes a new <see cref="T:GarryDb.Plugins.ConfigurablePlugin" />.
             </summary>
+            <param name="pluginContext">The plugin context.</param>
         </member>
         <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.Configure(`0)">
             <summary>
@@ -75,10 +82,11 @@
                 A plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.#ctor">
+        <member name="M:GarryDb.Plugins.Plugin.#ctor(GarryDb.Plugins.PluginContext)">
             <summary>
                 Initializes a new plugin.
             </summary>
+            <param name="pluginContext">The plugin context.</param>
         </member>
         <member name="M:GarryDb.Plugins.Plugin.Register``1(System.String,System.Func{``0,System.Threading.Tasks.Task})">
             <summary>
@@ -105,6 +113,14 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
+        <member name="M:GarryDb.Plugins.Plugin.SendAsync(GarryDb.Plugins.PluginIdentity,System.String,System.Object)">
+            <summary>
+                Sends <paramref name="message" /> to <paramref name="destination" />.
+            </summary>
+            <param name="destination">The destination plugin.</param>
+            <param name="handler">The name of the handler.</param>
+            <param name="message">The message.</param>
+        </member>
         <member name="M:GarryDb.Plugins.Plugin.Start">
             <summary>
                 Called when the plugin is being started.
@@ -124,6 +140,61 @@
             <summary>
                 Called when the plugin is being stopped.
             </summary>
+        </member>
+        <member name="T:GarryDb.Plugins.PluginContext">
+            <summary>
+                Sends messages to other plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.PluginContext.SendAsync(GarryDb.Plugins.PluginIdentity,System.String,System.Object)">
+            <summary>
+                Sends <paramref name="message" /> to <paramref name="destination" />.
+            </summary>
+            <param name="destination">The destination plugin.</param>
+            <param name="handler">The name of the handler.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="T:GarryDb.Plugins.PluginIdentity">
+            <summary>
+                The identity of a <see cref="T:GarryDb.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.#ctor(System.String,System.String)">
+            <summary>
+                Initializes a new <see cref="T:GarryDb.Plugins.PluginIdentity" />.
+            </summary>
+            <param name="name">The name of the plugin.</param>
+            <param name="version">The version of the plugin.</param>
+        </member>
+        <member name="P:GarryDb.Plugins.PluginIdentity.Name">
+            <summary>
+                Gets the name of the plugin.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.op_Equality(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.PluginIdentity)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GarryDb.Plugins.PluginIdentity.op_Inequality(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.PluginIdentity)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
         </member>
         <member name="T:GarryDb.Plugins.StartupOrderAttribute">
             <summary>

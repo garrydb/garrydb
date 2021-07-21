@@ -5,7 +5,7 @@ using GarryDB.UI.ViewModels;
 
 namespace GarryDB.UI.Views
 {
-    public class MainWindow : ReactiveWindow<MainWindowViewModel>
+    public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         public MainWindow()
         {

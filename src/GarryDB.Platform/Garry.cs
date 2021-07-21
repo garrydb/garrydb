@@ -15,6 +15,9 @@ using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
 
 using GarryDb.Platform.Plugins;
+
+using GarryDB.Platform.Plugins;
+
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
 using GarryDb.Plugins;
@@ -29,7 +32,6 @@ namespace GarryDb.Platform
     public sealed class Garry
     {
         private readonly FileSystem fileSystem;
-        private readonly AutoResetEvent shutdownRequested;
 
         /// <summary>
         ///     Raised when a plugin has been found.
@@ -82,7 +84,6 @@ namespace GarryDb.Platform
         /// <param name="fileSystem"></param>
         public Garry(FileSystem fileSystem)
         {
-            shutdownRequested = new AutoResetEvent(false);
             this.fileSystem = fileSystem;
         }
 
@@ -92,6 +93,7 @@ namespace GarryDb.Platform
         /// <param name="pluginsDirectory">The directory containing the plugins.</param>
         public async Task StartAsync(string pluginsDirectory)
         {
+            var shutdownRequested = new AutoResetEvent(false);
             using (ActorSystem system = ActorSystem.Create(ActorPaths.Garry.Name))
             {
                 var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
@@ -101,29 +103,31 @@ namespace GarryDb.Platform
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), ActorPaths.Plugins.Name);
                 
                 var containerBuilder = new ContainerBuilder();
-                
                 IEnumerable<LoadedPlugin> loadedPlugins = LoadPlugins(pluginsDirectory, containerBuilder).ToList();
 
                 await using (IContainer container = containerBuilder.Build())
                 {
-                    await using (ILifetimeScope lifetimeScope = container.BeginLifetimeScope())
-                    {
-                        IDictionary<PluginIdentity, Plugin> plugins =
-                            loadedPlugins
-                                .OrderBy(plugin => plugin.StartupOrder)
-                                .ToDictionary(
-                                    plugin => plugin.PluginIdentity,
-                                    plugin => (Plugin) lifetimeScope.ResolveKeyed<Plugin>(plugin.PluginIdentity)
-                                );
+                    IDictionary<PluginIdentity, Plugin> plugins =
+                        loadedPlugins
+                            .OrderBy(plugin => plugin.StartupOrder)
+                            .ToDictionary(
+                                plugin => plugin.PluginIdentity,
+                                plugin =>
+                                    container.ResolveKeyed<Plugin>(
+                                        plugin.PluginIdentity,
+                                        TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, plugin.PluginIdentity))
+                                    )
+                            );
 
-                        CreateActors(pluginsActor, plugins);
-                        await ConfigurePlugins(plugins).ConfigureAwait(false);
-                        await StartPluginsAsync(plugins).ConfigureAwait(false);
+                    plugins[GarryPlugin.PluginIdentity] = new GarryPlugin(shutdownRequested, new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
 
-                        shutdownRequested.WaitOne(TimeSpan.FromSeconds(30));
+                    CreateActors(pluginsActor, plugins);
+                    await ConfigurePlugins(plugins).ConfigureAwait(false);
+                    await StartPluginsAsync(plugins).ConfigureAwait(false);
 
-                        await StopPluginsAsync(plugins).ConfigureAwait(false);
-                    }
+                    shutdownRequested.WaitOne();
+
+                    await StopPluginsAsync(plugins).ConfigureAwait(false);
                 }
 
                 Debug.WriteLine("END");
@@ -136,10 +140,10 @@ namespace GarryDb.Platform
 
             IEnumerable<InspectedPlugin> inspectedPlugins =
                 fileSystem.GetTopLevelDirectories(pluginsDirectory)
-                .Select(directory => inspector.Inspect(directory))
-                .Where(plugin => plugin != null)
-                .Select(plugin => plugin!)
-                .ToList();
+                    .Select(directory => inspector.Inspect(directory))
+                    .Where(plugin => plugin != null)
+                    .Select(plugin => plugin!)
+                    .ToList();
             
             foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
             {
@@ -204,6 +208,21 @@ namespace GarryDb.Platform
                 PluginStopping(this, new PluginEventArgs(identity));
                 await plugin.RouteAsync("stop", new object()).ConfigureAwait(false);
                 PluginStopped(this, new PluginEventArgs(identity));
+            }
+        }
+
+        private sealed class GarryPlugin : Plugin
+        {
+            public static readonly PluginIdentity PluginIdentity = new PluginIdentity("garry", "1.0");
+
+            public GarryPlugin(EventWaitHandle shutdownRequested, PluginContext pluginContext)
+                : base(pluginContext)
+            {
+                Register("shutdown", (object _) =>
+                {
+                    shutdownRequested.Set();
+                    return Task.CompletedTask;
+                });
             }
         }
     }

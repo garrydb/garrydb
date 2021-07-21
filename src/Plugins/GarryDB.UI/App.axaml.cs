@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -7,26 +10,25 @@ using GarryDB.UI.Views;
 
 using ReactiveUI;
 
-using Splat;
-
 namespace GarryDB.UI
 {
     public class App : Application
     {
+        private readonly Func<Task> shutdown;
+
+        public App()
+            : this(() => Task.CompletedTask)
+        {
+        }
+
+        public App(Func<Task> shutdown)
+        {
+            this.shutdown = shutdown;
+        }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-        }
-
-        public override void RegisterServices()
-        {
-            //var builder = new ContainerBuilder();
-            //AutofacDependencyResolver resolver = builder.UseAutofacDependencyResolver();
-            //builder.RegisterInstance(resolver);
-            //resolver.InitializeReactiveUI();
-            
-            base.RegisterServices();
-            Locator.CurrentMutable.RegisterViewsForViewModels(GetType().Assembly);
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -37,6 +39,14 @@ namespace GarryDB.UI
                 {
                     DataContext = new MainWindowViewModel()
                 };
+
+                desktop.Events().Exit.InvokeCommand(
+                    ReactiveCommand.CreateFromTask((ControlledApplicationLifetimeExitEventArgs _) =>
+                    {
+                        _.ApplicationExitCode = -1;
+
+                        return shutdown();
+                    }));
             }
 
             base.OnFrameworkInitializationCompleted();

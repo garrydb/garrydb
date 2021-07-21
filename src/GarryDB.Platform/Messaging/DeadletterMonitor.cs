@@ -3,7 +3,7 @@ using Akka.Event;
 
 using Debug = System.Diagnostics.Debug;
 
-namespace GarryDb.Platform
+namespace GarryDB.Platform.Messaging
 {
     /// <summary>
     /// 

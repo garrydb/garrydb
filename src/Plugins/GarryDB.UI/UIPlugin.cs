@@ -5,7 +5,6 @@ using System.Threading;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.ReactiveUI;
 
 using GarryDb.Plugins;
 
@@ -15,14 +14,18 @@ namespace GarryDB.UI
 {
     public class UIPlugin : Plugin
     {
+        public UIPlugin(PluginContext pluginContext)
+            : base(pluginContext)
+        {
+        }
+
         private void Foo()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Foo");
 
             AppBuilder
-                .Configure<App>()
+                .Configure(() => new App(() => SendAsync(new PluginIdentity("garry", "*"), "shutdown", new object())))
                 .UsePlatformDetect()
-                .UseReactiveUI()
                 .LogToTrace()
                 .StartWithClassicDesktopLifetime(new string[0]);
 
@@ -37,7 +40,7 @@ namespace GarryDB.UI
 
             IDisposable eventSubscription =
                 Window.WindowOpenedEvent.AddClassHandler(typeof(MainWindow), (_, _) => startupCompleted.Set());
-            
+
             var mainThread = new Thread(Foo);
             mainThread.SetApartmentState(ApartmentState.STA);
             mainThread.Start();

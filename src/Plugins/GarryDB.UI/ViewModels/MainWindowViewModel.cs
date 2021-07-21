@@ -6,16 +6,6 @@ namespace GarryDB.UI.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject, IScreen
     {
-        // The Router associated with this Screen.
-        // Required by the IScreen interface.
-        public RoutingState Router { get; } = new RoutingState();
-
-        // The command that navigates a user to first view model.
-        public ReactiveCommand<Unit, IRoutableViewModel> GoNext { get; }
-
-        // The command that navigates a user back.
-        public ReactiveCommand<Unit, IRoutableViewModel> GoBack => Router.NavigateBack;
-
         public MainWindowViewModel()
         {
             // Manage the routing state. Use the Router.Navigate.Execute
@@ -29,5 +19,18 @@ namespace GarryDB.UI.ViewModels
                 () => Router.Navigate.Execute(new FirstViewModel(this))
             );
         }
+
+        // The command that navigates a user to first view model.
+        public ReactiveCommand<Unit, IRoutableViewModel> GoNext { get; }
+
+        // The command that navigates a user back.
+        public ReactiveCommand<Unit, IRoutableViewModel> GoBack
+        {
+            get { return Router.NavigateBack; }
+        }
+
+        // The Router associated with this Screen.
+        // Required by the IScreen interface.
+        public RoutingState Router { get; } = new RoutingState();
     }
 }

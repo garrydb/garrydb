@@ -9,6 +9,7 @@ namespace GarryDb.Specs.Plugins.Builders
     public sealed class PluginBuilder : TestDataBuilder<Plugin>
     {
         private readonly IDictionary<string, dynamic> registrations = new Dictionary<string, dynamic>();
+        private PluginContext pluginContext;
 
         protected override Plugin OnBuild()
         {
@@ -42,6 +43,7 @@ namespace GarryDb.Specs.Plugins.Builders
         private class PluginStub : Plugin
         {
             public PluginStub(PluginBuilder builder)
+                : base(builder.pluginContext)
             {
                 foreach (KeyValuePair<string, dynamic> registration in builder.registrations)
                 {
