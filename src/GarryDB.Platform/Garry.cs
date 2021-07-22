@@ -9,6 +9,7 @@ using Akka.Event;
 
 using Autofac;
 
+using GarryDb.Platform.Extensions;
 using GarryDb.Platform.Infrastructure;
 
 using GarryDB.Platform.Messaging;
@@ -22,6 +23,7 @@ using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
 using GarryDb.Plugins;
 
+using Address = GarryDB.Platform.Messaging.Address;
 using Debug = System.Diagnostics.Debug;
 
 namespace GarryDb.Platform
@@ -88,18 +90,47 @@ namespace GarryDb.Platform
 
                     plugins[GarryPlugin.PluginIdentity] = new GarryPlugin(shutdownRequested, new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
 
-                    CreateActors(pluginsActor, plugins);
-                    await ConfigurePlugins(plugins).ConfigureAwait(false);
-                    await StartPluginsAsync(plugins).ConfigureAwait(false);
+                    plugins.ForEach(plugin =>
+                    {
+                        pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
+                    });
+
+                    plugins.Keys.ForEach(plugin =>
+                    {
+                        startupSequence.Configure(plugin);
+                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "configure"), new object()));
+                    });
+
+                    plugins.Keys.ForEach(plugin =>
+                    {
+                        startupSequence.Configure(plugin);
+                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "start"), new object()));
+                    });
 
                     startupSequence.Complete();
 
                     shutdownRequested.WaitOne();
 
-                    await StopPluginsAsync(plugins.Values).ConfigureAwait(false);
+                    plugins.Keys.ForEach(plugin =>
+                    {
+                        startupSequence.Configure(plugin);
+                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "stop"), new object()));
+                    });
                 }
 
                 Debug.WriteLine("END");
+            }
+        }
+
+        private IEnumerable<LoadedPlugin> LoadPlugins(string pluginsDirectory, ContainerBuilder containerBuilder)
+        {
+            var pluginLoaderFactory = new PluginLoaderFactory();
+            IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
+            IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
+
+            foreach (PluginLoader loader in loaders)
+            {
+                yield return LoadPlugin(loader, containerBuilder);
             }
         }
 
@@ -121,58 +152,12 @@ namespace GarryDb.Platform
             }
         }
 
-        private IEnumerable<LoadedPlugin> LoadPlugins(string pluginsDirectory, ContainerBuilder containerBuilder)
-        {
-            var pluginLoaderFactory = new PluginLoaderFactory();
-            IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
-            IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
-
-            foreach (PluginLoader loader in loaders)
-            {
-                yield return LoadPlugin(loader, containerBuilder);
-            }
-        }
-
         private LoadedPlugin LoadPlugin(PluginLoader loader, ContainerBuilder containerBuilder)
         {
             startupSequence.Load(loader.PluginIdentity);
             LoadedPlugin plugin = loader.Load(containerBuilder);
 
             return plugin;
-        }
-
-        private void CreateActors(IActorRef pluginsActor, IDictionary<PluginIdentity, Plugin> plugins)
-        {
-            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
-            {
-                pluginsActor.Tell(new PluginLoaded(identity, plugin));
-            }
-        }
-
-        private async Task ConfigurePlugins(IDictionary<PluginIdentity, Plugin> plugins)
-        {
-            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
-            {
-                startupSequence.Configure(identity);
-                await plugin.RouteAsync("configure", new object()).ConfigureAwait(false);
-            }
-        }
-
-        private async Task StartPluginsAsync(IDictionary<PluginIdentity, Plugin> plugins)
-        {
-            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
-            {
-                startupSequence.Start(identity);
-                await plugin.RouteAsync("start", new object()).ConfigureAwait(false);
-            }
-        }
-
-        private async Task StopPluginsAsync(IEnumerable<Plugin> plugins)
-        {
-            foreach (Plugin plugin in plugins)
-            {
-                await plugin.RouteAsync("stop", new object()).ConfigureAwait(false);
-            }
         }
 
         private sealed class GarryPlugin : Plugin

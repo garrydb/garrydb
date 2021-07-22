@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GarryDb.Platform.Extensions
@@ -8,6 +9,20 @@ namespace GarryDb.Platform.Extensions
     /// </summary>
     public static class EnumerableExtensions
     {
+        /// <summary>
+        ///     Execute <paramref name="action" /> on each item in <paramref name="enumerable" />.
+        /// </summary>
+        /// <param name="enumerable">The <see cref="IEnumerable{T}" />.</param>
+        /// <param name="action">The actino to execute.</param>
+        /// <typeparam name="T">The type of the items in <paramref name="enumerable" />.</typeparam>
+        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+        {
+            foreach (T item in enumerable)
+            {
+                action(item);
+            }
+        }
+
         /// <summary>
         ///     Concatenates <paramref name="item" /> to the <see cref="IEnumerable{T}" />.
         /// </summary>

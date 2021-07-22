@@ -25,6 +25,14 @@
                 Extends <see cref="T:System.Collections.Generic.IEnumerable`1" />.
             </summary>
         </member>
+        <member name="M:GarryDb.Platform.Extensions.EnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+                Execute <paramref name="action" /> on each item in <paramref name="enumerable" />.
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.Generic.IEnumerable`1" />.</param>
+            <param name="action">The actino to execute.</param>
+            <typeparam name="T">The type of the items in <paramref name="enumerable" />.</typeparam>
+        </member>
         <member name="M:GarryDb.Platform.Extensions.EnumerableExtensions.Concat``1(System.Collections.Generic.IEnumerable{``0},``0)">
             <summary>
                 Concatenates <paramref name="item" /> to the <see cref="T:System.Collections.Generic.IEnumerable`1" />.
