@@ -24,7 +24,7 @@ namespace GarryDB.UI
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Foo");
 
             AppBuilder
-                .Configure(() => new App(() => SendAsync(new PluginIdentity("garry", "*"), "shutdown", new object())))
+                .Configure(() => new App(() => SendAsync("Garry", "shutdown")))
                 .UsePlatformDetect()
                 .LogToTrace()
                 .StartWithClassicDesktopLifetime(new string[0]);
@@ -50,10 +50,6 @@ namespace GarryDB.UI
             eventSubscription.Dispose();
 
             Debug.WriteLine($"{DateTimeOffset.Now:s} END UIPlugin.Start");
-        }
-
-        protected override void Stop()
-        {
         }
     }
 }

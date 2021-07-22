@@ -1,4 +1,4 @@
-﻿using GarryDb.Plugins;
+﻿using GarryDB.Platform.Plugins;
 
 namespace GarryDb.Platform.Plugins.Loading
 {

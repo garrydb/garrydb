@@ -33,50 +33,7 @@ namespace GarryDb.Platform
     {
         private readonly FileSystem fileSystem;
 
-        /// <summary>
-        ///     Raised when a plugin has been found.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginFound = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin is being loaded.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginLoading = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin has been loaded.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginLoaded = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin is being started.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginStarting = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin has been started.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginStarted = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin is being configured.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginConfiguring = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin has been configured.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginConfigured = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin is being stopped.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginStopping = delegate { };
-
-        /// <summary>
-        ///     Raised when a plugin has been stopped.
-        /// </summary>
-        public event EventHandler<PluginEventArgs> PluginStopped = delegate { };
+        private readonly StartupSequence startupSequence;
 
         /// <summary>
         ///     Initializes <see cref="Garry" />.
@@ -85,6 +42,16 @@ namespace GarryDb.Platform
         public Garry(FileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+            startupSequence = new StartupSequence();
+        }
+
+        /// <summary>
+        ///     Gets the <see cref="IObservable{T}">IObservable&lt;ProgressUpdated&gt;</see> to be notified
+        ///     when the startup progress is changed.
+        /// </summary>
+        public IObservable<StartupProgressUpdated> WhenProgressUpdated
+        {
+            get { return startupSequence; }
         }
 
         /// <summary>
@@ -125,9 +92,11 @@ namespace GarryDb.Platform
                     await ConfigurePlugins(plugins).ConfigureAwait(false);
                     await StartPluginsAsync(plugins).ConfigureAwait(false);
 
+                    startupSequence.Complete();
+
                     shutdownRequested.WaitOne();
 
-                    await StopPluginsAsync(plugins).ConfigureAwait(false);
+                    await StopPluginsAsync(plugins.Values).ConfigureAwait(false);
                 }
 
                 Debug.WriteLine("END");
@@ -147,7 +116,7 @@ namespace GarryDb.Platform
             
             foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
             {
-                PluginFound(this, new PluginEventArgs(inspectedPlugin.PluginIdentity));
+                startupSequence.Inspect(inspectedPlugin.PluginIdentity);
                 yield return inspectedPlugin;
             }
         }
@@ -166,9 +135,8 @@ namespace GarryDb.Platform
 
         private LoadedPlugin LoadPlugin(PluginLoader loader, ContainerBuilder containerBuilder)
         {
-            PluginLoading(this, new PluginEventArgs(loader.PluginIdentity));
+            startupSequence.Load(loader.PluginIdentity);
             LoadedPlugin plugin = loader.Load(containerBuilder);
-            PluginLoaded(this, new PluginEventArgs(loader.PluginIdentity));
 
             return plugin;
         }
@@ -185,9 +153,8 @@ namespace GarryDb.Platform
         {
             foreach ((PluginIdentity identity, Plugin plugin) in plugins)
             {
-                PluginConfiguring(this, new PluginEventArgs(identity));
+                startupSequence.Configure(identity);
                 await plugin.RouteAsync("configure", new object()).ConfigureAwait(false);
-                PluginConfigured(this, new PluginEventArgs(identity));
             }
         }
 
@@ -195,25 +162,22 @@ namespace GarryDb.Platform
         {
             foreach ((PluginIdentity identity, Plugin plugin) in plugins)
             {
-                PluginStarting(this, new PluginEventArgs(identity));
+                startupSequence.Start(identity);
                 await plugin.RouteAsync("start", new object()).ConfigureAwait(false);
-                PluginStarted(this, new PluginEventArgs(identity));
             }
         }
 
-        private async Task StopPluginsAsync(IDictionary<PluginIdentity, Plugin> plugins)
+        private async Task StopPluginsAsync(IEnumerable<Plugin> plugins)
         {
-            foreach ((PluginIdentity identity, Plugin plugin) in plugins)
+            foreach (Plugin plugin in plugins)
             {
-                PluginStopping(this, new PluginEventArgs(identity));
                 await plugin.RouteAsync("stop", new object()).ConfigureAwait(false);
-                PluginStopped(this, new PluginEventArgs(identity));
             }
         }
 
         private sealed class GarryPlugin : Plugin
         {
-            public static readonly PluginIdentity PluginIdentity = new PluginIdentity("garry", "1.0");
+            public static readonly PluginIdentity PluginIdentity = new PluginIdentity("Garry", "1.0");
 
             public GarryPlugin(EventWaitHandle shutdownRequested, PluginContext pluginContext)
                 : base(pluginContext)

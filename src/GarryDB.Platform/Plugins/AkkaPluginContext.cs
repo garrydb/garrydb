@@ -30,14 +30,9 @@ namespace GarryDB.Platform.Plugins
         }
 
         /// <inheritdoc />
-        public Task SendAsync(PluginIdentity destination, string handler, object message)
+        public Task SendAsync(string destination, string handler, object message)
         {
-            var envelope =
-                new MessageEnvelope(
-                    new Address(pluginIdentity, handler + "/reply"),
-                    new Address(destination, handler),
-                    message
-                );
+            var envelope = new MessageEnvelope(pluginIdentity, new Address(new PluginIdentity(destination), handler), message);
 
             plugins.Tell(envelope);
 

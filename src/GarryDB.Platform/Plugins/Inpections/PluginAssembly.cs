@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
 using GarryDb.Platform.Extensions;
+
+using GarryDB.Platform.Plugins;
+
 using GarryDb.Plugins;
 
 namespace GarryDb.Platform.Plugins.Inpections

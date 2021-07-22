@@ -38,8 +38,8 @@
             >
                 <ProgressBar
                   Minimum="0"
-                  Maximum="{Binding NumberOfSteps}"
-                  Value="{Binding CurrentStep}"
+                  Maximum="{Binding Total}"
+                  Value="{Binding Current}"
                   Foreground="White"
                   BorderBrush="Transparent"
                   Background="Transparent"

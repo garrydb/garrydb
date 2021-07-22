@@ -52,31 +52,6 @@
                 Called when the plugin is being configured.
             </summary>
         </member>
-        <member name="T:GarryDb.Plugins.Messaging.MessageRouter">
-            <summary>
-                Routes messages to handlers.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.#ctor">
-            <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.Messaging.MessageRouter" />.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.ConfigureRoute(System.String,System.Func{System.Object,System.Threading.Tasks.Task{System.Object}})">
-            <summary>
-                Register a handler for a named route.
-            </summary>
-            <param name="name">The name of the route.</param>
-            <param name="handler">The handler.</param>
-        </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.RouteAsync(System.String,System.Object)">
-            <summary>
-                Route the message to the route.
-            </summary>
-            <param name="name">The name of the route.</param>
-            <param name="message">The message to handle.</param>
-            <returns>The result of handling the message.</returns>
-        </member>
         <member name="T:GarryDb.Plugins.Plugin">
             <summary>
                 A plugin.
@@ -113,7 +88,14 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.SendAsync(GarryDb.Plugins.PluginIdentity,System.String,System.Object)">
+        <member name="M:GarryDb.Plugins.Plugin.SendAsync(System.String,System.String)">
+            <summary>
+                Sends and empty message to <paramref name="destination" />.
+            </summary>
+            <param name="destination">The destination plugin.</param>
+            <param name="handler">The name of the handler.</param>
+        </member>
+        <member name="M:GarryDb.Plugins.Plugin.SendAsync(System.String,System.String,System.Object)">
             <summary>
                 Sends <paramref name="message" /> to <paramref name="destination" />.
             </summary>
@@ -146,55 +128,13 @@
                 Sends messages to other plugins.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.PluginContext.SendAsync(GarryDb.Plugins.PluginIdentity,System.String,System.Object)">
+        <member name="M:GarryDb.Plugins.PluginContext.SendAsync(System.String,System.String,System.Object)">
             <summary>
                 Sends <paramref name="message" /> to <paramref name="destination" />.
             </summary>
             <param name="destination">The destination plugin.</param>
             <param name="handler">The name of the handler.</param>
             <param name="message">The message.</param>
-        </member>
-        <member name="T:GarryDb.Plugins.PluginIdentity">
-            <summary>
-                The identity of a <see cref="T:GarryDb.Plugins.Plugin" />.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.#ctor(System.String,System.String)">
-            <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.PluginIdentity" />.
-            </summary>
-            <param name="name">The name of the plugin.</param>
-            <param name="version">The version of the plugin.</param>
-        </member>
-        <member name="P:GarryDb.Plugins.PluginIdentity.Name">
-            <summary>
-                Gets the name of the plugin.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.Equals(System.Object)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.GetHashCode">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.ToString">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.op_Equality(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.PluginIdentity)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDb.Plugins.PluginIdentity.op_Inequality(GarryDb.Plugins.PluginIdentity,GarryDb.Plugins.PluginIdentity)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
         </member>
         <member name="T:GarryDb.Plugins.StartupOrderAttribute">
             <summary>

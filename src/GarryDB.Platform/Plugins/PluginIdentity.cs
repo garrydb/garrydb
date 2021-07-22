@@ -1,6 +1,8 @@
 ﻿using System;
 
-namespace GarryDb.Plugins
+using GarryDb.Plugins;
+
+namespace GarryDB.Platform.Plugins
 {
     /// <summary>
     ///     The identity of a <see cref="Plugin" />.
@@ -49,7 +51,7 @@ namespace GarryDb.Plugins
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return Name.ToLowerInvariant().GetHashCode();
         }
 
         /// <inheritdoc />

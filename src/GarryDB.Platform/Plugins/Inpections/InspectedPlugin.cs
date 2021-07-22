@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
+using GarryDB.Platform.Plugins;
+
 using GarryDb.Plugins;
 
 namespace GarryDb.Platform.Plugins.Inpections

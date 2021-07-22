@@ -18,67 +18,33 @@ namespace GarryDB.Wpf.Host
             var splashScreen = new SplashScreen();
             splashScreen.Show();
 
-            _ = Task.Run(async () =>
-              {
-                  var garry = new Garry(new WindowsFileSystem());
-                  garry.PluginFound += (_, _) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.NumberOfPlugins++;
-                      if (splashScreen.NumberOfSteps == int.MaxValue)
-                      {
-                          splashScreen.NumberOfSteps = 3;
-                      }
-                      else
-                      {
-                          splashScreen.NumberOfSteps += 3;
-                      }
-                  });
-                  garry.PluginLoading += (_, args) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.Phase = "Loading plugins";
-                      splashScreen.CurrentPlugin = args.PluginIdentity;
-                  });
-                  garry.PluginLoaded += (_, _) => Dispatcher.Invoke(() => splashScreen.CurrentStep++);
-                  garry.PluginConfiguring += (_, args) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.Phase = "Configuring plugins";
-                      splashScreen.CurrentPlugin = args.PluginIdentity;
-                      splashScreen.CurrentStep++;
-                  });
-                  garry.PluginStarting += (_, args) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.Phase = "Starting plugins";
-                      splashScreen.CurrentPlugin = args.PluginIdentity;
-                      splashScreen.CurrentStep++;
-                  });
-                  garry.PluginStarted += (_, _) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.NumberOfPluginsStarted++;
-                      if (splashScreen.NumberOfPluginsStarted == splashScreen.NumberOfPlugins)
-                      {
-                          splashScreen.Close();
-                      }
-                  });
+            Task.Run(async () =>
+            {
+                var garry = new Garry(new WindowsFileSystem());
 
-                  garry.PluginStopped += (_, _) => Dispatcher.Invoke(() =>
-                  {
-                      splashScreen.NumberOfPluginsStarted--;
-                      if (splashScreen.NumberOfPluginsStarted == 0)
-                      {
-                          Shutdown();
-                      }
-                  });
+                using (garry.WhenProgressUpdated.Subscribe(updated => OnProgressUpdated(splashScreen, updated), () => OnProgressCompleted(splashScreen)))
+                {
+                    await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins").ConfigureAwait(false);
+                }
 
-                  try
-                  {
-                      await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins").ConfigureAwait(false);
-                  }
-                  catch (Exception exception)
-                  {
-                      Console.WriteLine(exception);
-                      throw;
-                  }
-              });
+                Dispatcher.Invoke(() => Shutdown());
+            });
+        }
+
+        private void OnProgressUpdated(SplashScreen splashScreen, StartupProgressUpdated updated)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                splashScreen.Phase = updated.Stage;
+                splashScreen.Current = updated.CurrentStep;
+                splashScreen.CurrentPlugin = updated.PluginIdentity;
+                splashScreen.Total = updated.TotalSteps;
+            });
+        }
+
+        private void OnProgressCompleted(SplashScreen splashScreen)
+        {
+            Dispatcher.Invoke(() => splashScreen.Close());
         }
     }
 }

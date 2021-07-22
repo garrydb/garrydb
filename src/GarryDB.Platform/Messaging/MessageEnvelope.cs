@@ -1,91 +1,46 @@
-﻿using GarryDb.Plugins;
+﻿using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Platform.Messaging
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public sealed class Address
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="pluginIdentity"></param>
-        /// <param name="handler"></param>
-        public Address(PluginIdentity pluginIdentity, string handler)
-        {
-            PluginIdentity = pluginIdentity;
-            Handler = handler;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public PluginIdentity PluginIdentity { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Handler { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Address CreateReturnAddress()
-        {
-            return new Address(PluginIdentity, Handler + "/reply");
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{PluginIdentity}.{Handler}";
-        }
-    }
-
-    /// <summary>
-    /// 
+    ///     Wrapped around a message and contains metadata about that message.
     /// </summary>
     public sealed class MessageEnvelope
     {
+        private readonly PluginIdentity sender;
+
         /// <summary>
-        /// 
+        ///     Initializes a new <see cref="MessageEnvelope" />.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="destination"></param>
-        /// <param name="message"></param>
-        public MessageEnvelope(Address sender, Address destination, object message)
+        /// <param name="sender">The sender of the message.</param>
+        /// <param name="destination">The destination of the message.</param>
+        /// <param name="message">The message.</param>
+        public MessageEnvelope(PluginIdentity sender, Address destination, object message)
         {
-            Sender = sender;
+            this.sender = sender;
             Destination = destination;
             Message = message;
         }
 
         /// <summary>
-        ///     Gets the address of the sender.
-        /// </summary>
-        public Address Sender { get; }
-
-        /// <summary>
-        /// 
+        ///     Gets the destination of the message.
         /// </summary>
         public Address Destination { get; }
 
 
         /// <summary>
-        /// 
+        ///     Gets the message.
         /// </summary>
         public object Message { get; }
 
         /// <summary>
-        /// 
+        ///     Create a <see cref="MessageEnvelope" /> containing a response for the original sender.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">The message to send.</param>
+        /// <returns>A <see cref="MessageEnvelope" /> containing the message and is addressed to the sender.</returns>
         public MessageEnvelope CreateReturnMessage(object message)
         {
-            return new MessageEnvelope(Destination, Sender.CreateReturnAddress(), message);
+            return new MessageEnvelope(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
         }
     }
 }

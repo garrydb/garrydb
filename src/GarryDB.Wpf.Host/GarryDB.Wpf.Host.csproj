@@ -21,12 +21,12 @@
     <Garry_PluginsDirectory>$([System.IO.Path]::Combine($(Garry_RootDirectory), 'Plugins'))</Garry_PluginsDirectory>
   </PropertyGroup>
 
-  <Target Name="RebuildPlugins" AfterTargets="AfterBuild" Condition="True">
+  <Target Name="BuildPlugins" AfterTargets="PostBuildEvent" Condition="True">
     <Message Text="GARRY: Compiling Shared and Contract projects" Importance="high" />
-    <MSBuild Projects="@(SharedAndContractProjects)" Targets="Rebuild" />
+    <MSBuild Projects="@(SharedAndContractProjects)" Targets="Build" />
   </Target>
   
-  <Target Name="DeployPlugins" Condition="True" AfterTargets="RebuildPlugins" Inputs="@(PluginProjects)" Outputs="%(Identity).Dummy">
+  <Target Name="DeployPlugins" Condition="True" AfterTargets="BuildPlugins" Inputs="@(PluginProjects)" Outputs="%(Identity).Dummy">
     <PropertyGroup>
       <Garry_OutputDirectory>$([System.IO.Path]::Combine($(Garry_PluginsDirectory), %(PluginProjects.Filename)))</Garry_OutputDirectory>
     </PropertyGroup>

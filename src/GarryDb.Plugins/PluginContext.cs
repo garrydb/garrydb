@@ -13,6 +13,6 @@ namespace GarryDb.Plugins
         /// <param name="destination">The destination plugin.</param>
         /// <param name="handler">The name of the handler.</param>
         /// <param name="message">The message.</param>
-        Task SendAsync(PluginIdentity destination, string handler, object message);
+        Task SendAsync(string destination, string handler, object message);
     }
 }

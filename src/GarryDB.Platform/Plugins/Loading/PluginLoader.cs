@@ -7,6 +7,9 @@ using System.Runtime.Loader;
 using Autofac;
 
 using GarryDb.Platform.Extensions;
+
+using GarryDB.Platform.Plugins;
+
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Plugins;
 

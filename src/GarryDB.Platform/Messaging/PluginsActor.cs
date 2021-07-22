@@ -4,8 +4,7 @@ using System.Diagnostics;
 using Akka.Actor;
 
 using GarryDB.Platform.Messaging.Messages;
-
-using GarryDb.Plugins;
+using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Platform.Messaging
 {

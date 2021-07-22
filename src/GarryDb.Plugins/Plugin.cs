@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using GarryDb.Plugins.Messaging;
 
 namespace GarryDb.Plugins
 {
@@ -10,7 +9,7 @@ namespace GarryDb.Plugins
     /// </summary>
     public abstract class Plugin
     {
-        private readonly MessageRouter messageRouter;
+        private readonly IDictionary<string, Func<object, Task<object?>>> handlers;
         private readonly PluginContext pluginContext;
 
         /// <summary>
@@ -20,7 +19,7 @@ namespace GarryDb.Plugins
         protected Plugin(PluginContext pluginContext)
         {
             this.pluginContext = pluginContext;
-            messageRouter = new MessageRouter();
+            handlers = new Dictionary<string, Func<object, Task<object?>>>();
             
             Register("start", (object _) => StartAsync());
             Register("stop", (object _) => StopAsync());
@@ -56,7 +55,7 @@ namespace GarryDb.Plugins
                 return result;
             };
 
-            messageRouter.ConfigureRoute(name, handlerWrapper);
+            handlers[name] = handlerWrapper;
         }
 
         /// <summary>
@@ -67,7 +66,23 @@ namespace GarryDb.Plugins
         /// <returns>The result of handling the message.</returns>
         internal Task<object?> RouteAsync(string name, object message)
         {
-            return messageRouter.RouteAsync(name, message);
+            if (!handlers.ContainsKey(name))
+            {
+                return Task.FromResult<object?>(null);
+            }
+
+            Func<object, Task<object?>> handler = handlers[name];
+            return handler(message);
+        }
+
+        /// <summary>
+        ///     Sends and empty message to <paramref name="destination" />.
+        /// </summary>
+        /// <param name="destination">The destination plugin.</param>
+        /// <param name="handler">The name of the handler.</param>
+        protected Task SendAsync(string destination, string handler)
+        {
+            return SendAsync(destination, handler, new object());
         }
 
         /// <summary>
@@ -76,7 +91,7 @@ namespace GarryDb.Plugins
         /// <param name="destination">The destination plugin.</param>
         /// <param name="handler">The name of the handler.</param>
         /// <param name="message">The message.</param>
-        protected Task SendAsync(PluginIdentity destination, string handler, object message)
+        protected Task SendAsync(string destination, string handler, object message)
         {
             return pluginContext.SendAsync(destination, handler, message);
         }
