@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -55,27 +56,38 @@ namespace GarryDb.Platform.Plugins.Loading
 
         private Assembly? LoadInternal(AssemblyName name)
         {
-            if (Assemblies.Any(x => x.GetName().IsCompatibleWith(name)))
-            {
-                return Assemblies.Single(x => x.GetName().IsCompatibleWith(name));
-            }
+            Debug.WriteLine($"PluginLoadContext - {inspectedPlugin.PluginIdentity} requests {name}");
 
-            Assembly? assemblyFromParent =
+            var assemblyFromParent =
                 providers
-                    .Select(x => new {Success = x.TryLoad(name, out Assembly? assembly), Assembly = assembly})
-                    .Where(x => x.Success)
-                    .Select(x => x.Assembly!)
-                    .FirstOrDefault();
+                    .Select(x => new
+                    {
+                        Success = x.TryLoad(name, out Assembly? assembly),
+                        Assembly = assembly,
+                        Provider = x.Name
+                    })
+                    .FirstOrDefault(x => x.Success);
 
             if (assemblyFromParent != null)
             {
-                return assemblyFromParent;
+                Debug.WriteLine($"PluginLoadContext - {name} found in {assemblyFromParent.Provider}");
+
+                return assemblyFromParent.Assembly;
+            }
+
+            if (Assemblies.Any(x => x.GetName().IsCompatibleWith(name)))
+            {
+                Debug.WriteLine($"PluginLoadContext - found in self");
+
+                return Assemblies.Single(x => x.GetName().IsCompatibleWith(name));
             }
 
             Assembly? result = null;
             string? assemblyPath = resolver.ResolveAssemblyToPath(name);
             if (assemblyPath != null)
             {
+                Debug.WriteLine($"PluginLoadContext - loading from path {assemblyPath}");
+
                 result = LoadFromAssemblyPath(assemblyPath);
             }
 

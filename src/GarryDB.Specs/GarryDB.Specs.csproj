@@ -24,6 +24,8 @@
       <ProjectReference Include="..\Plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
       <ProjectReference Include="..\Plugins\ExamplePlugin\ExamplePlugin.csproj" />
       <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
+      <ProjectReference Include="..\Plugins\ExtendAvalonia\ExtendAvalonia.csproj" />
+      <ProjectReference Include="..\Plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
       <ProjectReference Include="..\Plugins\GarryDB.UI\GarryDB.UI.csproj" />
     </ItemGroup>
 
