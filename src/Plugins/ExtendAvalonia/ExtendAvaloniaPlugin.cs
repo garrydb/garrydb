@@ -2,6 +2,7 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 
 using GarryDb.Plugins;
 
@@ -12,15 +13,16 @@ namespace ExtendAvalonia
         public ExtendAvaloniaPlugin(PluginContext pluginContext, Application application)
             : base(pluginContext)
         {
-            var type = application.GetType().Assembly.GetType("GarryDB.UI.Views.MainWindow");
+            var type = application.GetType().Assembly.GetType("GarryDB.UI.Views.FirstView");
 
-            application.Styles.Add(new Style(selector => selector.OfType(type))
-            {
-                Setters =
+            Dispatcher.UIThread.InvokeAsync(() =>
+                application.Styles.Add(new Style(selector => selector.OfType(type))
                 {
-                    new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#FF0000"))
-                }
-            });
+                    Setters =
+                    {
+                        new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#FF0000"))
+                    }
+                }));
         }
     }
 }

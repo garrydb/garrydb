@@ -2,9 +2,12 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
 
 using GarryDb.Plugins;
 
@@ -36,7 +39,51 @@ namespace GarryDB.UI
             Debug.WriteLine($"{DateTimeOffset.Now:s} END UIPlugin.Foo");
         }
 
-        [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+
+
+        public static App CreateApplication
+        {
+            get
+            {
+                var mainThread = new Thread(TestAppBuilder);
+#pragma warning disable CA1416 // Validate platform compatibility
+                mainThread.SetApartmentState(ApartmentState.STA);
+#pragma warning restore CA1416 // Validate platform compatibility
+                mainThread.Start();
+
+                initialized.WaitOne();
+
+                return instance;
+            }
+        }
+
+        private static App instance;
+        private static ClassicDesktopStyleApplicationLifetime lifetime;
+
+        private static AutoResetEvent initialized = new AutoResetEvent(false);
+        private static AutoResetEvent starting = new AutoResetEvent(false);
+
+        private static void TestAppBuilder()
+        {
+            lifetime = new ClassicDesktopStyleApplicationLifetime()
+            {
+                ShutdownMode = ShutdownMode.OnLastWindowClose
+            };
+
+            instance =
+                (App) AppBuilder
+                    .Configure<App>()
+                    .UsePlatformDetect()
+                    .LogToTrace()
+                    .SetupWithLifetime(lifetime)
+                    .Instance;
+
+            initialized.Set();
+            starting.WaitOne();
+
+            lifetime.Start(new string[0]);
+        }
+
         protected override void Start()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Start");
@@ -45,10 +92,8 @@ namespace GarryDB.UI
             IDisposable eventSubscription =
                 Window.WindowOpenedEvent.AddClassHandler(typeof(MainWindow), (_, _) => startupCompleted.Set());
 
-            var mainThread = new Thread(Foo);
-            mainThread.SetApartmentState(ApartmentState.STA);
-            mainThread.Start();
-
+            instance.Shutdown = () => SendAsync("Garry", "shutdown");
+            starting.Set();
             startupCompleted.WaitOne();
             startupCompleted.Dispose();
             eventSubscription.Dispose();

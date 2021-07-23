@@ -29,12 +29,6 @@ namespace GarryDB.UI.Modules
                 .AssignableTo<ViewModel>()
                 .InstancePerDependency();
 
-            builder
-                .RegisterType<App>()
-                .AsSelf()
-                .As<Application>()
-                .SingleInstance();
-
             AutofacDependencyResolver resolver = builder.UseAutofacDependencyResolver();
             builder.RegisterInstance(resolver);
             resolver.InitializeSplat();
@@ -44,6 +38,11 @@ namespace GarryDB.UI.Modules
             RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
 
             builder.RegisterBuildCallback(scope => resolver.SetLifetimeScope(scope));
+
+            builder.RegisterInstance(UIPlugin.CreateApplication)
+                .AsSelf()
+                .As<Application>()
+                .SingleInstance();
         }
     }
 }
