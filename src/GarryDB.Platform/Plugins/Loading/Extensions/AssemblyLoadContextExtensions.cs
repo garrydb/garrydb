@@ -1,6 +1,10 @@
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+
+using GarryDb.Platform.Extensions;
 
 namespace GarryDB.Platform.Plugins.Loading.Extensions
 {
@@ -20,6 +24,13 @@ namespace GarryDB.Platform.Plugins.Loading.Extensions
         /// <returns><c>true</c> if the loading has been successful, otherwise <c>false</c>.</returns>
         public static bool TryLoad(this AssemblyLoadContext assemblyLoadContext, AssemblyName name, out Assembly? assembly)
         {
+            assembly = assemblyLoadContext.Assemblies.SingleOrDefault(x => name.IsCompatibleWith(x.GetName()));
+
+            if (assembly != null)
+            {
+                return true;
+            }
+
             try
             {
                 assembly = assemblyLoadContext.LoadFromAssemblyName(name);
@@ -27,6 +38,8 @@ namespace GarryDB.Platform.Plugins.Loading.Extensions
             }
             catch (FileNotFoundException)
             {
+                Debug.WriteLine($"Assembly {name} not found in {assemblyLoadContext.Name}");
+
                 assembly = null;
                 return false;
             }

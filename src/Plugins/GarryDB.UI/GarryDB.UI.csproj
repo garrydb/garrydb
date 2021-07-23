@@ -26,5 +26,6 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+      <ProjectReference Include="..\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
     </ItemGroup>
 </Project>

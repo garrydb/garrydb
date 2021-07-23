@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
@@ -14,17 +15,7 @@ namespace GarryDB.UI
 {
     public class App : Application
     {
-        private readonly Func<Task> shutdown;
-
-        public App()
-            : this(() => Task.CompletedTask)
-        {
-        }
-
-        public App(Func<Task> shutdown)
-        {
-            this.shutdown = shutdown;
-        }
+        public Func<Task> Shutdown;
 
         public override void Initialize()
         {
@@ -35,6 +26,8 @@ namespace GarryDB.UI
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = new MainWindowViewModel()
@@ -45,7 +38,7 @@ namespace GarryDB.UI
                     {
                         _.ApplicationExitCode = -1;
 
-                        return shutdown();
+                        return Shutdown();
                     }));
             }
 

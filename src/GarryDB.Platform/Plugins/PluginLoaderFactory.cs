@@ -25,10 +25,12 @@ namespace GarryDb.Platform.Plugins
             foreach ((InspectedPlugin plugin, PluginLoadContext context) in mapping)
             {
                 context.AddProvider(AssemblyLoadContext.Default);
+
                 foreach (ReferencedAssembly assembly in plugin.ReferencedAssemblies)
                 {
                     InspectedPlugin? provider =
-                        inspectedPlugins.SingleOrDefault(p => p.ProvidedAssemblies.Any(x => x.IsCompatibleWith(assembly.AssemblyName)));
+                        inspectedPlugins.SingleOrDefault(p =>
+                            p.ProvidedAssemblies.Any(x => x.IsCompatibleWith(assembly.AssemblyName)));
 
                     if (provider != null)
                     {

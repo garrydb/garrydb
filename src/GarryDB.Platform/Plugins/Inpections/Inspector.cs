@@ -64,7 +64,11 @@ namespace GarryDb.Platform.Plugins.Inpections
                 return null;
             }
 
-            IEnumerable<Assembly> providedAssemblies = assemblies.Where(assembly => IsProvidedAssembly(assembly, pluginAssembly)).ToList();
+            IEnumerable<Assembly> providedAssemblies =
+                assemblies
+                    .Where(assembly => IsProvidedAssembly(assembly, pluginAssembly))
+                    .ToList();
+
             IEnumerable<Assembly> referencedAssemblies = assemblies.Except(pluginAssembly).Except(providedAssemblies).ToList();
 
             return new InspectedPlugin(

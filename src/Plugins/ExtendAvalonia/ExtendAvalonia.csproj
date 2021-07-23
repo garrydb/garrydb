@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+    <ProjectReference Include="..\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.6" />
+  </ItemGroup>
+
+</Project>

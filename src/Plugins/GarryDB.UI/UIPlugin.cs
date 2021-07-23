@@ -14,17 +14,21 @@ namespace GarryDB.UI
 {
     public class UIPlugin : Plugin
     {
-        public UIPlugin(PluginContext pluginContext)
+        private readonly App app;
+
+        public UIPlugin(PluginContext pluginContext, App app)
             : base(pluginContext)
         {
+            this.app = app;
         }
 
         private void Foo()
         {
             Debug.WriteLine($"{DateTimeOffset.Now:s} BEGIN UIPlugin.Foo");
+            app.Shutdown = () => SendAsync("Garry", "shutdown");
 
             AppBuilder
-                .Configure(() => new App(() => SendAsync("Garry", "shutdown")))
+                .Configure(() => app)
                 .UsePlatformDetect()
                 .LogToTrace()
                 .StartWithClassicDesktopLifetime(new string[0]);
