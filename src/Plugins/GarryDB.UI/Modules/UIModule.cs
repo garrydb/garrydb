@@ -1,15 +1,10 @@
 ﻿using Autofac;
 
 using Avalonia;
-using Avalonia.ReactiveUI;
-using Avalonia.Threading;
 
 using GarryDB.UI.ViewModels;
 
 using ReactiveUI;
-
-using Splat;
-using Splat.Autofac;
 
 namespace GarryDB.UI.Modules
 {
@@ -24,16 +19,6 @@ namespace GarryDB.UI.Modules
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .AssignableTo<ViewModel>()
                 .InstancePerDependency();
-
-            AutofacDependencyResolver resolver = builder.UseAutofacDependencyResolver();
-            builder.RegisterInstance(resolver);
-            resolver.InitializeSplat();
-            resolver.InitializeReactiveUI();
-            resolver.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
-            resolver.RegisterConstant(new AutoDataTemplateBindingHook(), typeof(IPropertyBindingHook));
-            RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
-
-            builder.RegisterBuildCallback(scope => resolver.SetLifetimeScope(scope));
             
             builder.RegisterType<App>()
                 .As<Application>()
