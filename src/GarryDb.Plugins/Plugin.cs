@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 namespace GarryDb.Plugins
 {
     /// <summary>
     ///     A plugin.
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.Default | ImplicitUseTargetFlags.WithInheritors)]
     public abstract class Plugin
     {
         private readonly IDictionary<string, Func<object, Task<object?>>> handlers;

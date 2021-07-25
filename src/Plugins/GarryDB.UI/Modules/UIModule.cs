@@ -38,9 +38,8 @@ namespace GarryDB.UI.Modules
             RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
 
             builder.RegisterBuildCallback(scope => resolver.SetLifetimeScope(scope));
-
-            builder.RegisterInstance(UIPlugin.CreateApplication)
-                .AsSelf()
+            
+            builder.RegisterType<App>()
                 .As<Application>()
                 .SingleInstance();
         }
