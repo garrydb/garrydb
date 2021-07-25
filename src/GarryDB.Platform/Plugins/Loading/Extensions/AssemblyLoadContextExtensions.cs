@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -38,8 +37,6 @@ namespace GarryDB.Platform.Plugins.Loading.Extensions
             }
             catch (FileNotFoundException)
             {
-                Debug.WriteLine($"Assembly {name} not found in {assemblyLoadContext.Name}");
-
                 assembly = null;
                 return false;
             }

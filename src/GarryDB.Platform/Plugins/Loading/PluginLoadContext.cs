@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -54,10 +54,15 @@ namespace GarryDb.Platform.Plugins.Loading
             return assembly;
         }
 
+        private static readonly ConcurrentDictionary<AssemblyName, Assembly?> Cache = new();
+        
         private Assembly? LoadInternal(AssemblyName name)
         {
-            Debug.WriteLine($"PluginLoadContext - {inspectedPlugin.PluginIdentity} requests {name}");
+            return Cache.GetOrAdd(name, n => FindAssembly(n));
+        }
 
+        private Assembly? FindAssembly(AssemblyName name)
+        {
             var assemblyFromParent =
                 providers
                     .Select(x => new
@@ -70,15 +75,11 @@ namespace GarryDb.Platform.Plugins.Loading
 
             if (assemblyFromParent != null)
             {
-                Debug.WriteLine($"PluginLoadContext - {name} found in {assemblyFromParent.Provider}");
-
                 return assemblyFromParent.Assembly;
             }
 
             if (Assemblies.Any(x => x.GetName().IsCompatibleWith(name)))
             {
-                Debug.WriteLine($"PluginLoadContext - found in self");
-
                 return Assemblies.Single(x => x.GetName().IsCompatibleWith(name));
             }
 
@@ -86,8 +87,6 @@ namespace GarryDb.Platform.Plugins.Loading
             string? assemblyPath = resolver.ResolveAssemblyToPath(name);
             if (assemblyPath != null)
             {
-                Debug.WriteLine($"PluginLoadContext - loading from path {assemblyPath}");
-
                 result = LoadFromAssemblyPath(assemblyPath);
             }
 

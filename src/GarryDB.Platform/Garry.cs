@@ -24,7 +24,6 @@ using GarryDb.Platform.Plugins.Loading;
 using GarryDb.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
-using Debug = System.Diagnostics.Debug;
 
 namespace GarryDb.Platform
 {
@@ -117,8 +116,6 @@ namespace GarryDb.Platform
                         pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "stop"), new object()));
                     });
                 }
-
-                Debug.WriteLine("END");
             }
         }
 

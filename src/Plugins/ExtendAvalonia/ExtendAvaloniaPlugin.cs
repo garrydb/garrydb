@@ -2,11 +2,9 @@
 
 using Autofac;
 
-using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Avalonia.Threading;
 
 using GarryDb.Plugins;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
@@ -70,16 +69,10 @@ namespace GarryDb.Plugins
         /// <returns>The result of handling the message.</returns>
         internal Task<object?> RouteAsync(string name, object message)
         {
-            Debug.WriteLine($"Routing message {name}");
-
             if (!handlers.ContainsKey(name))
             {
-                Debug.WriteLine($"No handler configured for {name}");
-
                 return Task.FromResult<object?>(null);
             }
-
-            Debug.WriteLine($"Handling message {name}");
 
             Func<object, Task<object?>> handler = handlers[name];
             return handler(message);

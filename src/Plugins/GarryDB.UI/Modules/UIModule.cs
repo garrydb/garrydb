@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-using Autofac;
+﻿using Autofac;
 
 using Avalonia;
 using Avalonia.ReactiveUI;
@@ -19,8 +17,6 @@ namespace GarryDB.UI.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            Debug.WriteLine("Loading Autofac module");
-
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .AsClosedTypesOf(typeof(IViewFor<>))
                 .InstancePerDependency();
