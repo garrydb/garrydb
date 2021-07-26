@@ -1,0 +1,31 @@
+﻿using GarryDb.Platform.Plugins.Inpections;
+using GarryDb.Platform.Plugins.Loading;
+using GarryDb.Specs;
+using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
+
+namespace GarryDB.Specs.Platform.Plugins.Loading.Builders
+{
+    public sealed class PluginLoaderBuilder : TestDataBuilder<PluginLoader>
+    {
+        private InspectedPlugin inspectedPlugin;
+
+        protected override void OnPreBuild()
+        {
+            if (inspectedPlugin == null)
+            {
+                ThatLoadsPlugin(new InspectedPluginBuilder().Build());
+            }
+        }
+
+        protected override PluginLoader OnBuild()
+        {
+            return new PluginLoader(inspectedPlugin);
+        }
+
+        public PluginLoaderBuilder ThatLoadsPlugin(InspectedPlugin inspectedPlugin)
+        {
+            this.inspectedPlugin = inspectedPlugin;
+            return this;
+        }
+    }
+}

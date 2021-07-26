@@ -8,7 +8,7 @@ using GarryDb.Platform.Infrastructure;
 namespace GarryDB.Wpf.Host
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
     public partial class App
     {
@@ -22,7 +22,10 @@ namespace GarryDB.Wpf.Host
             {
                 var garry = new Garry(new WindowsFileSystem());
 
-                using (garry.WhenProgressUpdated.Subscribe(updated => OnProgressUpdated(splashScreen, updated), () => OnProgressCompleted(splashScreen)))
+                using (garry.WhenProgressUpdated.Subscribe(
+                    updated => OnProgressUpdated(splashScreen, updated),
+                    () => OnProgressCompleted(splashScreen))
+                )
                 {
                     await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins").ConfigureAwait(false);
                 }

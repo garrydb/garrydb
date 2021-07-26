@@ -8,7 +8,9 @@ using ExamplePlugin.Shared;
 using FluentAssertions;
 
 using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Specs.Platform.Builders;
+
+using GarryDB.Specs.Platform.Infrastructure.Builders;
+
 using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
 using GarryDb.Specs.Platform.Plugins.Inspections.Extensions;
 

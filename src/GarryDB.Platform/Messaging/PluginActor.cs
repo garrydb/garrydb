@@ -34,7 +34,7 @@ namespace GarryDB.Platform.Messaging
                 }
             });
         }
-
+        
         /// <summary>
         ///     Create the <see cref="PluginActor" />.
         /// </summary>

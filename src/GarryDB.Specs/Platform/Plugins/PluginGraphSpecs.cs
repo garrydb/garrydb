@@ -10,6 +10,9 @@ using ExamplePlugin.Shared;
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Inpections;
 using GarryDb.Platform.Plugins.Loading;
+
+using GarryDB.Specs.Akka.Builders;
+
 using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
 
 using NUnit.Framework;
@@ -31,6 +34,8 @@ namespace GarryDb.Specs.Platform.Plugins
 
             protected override void When(PluginLoaderFactory subject)
             {
+                var test = new TestKitBuilder().Build();
+
                 InspectedPlugin plugin1 = new InspectedPluginBuilder().Build();
                 InspectedPlugin plugin2 = new InspectedPluginBuilder().For<DependsOnExample>().References<ExampleShared>().Build();
 

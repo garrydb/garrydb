@@ -62,13 +62,13 @@ namespace GarryDb.Platform
         public async Task StartAsync(string pluginsDirectory)
         {
             var shutdownRequested = new AutoResetEvent(false);
-            using (ActorSystem system = ActorSystem.Create(ActorPaths.Garry.Name))
+            using (ActorSystem system = ActorSystem.Create("garry"))
             {
                 var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
                 IActorRef deadletterWatchActorRef = system.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
-                IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), ActorPaths.Plugins.Name);
+                IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), "plugins");
                 
                 var containerBuilder = new ContainerBuilder();
                 IEnumerable<LoadedPlugin> loadedPlugins = LoadPlugins(pluginsDirectory, containerBuilder).ToList();

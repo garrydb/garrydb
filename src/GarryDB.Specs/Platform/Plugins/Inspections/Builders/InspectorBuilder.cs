@@ -1,6 +1,7 @@
 ﻿using GarryDb.Platform.Infrastructure;
 using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Specs.Platform.Builders;
+
+using GarryDB.Specs.Platform.Infrastructure.Builders;
 
 namespace GarryDb.Specs.Platform.Plugins.Inspections.Builders
 {

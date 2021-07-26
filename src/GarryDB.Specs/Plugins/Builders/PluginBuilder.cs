@@ -4,16 +4,45 @@ using System.Threading.Tasks;
 
 using GarryDb.Plugins;
 
+using GarryDB.Specs.Plugins.Builders;
+
 namespace GarryDb.Specs.Plugins.Builders
 {
     public sealed class PluginBuilder : TestDataBuilder<Plugin>
     {
         private readonly IDictionary<string, dynamic> registrations = new Dictionary<string, dynamic>();
+        private Func<Plugin> factory;
+        private Action<object> onConfiguring;
         private PluginContext pluginContext;
+
+        protected override void OnPreBuild()
+        {
+            if (pluginContext == null)
+            {
+                Using(new PluginContextBuilder().Build());
+            }
+
+            if (factory == null)
+            {
+                WhenConfiguring(() => { });
+            }
+        }
 
         protected override Plugin OnBuild()
         {
-            return new PluginStub(this);
+            return factory();
+        }
+
+        public PluginBuilder WhenConfiguring(Action onConfigure)
+        {
+            return WhenConfiguring<object>(_ => onConfigure());
+        }
+
+        public PluginBuilder WhenConfiguring<TConfiguration>(Action<TConfiguration> onConfigure) where TConfiguration : new()
+        {
+            onConfiguring = o => onConfigure((TConfiguration) o);
+            factory = () => new PluginStub<TConfiguration>(this);
+            return this;
         }
         
         public PluginBuilder Register<TMessage>(string name, Action<TMessage> handler)
@@ -40,15 +69,29 @@ namespace GarryDb.Specs.Plugins.Builders
             return this;
         }
 
-        private class PluginStub : Plugin
+        public PluginBuilder Using(PluginContext pluginContext)
         {
+            this.pluginContext = pluginContext;
+            return this;
+        }
+
+        private class PluginStub<TConfiguration> : ConfigurablePlugin<TConfiguration> where TConfiguration : new()
+        {
+            private readonly PluginBuilder builder;
+
             public PluginStub(PluginBuilder builder)
                 : base(builder.pluginContext)
             {
+                this.builder = builder;
                 foreach (KeyValuePair<string, dynamic> registration in builder.registrations)
                 {
                     Register(registration.Key, registration.Value);
                 }
+            }
+
+            protected override void Configure(TConfiguration configuration)
+            {
+                builder.onConfiguring(configuration);
             }
         }
     }

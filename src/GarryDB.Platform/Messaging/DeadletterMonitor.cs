@@ -6,12 +6,12 @@ using Debug = System.Diagnostics.Debug;
 namespace GarryDB.Platform.Messaging
 {
     /// <summary>
-    /// 
+    ///     Monitors deadletters in the Akka.
     /// </summary>
     public class DeadletterMonitor : ReceiveActor
     {
         /// <summary>
-        /// 
+        ///     Initializes a new <see cref="DeadletterMonitor" />.
         /// </summary>
         public DeadletterMonitor()
         {

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 using GarryDb.Platform.Infrastructure;
+using GarryDb.Specs;
 
-namespace GarryDb.Specs.Platform.Builders
+namespace GarryDB.Specs.Platform.Infrastructure.Builders
 {
     public sealed class FileSystemBuilder : TestDataBuilder<FileSystem>
     {

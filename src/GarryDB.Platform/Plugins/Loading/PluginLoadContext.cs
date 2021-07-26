@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
 using GarryDb.Platform.Extensions;
+
 using GarryDb.Platform.Plugins.Inpections;
 
 using GarryDB.Platform.Plugins.Loading.Extensions;
@@ -28,13 +29,13 @@ namespace GarryDb.Platform.Plugins.Loading
         /// <summary>
         ///     Initializes a new <see cref="PluginLoadContext" />.
         /// </summary>
-        /// <param name="inspectedPlugin">The inpected plugin.</param>
+        /// <param name="inspectedPlugin">The inspected plugin.</param>
         public PluginLoadContext(InspectedPlugin inspectedPlugin)
             : base(inspectedPlugin.PluginIdentity.ToString())
         {
+            this.inspectedPlugin = inspectedPlugin;
             providers = new List<AssemblyLoadContext>();
             resolver = new AssemblyDependencyResolver(inspectedPlugin.Path);
-            this.inspectedPlugin = inspectedPlugin;
         }
 
         /// <summary>
@@ -46,6 +47,24 @@ namespace GarryDb.Platform.Plugins.Loading
             providers.Add(provider);
         }
 
+        /// <summary>
+        ///     Loads the assembly that contains the plugin.
+        /// </summary>
+        /// <returns>The assembly containing the plugin.</returns>
+        public Assembly LoadPluginAssembly()
+        {
+            return Load(inspectedPlugin.PluginAssembly.AssemblyName)!;
+        }
+
+        /// <summary>
+        ///     Loads the referenced assemblies.
+        /// </summary>
+        /// <returns>The assemblies that are referenced by the plugin.</returns>
+        public IEnumerable<Assembly> LoadReferencedAssemblies()
+        {
+            return inspectedPlugin.ReferencedAssemblies.Select(assembly => Load(assembly.AssemblyName)!);
+        }
+
         /// <inheritdoc />
         protected override Assembly? Load(AssemblyName name)
         {
@@ -54,7 +73,7 @@ namespace GarryDb.Platform.Plugins.Loading
             return assembly;
         }
 
-        private static readonly ConcurrentDictionary<AssemblyName, Assembly?> Cache = new();
+        private static readonly ConcurrentDictionary<AssemblyName, Assembly?> Cache = new ConcurrentDictionary<AssemblyName, Assembly?>();
         
         private Assembly? LoadInternal(AssemblyName name)
         {
