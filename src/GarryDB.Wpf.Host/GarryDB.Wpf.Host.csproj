@@ -9,46 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SharedAndContractProjects Include="..\Plugins\**\*Contract.csproj;..\Plugins\**\*Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PluginProjects Include="..\Plugins\**\*.csproj" Exclude="..\Plugins\**\*Contract.csproj;..\Plugins\**\*Shared.csproj" />
-  </ItemGroup>
-
-  <PropertyGroup>
-    <Garry_RootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'GarryDB.sln'))</Garry_RootDirectory>
-    <Garry_PluginsDirectory>$([System.IO.Path]::Combine($(Garry_RootDirectory), 'Plugins'))</Garry_PluginsDirectory>
-  </PropertyGroup>
-
-  <Target Name="BuildPlugins" AfterTargets="PostBuildEvent" Condition="True">
-    <Message Text="GARRY: Compiling Shared and Contract projects" Importance="high" />
-    <MSBuild Projects="@(SharedAndContractProjects)" Targets="Build" />
-  </Target>
-  
-  <Target Name="DeployPlugins" Condition="True" AfterTargets="BuildPlugins" Inputs="@(PluginProjects)" Outputs="%(Identity).Dummy">
-    <PropertyGroup>
-      <Garry_OutputDirectory>$([System.IO.Path]::Combine($(Garry_PluginsDirectory), %(PluginProjects.Filename)))</Garry_OutputDirectory>
-    </PropertyGroup>
-
-    <Message Text="GARRY: Building plugin %(PluginProjects.Identity)" Importance="high" />
-
-    <MSBuild Projects="%(PluginProjects.Identity)" Targets="Rebuild">
-      <Output TaskParameter="TargetOutputs" ItemName="CollectedBuildOutput" />
-    </MSBuild>
-
-    <Message Text="GARRY: Removing plugin directory $(Garry_OutputDirectory)" Importance="high" />
-    <RemoveDir Directories="$(Garry_OutputDirectory)" />
-
-    <ItemGroup>
-      <DllFiles Include="%(CollectedBuildOutput.RelativeDir)\**\*.*" />
-    </ItemGroup>
-
-    <Message Text="GARRY: Copying output to plugin directory $(Garry_OutputDirectory)" Importance="high" />
-    <Copy SourceFiles="@(DllFiles)" SkipUnchangedFiles="False"  DestinationFolder="$(Garry_OutputDirectory)\%(RecursiveDir)" />
-  </Target>
-  
-  <ItemGroup>
     <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
   </ItemGroup>
 

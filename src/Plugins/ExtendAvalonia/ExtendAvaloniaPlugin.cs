@@ -25,7 +25,7 @@ namespace ExtendAvalonia
             var type = Type.GetType("GarryDB.UI.Views.FirstView, GarryDB.UI");
 
             Selector = default(Selector).OfType(type);
-            Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#FF0000")));
+            Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#00065C")));
         }
         
         
