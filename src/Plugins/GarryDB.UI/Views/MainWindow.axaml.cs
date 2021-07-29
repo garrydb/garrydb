@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
+using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
@@ -17,6 +18,9 @@ namespace GarryDB.UI.Views
         {
             AvaloniaXamlLoader.Load(this);
 
+#if DEBUG
+            this.AttachDevTools();
+#endif
             this.WhenActivated(disposables =>
             {
                 this.WhenAnyValue(window => window.IsVisible)

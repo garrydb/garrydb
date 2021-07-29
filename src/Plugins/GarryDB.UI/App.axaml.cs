@@ -7,8 +7,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
 
+using GarryDB.UI.Shared;
 using GarryDB.UI.ViewModels;
 using GarryDB.UI.Views;
 
@@ -19,23 +19,28 @@ namespace GarryDB.UI
     public class App : Application
     {
         private readonly Func<Task> shutdown;
-        private readonly IEnumerable<Style> newStyles;
+        private readonly IEnumerable<Extension> extensions;
 
         public App()
-            : this(() => Task.CompletedTask, Enumerable.Empty<Style>())
+            : this(() => Task.CompletedTask, Enumerable.Empty<Extension>())
         {
         }
 
-        public App(Func<Task> shutdown, IEnumerable<Style> newStyles)
+        public App(Func<Task> shutdown, IEnumerable<Extension> extensions)
         {
             this.shutdown = shutdown;
-            this.newStyles = newStyles;
+            this.extensions = extensions;
         }
 
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            Styles.AddRange(newStyles);
+            Styles.AddRange(extensions.SelectMany(extension => extension.Styles));
+
+            foreach (IResourceProvider resource in extensions.SelectMany(extension => extension.Resources))
+            {
+                Resources.MergedDictionaries.Add(resource);
+            }
         }
 
         public override void OnFrameworkInitializationCompleted()
