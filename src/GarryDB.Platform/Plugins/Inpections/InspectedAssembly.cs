@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-using GarryDb.Platform.Extensions;
+using GarryDB.Platform.Extensions;
 
-namespace GarryDb.Platform.Plugins.Inpections
+namespace GarryDB.Platform.Plugins.Inpections
 {
     /// <summary>
     ///     The assembly that has been inspected by a <see cref="Inspector" />.

@@ -1,4 +1,4 @@
-﻿using GarryDb.Plugins;
+﻿using GarryDB.Plugins;
 
 namespace ExamplePlugin
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
-namespace GarryDb.Platform.Extensions
+namespace GarryDB.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="Type" />.

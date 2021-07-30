@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Avalonia;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
 namespace GarryDB.UI
 {

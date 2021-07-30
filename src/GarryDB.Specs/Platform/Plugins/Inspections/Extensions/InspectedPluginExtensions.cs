@@ -1,6 +1,6 @@
-﻿using GarryDb.Platform.Plugins.Inpections;
+﻿using GarryDB.Platform.Plugins.Inpections;
 
-namespace GarryDb.Specs.Platform.Plugins.Inspections.Extensions
+namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
 {
     public static class InspectedPluginExtensions
     {

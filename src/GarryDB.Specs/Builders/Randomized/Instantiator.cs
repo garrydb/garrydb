@@ -5,9 +5,9 @@ using System.Reflection;
 
 using FluentAssertions;
 
-using GarryDb.Specs.Builders.Extensions;
+using GarryDB.Specs.Builders.Extensions;
 
-namespace GarryDb.Specs.Builders.Randomized
+namespace GarryDB.Specs.Builders.Randomized
 {
     public sealed class Instantiator
     {

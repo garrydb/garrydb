@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
-using GarryDb.Plugins;
-using GarryDb.Specs.Builders.Randomized;
-using GarryDb.Specs.Plugins.Builders;
+using GarryDB.Plugins;
+
+using GarryDB.Specs.Builders.Randomized;
+using GarryDB.Specs.Plugins.Builders;
 
 using NUnit.Framework;
 
-namespace GarryDb.Specs.Plugins
+namespace GarryDB.Specs.Plugins
 {
     public static class PluginSpecs
     {

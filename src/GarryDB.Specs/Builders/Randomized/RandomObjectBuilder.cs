@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GarryDb.Specs.Builders.Randomized
+namespace GarryDB.Specs.Builders.Randomized
 {
     public sealed class RandomObjectBuilder<T> : TestDataBuilder<T>
     {

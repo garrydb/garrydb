@@ -4,14 +4,11 @@ using Akka.TestKit.NUnit;
 
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Plugins;
-
-using GarryDb.Plugins;
-using GarryDb.Specs;
-
+using GarryDB.Plugins;
 using GarryDB.Specs.Akka.Builders;
 using GarryDB.Specs.Platform.Plugins.Builders;
 
-using GarryDb.Specs.Plugins.Builders;
+using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace GarryDb.Specs
+namespace GarryDB.Specs
 {
     public abstract class AsyncSpecification<TSubject> : Specification<TSubject>
     {

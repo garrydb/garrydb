@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 using GarryDB.Platform.Plugins;
 
-namespace GarryDb.Platform
+namespace GarryDB.Platform.Startup
 {
     /// <summary>
     ///     The sequence of steps to take before Garry is started.

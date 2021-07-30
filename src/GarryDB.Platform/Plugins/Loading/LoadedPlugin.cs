@@ -1,6 +1,4 @@
-﻿using GarryDB.Platform.Plugins;
-
-namespace GarryDb.Platform.Plugins.Loading
+﻿namespace GarryDB.Platform.Plugins.Loading
 {
     /// <summary>
     ///     A plugin that has been loaded.

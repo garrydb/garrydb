@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using System.Windows;
 
-using GarryDb.Platform;
-using GarryDb.Platform.Infrastructure;
+using GarryDB.Platform;
+using GarryDB.Platform.Infrastructure;
+
+using GarryDB.Platform.Startup;
 
 namespace GarryDB.Wpf.Host
 {
@@ -27,7 +29,7 @@ namespace GarryDB.Wpf.Host
                     () => OnProgressCompleted(splashScreen))
                 )
                 {
-                    await garry.StartAsync("C:\\Projects\\GarryDb\\Plugins").ConfigureAwait(false);
+                    await garry.StartAsync("C:\\Projects\\GarryDB\\Plugins").ConfigureAwait(false);
                 }
 
                 Dispatcher.Invoke(() => Shutdown());

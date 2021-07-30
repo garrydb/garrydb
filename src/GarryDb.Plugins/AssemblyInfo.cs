@@ -16,5 +16,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("ef7872b2-d297-47c1-984d-705181627d83")]
-[assembly: InternalsVisibleTo("GarryDb.Specs")]
+[assembly: InternalsVisibleTo("GarryDB.Specs")]
 [assembly: InternalsVisibleTo("GarryDB.Platform")]

@@ -1,9 +1,7 @@
 ﻿using System;
 
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Styling;
 
 namespace ExtendAvalonia.Styles 

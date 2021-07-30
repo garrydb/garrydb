@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Specs", "src\GarryD
 		{65E20B7E-2D98-4837-BC48-C70ED5E1B232} = {65E20B7E-2D98-4837-BC48-C70ED5E1B232}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDb.Plugins", "src\GarryDb.Plugins\GarryDb.Plugins.csproj", "{463C8D9E-5C58-4843-91FB-6CB5B6841429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Plugins", "src\GarryDB.Plugins\GarryDB.Plugins.csproj", "{463C8D9E-5C58-4843-91FB-6CB5B6841429}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Wpf.Host", "src\GarryDB.Wpf.Host\GarryDB.Wpf.Host.csproj", "{65E20B7E-2D98-4837-BC48-C70ED5E1B232}"
 	ProjectSection(ProjectDependencies) = postProject

@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+      <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
     </ItemGroup>
 
     <ItemGroup>

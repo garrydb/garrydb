@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>GarryDb.Plugins</name>
+        <name>GarryDB.Plugins</name>
     </assembly>
     <members>
-        <member name="T:GarryDb.Plugins.Messaging.MessageRouter">
+        <member name="T:GarryDB.Plugins.Messaging.MessageRouter">
             <summary>
                 Routes messages to handlers.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.#ctor">
+        <member name="M:GarryDB.Plugins.Messaging.MessageRouter.#ctor">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.Messaging.MessageRouter" />.
+                Initializes a new <see cref="T:GarryDB.Plugins.Messaging.MessageRouter" />.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.ConfigureRoute(System.String,System.Func{System.Object,System.Threading.Tasks.Task{System.Object}})">
+        <member name="M:GarryDB.Plugins.Messaging.MessageRouter.ConfigureRoute(System.String,System.Func{System.Object,System.Threading.Tasks.Task{System.Object}})">
             <summary>
                 Register a handler for a named route.
             </summary>
             <param name="name">The name of the route.</param>
             <param name="handler">The handler.</param>
         </member>
-        <member name="M:GarryDb.Plugins.Messaging.MessageRouter.RouteAsync(System.String,System.Object)">
+        <member name="M:GarryDB.Plugins.Messaging.MessageRouter.RouteAsync(System.String,System.Object)">
             <summary>
                 Route the message to the route.
             </summary>
@@ -29,17 +29,17 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
-        <member name="T:GarryDb.Plugins.Plugin">
+        <member name="T:GarryDB.Plugins.Plugin">
             <summary>
                 A plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.#ctor">
+        <member name="M:GarryDB.Plugins.Plugin.#ctor">
             <summary>
                 Initializes a new plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Register``2(System.String,System.Func{``0,System.Threading.Tasks.Task{``1}})">
+        <member name="M:GarryDB.Plugins.Plugin.Register``2(System.String,System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <summary>
                 Register a handler for a named route.
             </summary>
@@ -48,7 +48,7 @@
             <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
             <typeparam name="TResult">The type of the result.</typeparam>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.RouteAsync(System.String,System.Object)">
+        <member name="M:GarryDB.Plugins.Plugin.RouteAsync(System.String,System.Object)">
             <summary>
                 Route the message to the route.
             </summary>
@@ -56,12 +56,12 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Stop">
+        <member name="M:GarryDB.Plugins.Plugin.Stop">
             <summary>
                 Called when the plugin is being stopped.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.StopAsync">
+        <member name="M:GarryDB.Plugins.Plugin.StopAsync">
             <summary>
                 Called when the plugin is being stopped.
             </summary>

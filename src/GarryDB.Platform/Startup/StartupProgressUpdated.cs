@@ -1,6 +1,6 @@
 ﻿using GarryDB.Platform.Plugins;
 
-namespace GarryDb.Platform
+namespace GarryDB.Platform.Startup
 {
     /// <summary>
     ///     Is raised when the progress of the startup has changed.

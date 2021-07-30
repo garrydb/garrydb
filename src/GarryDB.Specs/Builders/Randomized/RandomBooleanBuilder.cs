@@ -1,4 +1,4 @@
-﻿namespace GarryDb.Specs.Builders.Randomized
+﻿namespace GarryDB.Specs.Builders.Randomized
 {
     public sealed class RandomBooleanBuilder : TestDataBuilder<bool>
     {

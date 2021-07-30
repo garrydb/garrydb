@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GarryDb.Specs.Builders.Extensions
+namespace GarryDB.Specs.Builders.Extensions
 {
     public static class TypeExtensions
     {

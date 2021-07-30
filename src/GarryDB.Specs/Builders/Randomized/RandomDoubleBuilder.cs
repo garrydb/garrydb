@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GarryDb.Specs.Builders.Randomized
+namespace GarryDB.Specs.Builders.Randomized
 {
     public sealed class RandomDoubleBuilder : TestDataBuilder<double>
     {

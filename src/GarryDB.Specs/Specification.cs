@@ -5,7 +5,7 @@ using GarryDB.Specs.NUnit.Extensions;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
-namespace GarryDb.Specs
+namespace GarryDB.Specs
 {
     public abstract class Specification<TSubject>
     {

@@ -2,8 +2,7 @@
 
 using ExamplePlugin.Contract;
 
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Specs;
+using GarryDB.Platform.Plugins.Inpections;
 
 namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 {

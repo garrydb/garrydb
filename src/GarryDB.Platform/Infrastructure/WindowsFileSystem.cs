@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace GarryDb.Platform.Infrastructure
+namespace GarryDB.Platform.Infrastructure
 {
     /// <summary>
     ///     The <see cref="FileSystem" /> for Windows.

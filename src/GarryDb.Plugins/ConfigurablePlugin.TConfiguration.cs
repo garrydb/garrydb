@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace GarryDb.Plugins
+namespace GarryDB.Plugins
 {
     /// <summary>
     ///     A plugin that can be configured

@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <RootNamespace>GarryDB.Plugins</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\..\docs\GarryDb.Plugins.xml</DocumentationFile>
+    <DocumentationFile>..\..\docs\GarryDB.Plugins.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>

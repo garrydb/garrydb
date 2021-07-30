@@ -5,10 +5,10 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
-using GarryDb.Platform.Extensions;
-using GarryDb.Platform.Plugins.Inpections;
+using GarryDB.Platform.Extensions;
+using GarryDB.Platform.Plugins.Inpections;
 
-namespace GarryDb.Specs.Platform.Plugins.Inspections.Extensions
+namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
 {
     public class InspectedPluginAssertions : ReferenceTypeAssertions<InspectedPlugin, InspectedPluginAssertions>
     {

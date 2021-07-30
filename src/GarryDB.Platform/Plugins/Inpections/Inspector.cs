@@ -4,11 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using GarryDb.Platform.Extensions;
-using GarryDb.Platform.Infrastructure;
-using GarryDb.Plugins;
+using GarryDB.Platform.Extensions;
+using GarryDB.Platform.Infrastructure;
 
-namespace GarryDb.Platform.Plugins.Inpections
+using GarryDB.Plugins;
+
+namespace GarryDB.Platform.Plugins.Inpections
 {
     /// <summary>
     ///     Inspects the <see cref="Plugin" /> at a location.

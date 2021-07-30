@@ -7,16 +7,16 @@ using ExamplePlugin.Shared;
 
 using FluentAssertions;
 
-using GarryDb.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Inpections;
 
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 
-using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
-using GarryDb.Specs.Platform.Plugins.Inspections.Extensions;
+using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
+using GarryDB.Specs.Platform.Plugins.Inspections.Extensions;
 
 using NUnit.Framework;
 
-namespace GarryDb.Specs.Platform.Plugins.Inspections
+namespace GarryDB.Specs.Platform.Plugins.Inspections
 {
     public static class InspectorSpecs
     {

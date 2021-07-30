@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-using GarryDb.Platform.Extensions;
+using GarryDB.Platform.Extensions;
 
 namespace GarryDB.Platform.Plugins.Loading.Extensions
 {

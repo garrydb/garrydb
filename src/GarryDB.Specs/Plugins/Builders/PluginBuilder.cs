@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
-using GarryDB.Specs.Plugins.Builders;
-
-namespace GarryDb.Specs.Plugins.Builders
+namespace GarryDB.Specs.Plugins.Builders
 {
     public sealed class PluginBuilder : TestDataBuilder<Plugin>
     {

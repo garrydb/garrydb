@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-namespace GarryDb.Plugins
+namespace GarryDB.Plugins
 {
     /// <summary>
     ///     A plugin.

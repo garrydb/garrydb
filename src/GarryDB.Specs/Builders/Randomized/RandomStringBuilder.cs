@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace GarryDb.Specs.Builders.Randomized
+namespace GarryDB.Specs.Builders.Randomized
 {
     public sealed class RandomStringBuilder : TestDataBuilder<string>
     {

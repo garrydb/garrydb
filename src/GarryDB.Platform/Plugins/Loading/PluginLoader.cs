@@ -5,14 +5,12 @@ using System.Reflection;
 
 using Autofac;
 
-using GarryDb.Platform.Extensions;
+using GarryDB.Platform.Extensions;
+using GarryDB.Platform.Plugins.Inpections;
 
-using GarryDB.Platform.Plugins;
+using GarryDB.Plugins;
 
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Plugins;
-
-namespace GarryDb.Platform.Plugins.Loading
+namespace GarryDB.Platform.Plugins.Loading
 {
     /// <summary>
     ///     Loads a <see cref="Plugin" />.

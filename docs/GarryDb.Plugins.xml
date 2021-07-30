@@ -1,69 +1,69 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>GarryDb.Plugins</name>
+        <name>GarryDB.Plugins</name>
     </assembly>
     <members>
-        <member name="T:GarryDb.Plugins.ConfigurablePlugin">
+        <member name="T:GarryDB.Plugins.ConfigurablePlugin">
             <summary>
                 A plugin that can be configured
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin.#ctor(GarryDb.Plugins.PluginContext)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin.#ctor(GarryDB.Plugins.PluginContext)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.ConfigurablePlugin" />.
+                Initializes a new <see cref="T:GarryDB.Plugins.ConfigurablePlugin" />.
             </summary>
             <param name="pluginContext">The plugin context.</param>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin.Configure(System.Object)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin.Configure(System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin.Configure">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin.Configure">
             <summary>
                 Called when the plugin is being configured.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin.ConfigureAsync(System.Object)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin.ConfigureAsync(System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin.ConfigureAsync">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin.ConfigureAsync">
             <summary>
                 Called when the plugin is being configured.
             </summary>
         </member>
-        <member name="T:GarryDb.Plugins.ConfigurablePlugin`1">
+        <member name="T:GarryDB.Plugins.ConfigurablePlugin`1">
             <summary>
                 A plugin that can be configured
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.#ctor(GarryDb.Plugins.PluginContext)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin`1.#ctor(GarryDB.Plugins.PluginContext)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.ConfigurablePlugin" />.
+                Initializes a new <see cref="T:GarryDB.Plugins.ConfigurablePlugin" />.
             </summary>
             <param name="pluginContext">The plugin context.</param>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.Configure(`0)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin`1.Configure(`0)">
             <summary>
                 Called when the plugin is being configured.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.ConfigurablePlugin`1.ConfigureAsync(`0)">
+        <member name="M:GarryDB.Plugins.ConfigurablePlugin`1.ConfigureAsync(`0)">
             <summary>
                 Called when the plugin is being configured.
             </summary>
         </member>
-        <member name="T:GarryDb.Plugins.Plugin">
+        <member name="T:GarryDB.Plugins.Plugin">
             <summary>
                 A plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.#ctor(GarryDb.Plugins.PluginContext)">
+        <member name="M:GarryDB.Plugins.Plugin.#ctor(GarryDB.Plugins.PluginContext)">
             <summary>
                 Initializes a new plugin.
             </summary>
             <param name="pluginContext">The plugin context.</param>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Register``1(System.String,System.Func{``0,System.Threading.Tasks.Task})">
+        <member name="M:GarryDB.Plugins.Plugin.Register``1(System.String,System.Func{``0,System.Threading.Tasks.Task})">
             <summary>
                 Register a handler for a named route.
             </summary>
@@ -71,7 +71,7 @@
             <param name="handler">The handler.</param>
             <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Register``2(System.String,System.Func{``0,System.Threading.Tasks.Task{``1}})">
+        <member name="M:GarryDB.Plugins.Plugin.Register``2(System.String,System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <summary>
                 Register a handler for a named route.
             </summary>
@@ -80,7 +80,7 @@
             <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
             <typeparam name="TResult">The type of the result.</typeparam>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.RouteAsync(System.String,System.Object)">
+        <member name="M:GarryDB.Plugins.Plugin.RouteAsync(System.String,System.Object)">
             <summary>
                 Route the message to the route.
             </summary>
@@ -88,14 +88,14 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.SendAsync(System.String,System.String)">
+        <member name="M:GarryDB.Plugins.Plugin.SendAsync(System.String,System.String)">
             <summary>
                 Sends and empty message to <paramref name="destination" />.
             </summary>
             <param name="destination">The destination plugin.</param>
             <param name="handler">The name of the handler.</param>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.SendAsync(System.String,System.String,System.Object)">
+        <member name="M:GarryDB.Plugins.Plugin.SendAsync(System.String,System.String,System.Object)">
             <summary>
                 Sends <paramref name="message" /> to <paramref name="destination" />.
             </summary>
@@ -103,32 +103,32 @@
             <param name="handler">The name of the handler.</param>
             <param name="message">The message.</param>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Start">
+        <member name="M:GarryDB.Plugins.Plugin.Start">
             <summary>
                 Called when the plugin is being started.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.StartAsync">
+        <member name="M:GarryDB.Plugins.Plugin.StartAsync">
             <summary>
                 Called when the plugin is being started.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.Stop">
+        <member name="M:GarryDB.Plugins.Plugin.Stop">
             <summary>
                 Called when the plugin is being stopped.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.Plugin.StopAsync">
+        <member name="M:GarryDB.Plugins.Plugin.StopAsync">
             <summary>
                 Called when the plugin is being stopped.
             </summary>
         </member>
-        <member name="T:GarryDb.Plugins.PluginContext">
+        <member name="T:GarryDB.Plugins.PluginContext">
             <summary>
                 Sends messages to other plugins.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.PluginContext.SendAsync(System.String,System.String,System.Object)">
+        <member name="M:GarryDB.Plugins.PluginContext.SendAsync(System.String,System.String,System.Object)">
             <summary>
                 Sends <paramref name="message" /> to <paramref name="destination" />.
             </summary>
@@ -136,18 +136,18 @@
             <param name="handler">The name of the handler.</param>
             <param name="message">The message.</param>
         </member>
-        <member name="T:GarryDb.Plugins.StartupOrderAttribute">
+        <member name="T:GarryDB.Plugins.StartupOrderAttribute">
             <summary>
                 Indicates the startup order of the plugin.
             </summary>
         </member>
-        <member name="M:GarryDb.Plugins.StartupOrderAttribute.#ctor(System.Int32)">
+        <member name="M:GarryDB.Plugins.StartupOrderAttribute.#ctor(System.Int32)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Plugins.StartupOrderAttribute" />.
+                Initializes a new <see cref="T:GarryDB.Plugins.StartupOrderAttribute" />.
             </summary>
             <param name="order">The order of the plugin.</param>
         </member>
-        <member name="P:GarryDb.Plugins.StartupOrderAttribute.Order">
+        <member name="P:GarryDB.Plugins.StartupOrderAttribute.Order">
             <summary>
                 Gets the startup order.
             </summary>

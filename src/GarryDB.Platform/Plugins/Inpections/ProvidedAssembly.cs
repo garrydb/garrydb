@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
-namespace GarryDb.Platform.Plugins.Inpections
+namespace GarryDB.Platform.Plugins.Inpections
 {
     /// <summary>
     ///     The assembly that the <see cref="Plugin" /> is providing to the rest of the system.

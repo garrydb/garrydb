@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GarryDb.Platform.Infrastructure
+namespace GarryDB.Platform.Infrastructure
 {
     /// <summary>
     ///     Interacts with the file system.

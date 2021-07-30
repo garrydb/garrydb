@@ -9,23 +9,22 @@ using Akka.Event;
 
 using Autofac;
 
-using GarryDb.Platform.Extensions;
-using GarryDb.Platform.Infrastructure;
+using GarryDB.Platform.Extensions;
+using GarryDB.Platform.Infrastructure;
 
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
 
-using GarryDb.Platform.Plugins;
-
 using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Loading;
 
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Platform.Plugins.Loading;
-using GarryDb.Plugins;
+using GarryDB.Platform.Startup;
+using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
 
-namespace GarryDb.Platform
+namespace GarryDB.Platform
 {
     /// <summary>
     ///     The Garry.
@@ -33,7 +32,6 @@ namespace GarryDb.Platform
     public sealed class Garry
     {
         private readonly FileSystem fileSystem;
-
         private readonly StartupSequence startupSequence;
 
         /// <summary>

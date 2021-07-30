@@ -3,8 +3,7 @@
 using Akka.Actor;
 
 using GarryDB.Platform.Messaging;
-
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
 

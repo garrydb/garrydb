@@ -3,8 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-using GarryDb.Platform.Infrastructure;
-using GarryDb.Specs;
+using GarryDB.Platform.Infrastructure;
 
 namespace GarryDB.Specs.Platform.Infrastructure.Builders
 {

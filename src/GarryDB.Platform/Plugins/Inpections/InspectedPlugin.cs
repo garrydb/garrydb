@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
-using GarryDB.Platform.Plugins;
+using GarryDB.Plugins;
 
-using GarryDb.Plugins;
-
-namespace GarryDb.Platform.Plugins.Inpections
+namespace GarryDB.Platform.Plugins.Inpections
 {
     /// <summary>
     ///     Contains the information gathered when inspecting a <see cref="Plugin" />.

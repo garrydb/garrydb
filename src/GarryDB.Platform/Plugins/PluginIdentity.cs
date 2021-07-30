@@ -1,6 +1,6 @@
 ﻿using System;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
 namespace GarryDB.Platform.Plugins
 {

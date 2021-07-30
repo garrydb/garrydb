@@ -6,10 +6,11 @@ using ExamplePlugin;
 using ExamplePlugin.Contract;
 using ExamplePlugin.Shared;
 
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Plugins;
+using GarryDB.Platform.Plugins.Inpections;
 
-namespace GarryDb.Specs.Platform.Plugins.Inspections.Builders
+using GarryDB.Plugins;
+
+namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 {
     public sealed class InspectedPluginBuilder : TestDataBuilder<InspectedPlugin>
     {

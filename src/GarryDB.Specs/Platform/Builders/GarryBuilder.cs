@@ -1,11 +1,10 @@
-﻿using GarryDB.Platform.Infrastructure;
-using GarryDB.Platform.Plugins.Inpections;
-
+﻿using GarryDB.Platform;
+using GarryDB.Platform.Infrastructure;
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 
-namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
+namespace GarryDB.Specs.Platform.Builders
 {
-    public sealed class InspectorBuilder : TestDataBuilder<Inspector>
+    public sealed class GarryBuilder : TestDataBuilder<Garry>
     {
         private FileSystem fileSystem;
 
@@ -17,12 +16,12 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
             }
         }
 
-        protected override Inspector OnBuild()
+        protected override Garry OnBuild()
         {
-            return new Inspector(fileSystem);
+            return new Garry(fileSystem);
         }
 
-        public InspectorBuilder Using(FileSystem fileSystem)
+        public GarryBuilder Using(FileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
             return this;

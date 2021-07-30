@@ -2,8 +2,6 @@
 
 using Akka.TestKit.NUnit;
 
-using GarryDb.Specs;
-
 using GarryDB.Specs.NUnit.Extensions;
 
 using NUnit.Framework.Internal;

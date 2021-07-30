@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
-using GarryDb.Platform.Extensions;
+using GarryDB.Platform.Extensions;
+using GarryDB.Plugins;
 
-using GarryDB.Platform.Plugins;
-
-using GarryDb.Plugins;
-
-namespace GarryDb.Platform.Plugins.Inpections
+namespace GarryDB.Platform.Plugins.Inpections
 {
     /// <summary>
     ///     The assembly containing the <see cref="Plugin" />.

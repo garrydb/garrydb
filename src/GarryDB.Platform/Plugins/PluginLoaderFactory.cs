@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Runtime.Loader;
 
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Platform.Plugins.Loading;
+using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Loading;
 
-namespace GarryDb.Platform.Plugins
+namespace GarryDB.Platform.Plugins
 {
     /// <summary>
     ///     Creates <see cref="PluginLoader" />s.

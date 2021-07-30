@@ -7,17 +7,17 @@ using DependsOnExamplePlugin;
 
 using ExamplePlugin.Shared;
 
-using GarryDb.Platform.Plugins;
-using GarryDb.Platform.Plugins.Inpections;
-using GarryDb.Platform.Plugins.Loading;
+using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Loading;
 
 using GarryDB.Specs.Akka.Builders;
 
-using GarryDb.Specs.Platform.Plugins.Inspections.Builders;
+using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
 
 using NUnit.Framework;
 
-namespace GarryDb.Specs.Platform.Plugins
+namespace GarryDB.Specs.Platform.Plugins
 {
     public static class PluginGraphSpecs
     {

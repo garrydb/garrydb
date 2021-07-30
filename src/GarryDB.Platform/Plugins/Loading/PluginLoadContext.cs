@@ -7,15 +7,14 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
-using GarryDb.Platform.Extensions;
+using GarryDB.Platform.Extensions;
 
-using GarryDb.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Inpections;
 
 using GarryDB.Platform.Plugins.Loading.Extensions;
+using GarryDB.Plugins;
 
-using GarryDb.Plugins;
-
-namespace GarryDb.Platform.Plugins.Loading
+namespace GarryDB.Platform.Plugins.Loading
 {
     /// <summary>
     ///     Loads the assemblies of a <see cref="Plugin" /> into their own scoped <see cref="AssemblyLoadContext" />.

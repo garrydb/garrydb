@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+      <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
       <ProjectReference Include="..\Plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
       <ProjectReference Include="..\Plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
       <ProjectReference Include="..\Plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />

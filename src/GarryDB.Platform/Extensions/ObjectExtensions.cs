@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace GarryDb.Platform.Extensions
+namespace GarryDB.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="object" />.

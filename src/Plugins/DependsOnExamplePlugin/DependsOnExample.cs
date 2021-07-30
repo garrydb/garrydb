@@ -1,6 +1,6 @@
 ﻿using ExamplePlugin.Shared;
 
-using GarryDb.Plugins;
+using GarryDB.Plugins;
 
 namespace DependsOnExamplePlugin
 {
