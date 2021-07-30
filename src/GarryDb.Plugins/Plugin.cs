@@ -23,7 +23,7 @@ namespace GarryDB.Plugins
         {
             this.pluginContext = pluginContext;
             handlers = new Dictionary<string, Func<object, Task<object?>>>();
-            
+
             Register("start", (object _) => StartAsync());
             Register("stop", (object _) => StopAsync());
         }
@@ -37,10 +37,11 @@ namespace GarryDB.Plugins
         protected void Register<TMessage>(string name, Func<TMessage, Task> handler)
         {
             Register<TMessage, object?>(name, async message =>
-            {
-                await handler(message).ConfigureAwait(false);
-                return null;
-            });
+                                              {
+                                                  await handler(message).ConfigureAwait(false);
+
+                                                  return null;
+                                              });
         }
 
         /// <summary>
@@ -53,10 +54,12 @@ namespace GarryDB.Plugins
         protected void Register<TMessage, TResult>(string name, Func<TMessage, Task<TResult?>> handler)
         {
             Func<object, Task<object?>> handlerWrapper = async message =>
-            {
-                TResult? result = await handler((TMessage)message).ConfigureAwait(false);
-                return result;
-            };
+                                                         {
+                                                             TResult? result =
+                                                                 await handler((TMessage)message).ConfigureAwait(false);
+
+                                                             return result;
+                                                         };
 
             handlers[name] = handlerWrapper;
         }
@@ -75,6 +78,7 @@ namespace GarryDB.Plugins
             }
 
             Func<object, Task<object?>> handler = handlers[name];
+
             return handler(message);
         }
 
@@ -105,13 +109,14 @@ namespace GarryDB.Plugins
         protected virtual void Start()
         {
         }
-        
+
         /// <summary>
         ///     Called when the plugin is being started.
         /// </summary>
         protected virtual Task StartAsync()
         {
             Start();
+
             return Task.CompletedTask;
         }
 
@@ -128,6 +133,7 @@ namespace GarryDB.Plugins
         protected virtual Task StopAsync()
         {
             Stop();
+
             return Task.CompletedTask;
         }
     }

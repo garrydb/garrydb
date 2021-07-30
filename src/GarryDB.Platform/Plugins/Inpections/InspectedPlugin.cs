@@ -16,10 +16,9 @@ namespace GarryDB.Platform.Plugins.Inpections
         /// <param name="pluginAssembly">The assembly containing the <see cref="Plugin" />.</param>
         /// <param name="providedAssemblies">The assemblies the <see cref="Plugin" /> provides.</param>
         /// <param name="referencedAssemblies">The assemblies the <see cref="Plugin" /> references,</param>
-        public InspectedPlugin(
-            PluginAssembly pluginAssembly,
-            IEnumerable<ProvidedAssembly> providedAssemblies,
-            IEnumerable<ReferencedAssembly> referencedAssemblies
+        public InspectedPlugin(PluginAssembly pluginAssembly,
+                               IEnumerable<ProvidedAssembly> providedAssemblies,
+                               IEnumerable<ReferencedAssembly> referencedAssemblies
         )
         {
             Path = pluginAssembly.Path;

@@ -52,6 +52,7 @@ namespace GarryDB.Specs.Builders.Extensions
             }
 
             Type baseType = givenType.BaseType;
+
             return baseType != null && IsAssignableToGenericType(baseType, genericType);
         }
     }

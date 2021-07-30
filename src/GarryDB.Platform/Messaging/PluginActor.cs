@@ -24,16 +24,17 @@ namespace GarryDB.Platform.Messaging
             this.plugin = plugin;
 
             ReceiveAsync(async (MessageEnvelope envelope) =>
-            {
-                object? returnMessage = await plugin.RouteAsync(envelope.Destination.Handler, envelope.Message).ConfigureAwait(false);
+                         {
+                             object? returnMessage = await plugin.RouteAsync(envelope.Destination.Handler, envelope.Message)
+                                                                 .ConfigureAwait(false);
 
-                if (returnMessage != null)
-                {
-                    Sender.Tell(envelope.CreateReturnMessage(returnMessage));
-                }
-            });
+                             if (returnMessage != null)
+                             {
+                                 Sender.Tell(envelope.CreateReturnMessage(returnMessage));
+                             }
+                         });
         }
-        
+
         /// <summary>
         ///     Create the <see cref="PluginActor" />.
         /// </summary>

@@ -8,9 +8,7 @@ using ExamplePlugin.Shared;
 using FluentAssertions;
 
 using GarryDB.Platform.Plugins.Inpections;
-
 using GarryDB.Specs.Platform.Infrastructure.Builders;
-
 using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
 using GarryDB.Specs.Platform.Plugins.Inspections.Extensions;
 
@@ -36,16 +34,12 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections
                 sharedAssembly = typeof(ExampleShared).Assembly;
                 directory = Path.GetDirectoryName(exampleAssembly.Location);
 
-                return
-                    new InspectorBuilder()
-                        .Using(new FileSystemBuilder()
-                               .WithFiles(directory,
-                                   Path.GetFileName(exampleAssembly.Location),
-                                   Path.GetFileName(contractAssembly.Location),
-                                   Path.GetFileName(sharedAssembly.Location)
-                               )
-                               .Build())
-                        .Build();
+                return new InspectorBuilder().Using(new FileSystemBuilder()
+                                                    .WithFiles(directory, Path.GetFileName(exampleAssembly.Location),
+                                                               Path.GetFileName(contractAssembly.Location),
+                                                               Path.GetFileName(sharedAssembly.Location))
+                                                    .Build())
+                                             .Build();
             }
 
             protected override void When(Inspector subject)

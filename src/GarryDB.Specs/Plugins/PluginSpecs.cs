@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 
 using GarryDB.Plugins;
-
 using GarryDB.Specs.Builders.Randomized;
 using GarryDB.Specs.Plugins.Builders;
 

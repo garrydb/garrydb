@@ -1,6 +1,5 @@
-﻿using GarryDB.Platform.Infrastructure;
+using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Plugins.Inpections;
-
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 
 namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
@@ -19,12 +18,13 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 
         protected override Inspector OnBuild()
         {
-            return new Inspector(fileSystem);
+            return new(fileSystem);
         }
 
         public InspectorBuilder Using(FileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+
             return this;
         }
     }

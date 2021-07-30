@@ -12,17 +12,11 @@ namespace GarryDB.UI.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                .AsClosedTypesOf(typeof(IViewFor<>))
-                .InstancePerDependency();
+            builder.RegisterAssemblyTypes(ThisAssembly).AsClosedTypesOf(typeof(IViewFor<>)).InstancePerDependency();
 
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                .AssignableTo<ViewModel>()
-                .InstancePerDependency();
-            
-            builder.RegisterType<App>()
-                .As<Application>()
-                .SingleInstance();
+            builder.RegisterAssemblyTypes(ThisAssembly).AssignableTo<ViewModel>().InstancePerDependency();
+
+            builder.RegisterType<App>().As<Application>().SingleInstance();
         }
     }
 }

@@ -43,32 +43,26 @@ namespace GarryDB.Specs.Builders.Randomized
             get
             {
                 includeTimeComponent = false;
+
                 return this;
             }
         }
 
         protected override DateTimeOffset OnBuild()
         {
-            var minimumTicks = (int)minimum.Ticks;
-            var maximumTicks = (int)maximum.Ticks;
+            int minimumTicks = (int)minimum.Ticks;
+            int maximumTicks = (int)maximum.Ticks;
 
             int randomTicks = new RandomIntegerBuilder().WithMinimum(minimumTicks).WithMaximum(maximumTicks).Build();
 
-            TimeSpan period = TimeSpan.FromTicks(randomTicks);
+            var period = TimeSpan.FromTicks(randomTicks);
 
             DateTimeOffset dateTimeOffset = DateTimeOffset.Now.Add(period);
 
             if (includeTimeComponent)
             {
-                return new DateTimeOffset(
-                    dateTimeOffset.Year,
-                    dateTimeOffset.Month,
-                    dateTimeOffset.Day,
-                    dateTimeOffset.Hour,
-                    dateTimeOffset.Minute,
-                    dateTimeOffset.Second,
-                    dateTimeOffset.Offset
-                );
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, dateTimeOffset.Hour,
+                                          dateTimeOffset.Minute, dateTimeOffset.Second, dateTimeOffset.Offset);
             }
 
             return dateTimeOffset.Date;

@@ -34,10 +34,9 @@ namespace GarryDB.Specs.Builders.Randomized
                 return new List<T>();
             }
 
-            return
-                Enumerable.Range(1, size)
-                          .Select(_ => new RandomObjectBuilder<T>().WithRecursionCount(recursionCount).With(values!).Build())
-                          .ToList()!;
+            return Enumerable.Range(1, size)
+                             .Select(_ => new RandomObjectBuilder<T>().WithRecursionCount(recursionCount).With(values!).Build())
+                             .ToList()!;
         }
 
         public RandomListBuilder<T> WithSize(int size)
@@ -55,6 +54,7 @@ namespace GarryDB.Specs.Builders.Randomized
         public RandomListBuilder<T> WithMaximum(int newMaximum)
         {
             maximum = newMaximum;
+
             return this;
         }
 
@@ -66,6 +66,7 @@ namespace GarryDB.Specs.Builders.Randomized
         public RandomListBuilder<T> With(Func<object> preListValues)
         {
             values = preListValues;
+
             return this;
         }
     }

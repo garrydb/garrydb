@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Plugins;
@@ -8,9 +8,9 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 {
     public sealed class MessageEnvelopeBuilder : TestDataBuilder<MessageEnvelope>
     {
-        private PluginIdentity sender;
         private Address destination;
         private object message;
+        private PluginIdentity sender;
 
         protected override void OnPreBuild()
         {
@@ -32,12 +32,13 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
         protected override MessageEnvelope OnBuild()
         {
-            return new MessageEnvelope(sender, destination, message);
+            return new(sender, destination, message);
         }
 
         public MessageEnvelopeBuilder SentFrom(PluginIdentity sender)
         {
             this.sender = sender;
+
             return this;
         }
 
@@ -49,12 +50,14 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
         public MessageEnvelopeBuilder AddressedTo(Address destination)
         {
             this.destination = destination;
+
             return this;
         }
 
         public MessageEnvelopeBuilder ContainingMessage(object message)
         {
             this.message = message;
+
             return this;
         }
     }

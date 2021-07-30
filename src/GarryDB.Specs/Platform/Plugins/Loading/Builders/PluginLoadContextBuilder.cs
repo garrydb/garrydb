@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Inpections;
 using GarryDB.Platform.Plugins.Loading;
 using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
 
@@ -18,12 +18,13 @@ namespace GarryDB.Specs.Platform.Plugins.Loading.Builders
 
         protected override PluginLoadContext OnBuild()
         {
-            return new PluginLoadContext(inspectedPlugin);
+            return new(inspectedPlugin);
         }
 
         public PluginLoadContextBuilder ForPlugin(InspectedPlugin inspectedPlugin)
         {
             this.inspectedPlugin = inspectedPlugin;
+
             return this;
         }
     }

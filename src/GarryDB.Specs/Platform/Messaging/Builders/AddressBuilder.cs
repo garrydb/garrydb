@@ -1,15 +1,14 @@
-﻿using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Plugins;
 using GarryDB.Specs.Builders.Randomized;
-
 using GarryDB.Specs.Platform.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
     public sealed class AddressBuilder : TestDataBuilder<Address>
     {
-        private PluginIdentity pluginIdentity;
         private string handler;
+        private PluginIdentity pluginIdentity;
 
         protected override void OnPreBuild()
         {
@@ -26,7 +25,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
         protected override Address OnBuild()
         {
-            return new Address(pluginIdentity, handler);
+            return new(pluginIdentity, handler);
         }
 
         public AddressBuilder For(PluginIdentity pluginIdentity)
@@ -43,6 +42,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
         {
             this.pluginIdentity = pluginIdentity;
             this.handler = handler;
+
             return this;
         }
     }

@@ -27,6 +27,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
         public PluginsActorBuilder Using(TestKit testKit)
         {
             this.testKit = testKit;
+
             return this;
         }
     }

@@ -1,16 +1,15 @@
-﻿using GarryDB.Platform.Messaging.Messages;
+using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 using GarryDB.Specs.Platform.Plugins.Builders;
-
 using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Messages.Builders
 {
     public sealed class PluginLoadedBuilder : TestDataBuilder<PluginLoaded>
     {
-        private PluginIdentity pluginIdentity;
         private Plugin plugin;
+        private PluginIdentity pluginIdentity;
 
         protected override void OnPreBuild()
         {
@@ -22,7 +21,7 @@ namespace GarryDB.Specs.Platform.Messaging.Messages.Builders
 
         protected override PluginLoaded OnBuild()
         {
-            return new PluginLoaded(pluginIdentity, plugin);
+            return new(pluginIdentity, plugin);
         }
 
         public PluginLoadedBuilder For(PluginIdentity pluginIdentity, Plugin plugin)

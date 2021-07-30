@@ -7,15 +7,14 @@ using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 using GarryDB.Specs.Akka.Builders;
 using GarryDB.Specs.Platform.Plugins.Builders;
-
 using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
     public sealed class PluginActorBuilder : TestDataBuilder<IActorRef>
     {
-        private PluginIdentity pluginIdentity;
         private Plugin plugin;
+        private PluginIdentity pluginIdentity;
         private TestKit testKit;
 
         protected override void OnPreBuild()
@@ -43,10 +42,11 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
             return this;
         }
-        
+
         public PluginActorBuilder Using(TestKit testKit)
         {
             this.testKit = testKit;
+
             return this;
         }
     }

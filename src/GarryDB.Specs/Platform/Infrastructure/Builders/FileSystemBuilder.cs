@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -25,6 +26,7 @@ namespace GarryDB.Specs.Platform.Infrastructure.Builders
         public FileSystemBuilder WithFiles(string directory, params string[] files)
         {
             this.files[directory.ToLowerInvariant()] = files;
+
             return this;
         }
 
@@ -49,7 +51,7 @@ namespace GarryDB.Specs.Platform.Infrastructure.Builders
 
             public IEnumerable<string> GetTopLevelDirectories(string directory)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
         }
     }

@@ -4,7 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Styling;
 
-namespace ExtendAvalonia.Styles 
+namespace ExtendAvalonia.Styles
 {
     public class FirstViewStyle : Style
     {
@@ -14,7 +14,7 @@ namespace ExtendAvalonia.Styles
             Setters.Add(new Setter(TemplatedControl.TemplateProperty, new DynamicResourceExtension("ForTheFirstView_Oud")));
             // Setters.Add(new Setter(TemplatedControl.TemplateProperty, new ControlTemplate
             // {
-                // Content = new DynamicResourceExtension("ForTheFirstView")
+            // Content = new DynamicResourceExtension("ForTheFirstView")
             // }));
             // Setters.Add(new Setter(UserControl.ContentProperty, new DynamicResourceExtension("ForTheFirstView")));
         }

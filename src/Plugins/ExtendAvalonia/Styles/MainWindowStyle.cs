@@ -9,7 +9,7 @@ namespace ExtendAvalonia.Styles
     {
         public MainWindowStyle()
         {
-            Selector = default(Selector).Is<Window>();// Garry("GarryDB.UI.Views.MainWindow");
+            Selector = default(Selector).Is<Window>(); // Garry("GarryDB.UI.Views.MainWindow");
             // Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#00146E")));
         }
 

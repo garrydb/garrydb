@@ -14,8 +14,8 @@ namespace GarryDB.Platform.Plugins
     /// </summary>
     public sealed class AkkaPluginContext : PluginContext
     {
-        private readonly IActorRef plugins;
         private readonly PluginIdentity pluginIdentity;
+        private readonly IActorRef plugins;
 
         /// <summary>
         ///     Initializes a new <see cref="AkkaPluginContext" />.

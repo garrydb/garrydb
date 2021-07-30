@@ -7,7 +7,6 @@ using Autofac;
 
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Plugins.Inpections;
-
 using GarryDB.Plugins;
 
 namespace GarryDB.Platform.Plugins.Loading
@@ -50,15 +49,12 @@ namespace GarryDB.Platform.Plugins.Loading
             Assembly pluginAssembly = PluginLoadContext.LoadPluginAssembly();
             IEnumerable<Assembly> referencedAssemblies = PluginLoadContext.LoadReferencedAssemblies();
             containerBuilder.RegisterAssemblyModules(referencedAssemblies.Concat(pluginAssembly).ToArray());
-            
+
             Type pluginType = pluginAssembly.GetType(inspectedPlugin.PluginAssembly.PluginType)!;
             var plugin = new LoadedPlugin(inspectedPlugin.PluginIdentity, inspectedPlugin.StartupOrder);
 
-            containerBuilder
-                .RegisterType(pluginType)
-                .Keyed<Plugin>(plugin.PluginIdentity)
-                .SingleInstance();
-            
+            containerBuilder.RegisterType(pluginType).Keyed<Plugin>(plugin.PluginIdentity).SingleInstance();
+
             return plugin;
         }
     }

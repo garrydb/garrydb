@@ -1,4 +1,4 @@
-﻿using Akka.Actor;
+using Akka.Actor;
 
 using GarryDB.Platform.Plugins;
 using GarryDB.Specs.Platform.Messaging.Builders;
@@ -7,8 +7,8 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 {
     public sealed class AkkaPluginContextBuilder : TestDataBuilder<AkkaPluginContext>
     {
-        private IActorRef plugins;
         private PluginIdentity pluginIdentity;
+        private IActorRef plugins;
 
         protected override void OnPreBuild()
         {
@@ -25,18 +25,20 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 
         protected override AkkaPluginContext OnBuild()
         {
-            return new AkkaPluginContext(plugins, pluginIdentity);
+            return new(plugins, pluginIdentity);
         }
 
         public AkkaPluginContextBuilder WithPluginsActor(IActorRef plugins)
         {
             this.plugins = plugins;
+
             return this;
         }
 
         public AkkaPluginContextBuilder ForPlugin(PluginIdentity pluginIdentity)
         {
             this.pluginIdentity = pluginIdentity;
+
             return this;
         }
     }

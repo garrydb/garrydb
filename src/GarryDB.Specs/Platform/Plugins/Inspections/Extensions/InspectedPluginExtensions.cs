@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Platform.Plugins.Inpections;
 
 namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
 {
@@ -6,7 +6,7 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
     {
         public static InspectedPluginAssertions Should(this InspectedPlugin subject)
         {
-            return new InspectedPluginAssertions(subject);
+            return new(subject);
         }
     }
 }

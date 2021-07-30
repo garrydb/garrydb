@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -8,9 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
-
 using GarryDB.Platform.Plugins.Inpections;
-
 using GarryDB.Platform.Plugins.Loading.Extensions;
 using GarryDB.Plugins;
 
@@ -21,6 +19,7 @@ namespace GarryDB.Platform.Plugins.Loading
     /// </summary>
     public sealed class PluginLoadContext : AssemblyLoadContext
     {
+        private static readonly ConcurrentDictionary<AssemblyName, Assembly?> Cache = new();
         private readonly InspectedPlugin inspectedPlugin;
         private readonly IList<AssemblyLoadContext> providers;
         private readonly AssemblyDependencyResolver resolver;
@@ -72,8 +71,6 @@ namespace GarryDB.Platform.Plugins.Loading
             return assembly;
         }
 
-        private static readonly ConcurrentDictionary<AssemblyName, Assembly?> Cache = new ConcurrentDictionary<AssemblyName, Assembly?>();
-        
         private Assembly? LoadInternal(AssemblyName name)
         {
             return Cache.GetOrAdd(name, n => FindAssembly(n));
@@ -81,15 +78,13 @@ namespace GarryDB.Platform.Plugins.Loading
 
         private Assembly? FindAssembly(AssemblyName name)
         {
-            var assemblyFromParent =
-                providers
-                    .Select(x => new
-                    {
-                        Success = x.TryLoad(name, out Assembly? assembly),
-                        Assembly = assembly,
-                        Provider = x.Name
-                    })
-                    .FirstOrDefault(x => x.Success);
+            var assemblyFromParent = providers.Select(x => new
+                                                           {
+                                                               Success = x.TryLoad(name, out Assembly? assembly),
+                                                               Assembly = assembly,
+                                                               Provider = x.Name
+                                                           })
+                                              .FirstOrDefault(x => x.Success);
 
             if (assemblyFromParent != null)
             {

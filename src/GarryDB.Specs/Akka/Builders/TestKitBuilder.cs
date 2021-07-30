@@ -14,8 +14,9 @@ namespace GarryDB.Specs.Akka.Builders
 
         protected override TestKit OnBuild()
         {
-            TestKit existing = TestExecutionContext.CurrentContext.CurrentTest.Properties[TestKitKey].OfType<TestKit>()
-                .SingleOrDefault();
+            TestKit existing = TestExecutionContext.CurrentContext.CurrentTest.Properties[TestKitKey]
+                                                   .OfType<TestKit>()
+                                                   .SingleOrDefault();
 
             if (existing != null)
             {

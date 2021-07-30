@@ -30,6 +30,7 @@ namespace GarryDB.Plugins
         protected virtual Task ConfigureAsync(TConfiguration configuration)
         {
             Configure(configuration);
+
             return Task.CompletedTask;
         }
     }

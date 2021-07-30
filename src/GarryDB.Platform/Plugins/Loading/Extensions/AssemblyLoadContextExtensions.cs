@@ -33,11 +33,13 @@ namespace GarryDB.Platform.Plugins.Loading.Extensions
             try
             {
                 assembly = assemblyLoadContext.LoadFromAssemblyName(name);
+
                 return true;
             }
             catch (FileNotFoundException)
             {
                 assembly = null;
+
                 return false;
             }
         }

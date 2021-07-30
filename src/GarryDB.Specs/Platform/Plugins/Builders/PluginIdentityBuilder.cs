@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins;
 using GarryDB.Specs.Builders.Randomized;
 
 namespace GarryDB.Specs.Platform.Plugins.Builders
@@ -27,18 +27,20 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 
         protected override PluginIdentity OnBuild()
         {
-            return new PluginIdentity(name, version);
+            return new(name, version);
         }
 
         public PluginIdentityBuilder Named(string name)
         {
             this.name = name;
+
             return this;
         }
 
         public PluginIdentityBuilder WithVersion(string version)
         {
             this.version = version;
+
             return this;
         }
     }

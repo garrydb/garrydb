@@ -17,6 +17,7 @@
         public RandomHexStringBuilder ForValue(long value)
         {
             this.value = value;
+
             return this;
         }
     }

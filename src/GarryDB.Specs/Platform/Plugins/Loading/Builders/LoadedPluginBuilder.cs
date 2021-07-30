@@ -1,8 +1,6 @@
-﻿using GarryDB.Platform.Plugins;
-
+using GarryDB.Platform.Plugins;
 using GarryDB.Platform.Plugins.Loading;
 using GarryDB.Specs.Builders.Randomized;
-
 using GarryDB.Specs.Platform.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Plugins.Loading.Builders
@@ -27,18 +25,20 @@ namespace GarryDB.Specs.Platform.Plugins.Loading.Builders
 
         protected override LoadedPlugin OnBuild()
         {
-            return new LoadedPlugin(pluginIdentity, startupOrder);
+            return new(pluginIdentity, startupOrder);
         }
 
         public LoadedPluginBuilder ForPlugin(PluginIdentity pluginIdentity)
         {
             this.pluginIdentity = pluginIdentity;
+
             return this;
         }
 
         public LoadedPluginBuilder WithStartupOrder(int startupOrder)
         {
             this.startupOrder = startupOrder;
+
             return this;
         }
     }

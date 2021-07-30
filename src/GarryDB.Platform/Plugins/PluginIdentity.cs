@@ -61,7 +61,6 @@ namespace GarryDB.Platform.Plugins
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -82,7 +81,6 @@ namespace GarryDB.Platform.Plugins
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>

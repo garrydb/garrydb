@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Platform.Messaging
 {
@@ -8,6 +8,16 @@ namespace GarryDB.Platform.Messaging
     public sealed class MessageEnvelope
     {
         private readonly PluginIdentity sender;
+
+        /// <summary>
+        ///     Initializes a new <see cref="MessageEnvelope" />.
+        /// </summary>
+        /// <param name="sender">The sender of the message.</param>
+        /// <param name="destination">The destination of the message.</param>
+        public MessageEnvelope(PluginIdentity sender, Address destination)
+            : this(sender, destination, new object())
+        {
+        }
 
         /// <summary>
         ///     Initializes a new <see cref="MessageEnvelope" />.
@@ -27,7 +37,6 @@ namespace GarryDB.Platform.Messaging
         /// </summary>
         public Address Destination { get; }
 
-
         /// <summary>
         ///     Gets the message.
         /// </summary>
@@ -40,7 +49,7 @@ namespace GarryDB.Platform.Messaging
         /// <returns>A <see cref="MessageEnvelope" /> containing the message and is addressed to the sender.</returns>
         public MessageEnvelope CreateReturnMessage(object message)
         {
-            return new MessageEnvelope(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
+            return new(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
         }
     }
 }

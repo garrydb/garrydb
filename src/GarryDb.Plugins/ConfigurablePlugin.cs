@@ -41,6 +41,7 @@ namespace GarryDB.Plugins
         protected virtual Task ConfigureAsync()
         {
             Configure();
+
             return Task.CompletedTask;
         }
     }

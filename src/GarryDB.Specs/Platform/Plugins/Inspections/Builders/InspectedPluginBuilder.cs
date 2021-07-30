@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -7,16 +7,15 @@ using ExamplePlugin.Contract;
 using ExamplePlugin.Shared;
 
 using GarryDB.Platform.Plugins.Inpections;
-
 using GarryDB.Plugins;
 
 namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 {
     public sealed class InspectedPluginBuilder : TestDataBuilder<InspectedPlugin>
     {
-        private Assembly pluginAssembly;
         private readonly IList<Assembly> provided = new List<Assembly>();
         private readonly IList<Assembly> references = new List<Assembly>();
+        private Assembly pluginAssembly;
 
         protected override void OnPreBuild()
         {
@@ -28,11 +27,8 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 
         protected override InspectedPlugin OnBuild()
         {
-            return new InspectedPlugin(
-                new PluginAssembly(pluginAssembly),
-                provided.Select(assembly => new ProvidedAssembly(assembly)),
-                references.Select(assembly => new ReferencedAssembly(assembly))
-            );
+            return new(new PluginAssembly(pluginAssembly), provided.Select(assembly => new ProvidedAssembly(assembly)),
+                       references.Select(assembly => new ReferencedAssembly(assembly)));
         }
 
         public InspectedPluginBuilder For<TPlugin>() where TPlugin : Plugin
@@ -43,6 +39,7 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
         public InspectedPluginBuilder For(Assembly assembly)
         {
             pluginAssembly = assembly;
+
             return this;
         }
 
@@ -54,6 +51,7 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
         public InspectedPluginBuilder Provides(Assembly assembly)
         {
             provided.Add(assembly);
+
             return this;
         }
 
@@ -65,6 +63,7 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
         public InspectedPluginBuilder References(Assembly assembly)
         {
             references.Add(assembly);
+
             return this;
         }
     }

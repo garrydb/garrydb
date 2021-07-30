@@ -23,6 +23,7 @@ namespace GarryDB.Specs.Builders.Randomized
             get
             {
                 startsWithLetter = true;
+
                 return this;
             }
         }
@@ -32,6 +33,7 @@ namespace GarryDB.Specs.Builders.Randomized
             get
             {
                 lettersOnly = true;
+
                 return this;
             }
         }
@@ -53,11 +55,7 @@ namespace GarryDB.Specs.Builders.Randomized
                 maximumLength--;
             }
 
-            int numberOfCharacters =
-                new RandomIntegerBuilder()
-                    .WithMinimum(minimumLength)
-                    .WithMaximum(maximumLength)
-                    .Build();
+            int numberOfCharacters = new RandomIntegerBuilder().WithMinimum(minimumLength).WithMaximum(maximumLength).Build();
 
             string characters = !lettersOnly ? Characters : Characters.Substring(10);
 
@@ -69,19 +67,23 @@ namespace GarryDB.Specs.Builders.Randomized
         public RandomStringBuilder WithMinimumLength(int length)
         {
             minimumLength = length;
+
             return this;
         }
 
         public RandomStringBuilder WithMaximumLength(int length)
         {
             maximumLength = length;
+
             return this;
         }
 
         private string BuildRandomString(string characters, int length)
         {
             char[] value = Enumerable.Range(0, length)
-                                     .Select(x => new RandomIntegerBuilder().WithMinimum(0).WithMaximum(characters.Length).Build())
+                                     .Select(x => new RandomIntegerBuilder().WithMinimum(0)
+                                                                            .WithMaximum(characters.Length)
+                                                                            .Build())
                                      .Select(x => characters[x])
                                      .ToArray();
 

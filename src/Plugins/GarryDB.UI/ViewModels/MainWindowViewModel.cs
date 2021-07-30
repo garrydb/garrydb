@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 
 using ReactiveUI;
 
@@ -15,9 +15,7 @@ namespace GarryDB.UI.ViewModels
             // of a view model, this allows you to pass parameters to 
             // your view models, or to reuse existing view models.
             //
-            GoNext = ReactiveCommand.CreateFromObservable(
-                () => Router.Navigate.Execute(new FirstViewModel(this))
-            );
+            GoNext = ReactiveCommand.CreateFromObservable(() => Router.Navigate.Execute(new FirstViewModel(this)));
         }
 
         // The command that navigates a user to first view model.
@@ -31,6 +29,6 @@ namespace GarryDB.UI.ViewModels
 
         // The Router associated with this Screen.
         // Required by the IScreen interface.
-        public RoutingState Router { get; } = new RoutingState();
+        public RoutingState Router { get; } = new();
     }
 }

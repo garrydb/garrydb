@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform;
+using GarryDB.Platform;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 
@@ -18,12 +18,13 @@ namespace GarryDB.Specs.Platform.Builders
 
         protected override Garry OnBuild()
         {
-            return new Garry(fileSystem);
+            return new(fileSystem);
         }
 
         public GarryBuilder Using(FileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+
             return this;
         }
     }

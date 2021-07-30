@@ -23,11 +23,11 @@
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=Interfaces/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateInstanceFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateStaticFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=91BB8D774C5AFE4DADBB888D93BBD783/AbsolutePath/@EntryValue">C:\Projects\Temp\GarryDB\ReSharper 9 Code Style.DotSettings</s:String>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=91BB8D774C5AFE4DADBB888D93BBD783/RelativePath/@EntryValue">..\ReSharper 9 Code Style.DotSettings</s:String>
-	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=91BB8D774C5AFE4DADBB888D93BBD783/@KeyIndexDefined">True</s:Boolean>
-	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File91BB8D774C5AFE4DADBB888D93BBD783/@KeyIndexDefined">True</s:Boolean>
-	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File91BB8D774C5AFE4DADBB888D93BBD783/RelativePriority/@EntryValue">1</s:Double>
+	
+	
+	
+	
+	
 	<s:Boolean x:Key="/Default/ReSpeller/CheckInternal/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ReSpeller/CheckLocals/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ReSpeller/CheckPrivate/@EntryValue">False</s:Boolean>

@@ -11,7 +11,9 @@ namespace GarryDB.UI.Views
     {
         public FirstView()
         {
-            this.WhenActivated(disposables => { });
+            this.WhenActivated(disposables =>
+                               {
+                               });
             AvaloniaXamlLoader.Load(this);
         }
     }

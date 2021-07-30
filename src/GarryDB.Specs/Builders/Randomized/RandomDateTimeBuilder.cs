@@ -44,18 +44,19 @@ namespace GarryDB.Specs.Builders.Randomized
             get
             {
                 includeTimeComponent = false;
+
                 return this;
             }
         }
 
         protected override DateTime OnBuild()
         {
-            var minimumTicks = (int)minimum.Ticks;
-            var maximumTicks = (int)maximum.Ticks;
+            int minimumTicks = (int)minimum.Ticks;
+            int maximumTicks = (int)maximum.Ticks;
 
             int randomTicks = new RandomIntegerBuilder().WithMinimum(minimumTicks).WithMaximum(maximumTicks).Build();
 
-            TimeSpan period = TimeSpan.FromTicks(randomTicks);
+            var period = TimeSpan.FromTicks(randomTicks);
 
             DateTime dateTime = baseMoment.Add(period);
 
@@ -71,6 +72,7 @@ namespace GarryDB.Specs.Builders.Randomized
         {
             baseMoment = afterMoment;
             minimum = TimeSpan.Zero;
+
             return this;
         }
     }

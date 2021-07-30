@@ -18,12 +18,14 @@ namespace GarryDB.Specs.Builders.Randomized
         public RandomDoubleBuilder WithMinimum(double newMinimum)
         {
             minimum = newMinimum;
+
             return this;
         }
 
         public RandomDoubleBuilder WithMaximum(double newMaximum)
         {
             maximum = newMaximum;
+
             return this;
         }
     }

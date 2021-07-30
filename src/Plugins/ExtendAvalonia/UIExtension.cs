@@ -17,9 +17,9 @@ namespace ExtendAvalonia
             get
             {
                 yield return new StyleInclude(new Uri("avares://ExtendAvalonia/"))
-                {
-                    Source = new Uri("Resources/Styles.axaml", UriKind.Relative)
-                };
+                             {
+                                 Source = new Uri("Resources/Styles.axaml", UriKind.Relative)
+                             };
             }
         }
 
@@ -28,9 +28,9 @@ namespace ExtendAvalonia
             get
             {
                 yield return new ResourceInclude
-                {
-                    Source = new Uri("avares://ExtendAvalonia/Resources/ResourceDictionary.axaml")
-                };
+                             {
+                                 Source = new Uri("avares://ExtendAvalonia/Resources/ResourceDictionary.axaml")
+                             };
             }
         }
     }

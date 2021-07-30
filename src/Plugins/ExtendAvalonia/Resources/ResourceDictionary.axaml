@@ -3,7 +3,8 @@
                     xmlns:views="clr-namespace:ExtendAvalonia.Views">
   <ControlTemplate x:Key="ForTheFirstView_Oud">
     <Canvas x:Name="Canvas">
-      <TextBlock Text="Header from ExtendAvalonia/Resources/ResourceDictionary.axaml" TextAlignment="Center" Canvas.Right="300" Foreground="Yellow" FontWeight="Bold" />
+      <TextBlock Text="Header from ExtendAvalonia/Resources/ResourceDictionary.axaml" TextAlignment="Center"
+                 Canvas.Right="300" Foreground="Yellow" FontWeight="Bold" />
       <ContentPresenter
         x:Name="PART_ExampleContentPresenter"
         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
@@ -12,8 +13,8 @@
         VerticalContentAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
         Height="{Binding Bounds.Bottom, ElementName=Canvas}"
         Width="{Binding Bounds.Width, ElementName=Canvas}"
-        Canvas.Top="0" Canvas.Left="0" Canvas.Bottom="{Binding Height, ElementName=Canvas}" Canvas.Right="{Binding Width, ElementName=Canvas}"
-      />
+        Canvas.Top="0" Canvas.Left="0" Canvas.Bottom="{Binding Height, ElementName=Canvas}"
+        Canvas.Right="{Binding Width, ElementName=Canvas}" />
     </Canvas>
   </ControlTemplate>
 
@@ -24,8 +25,7 @@
         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
         ContentTemplate="{Binding ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
         Height="{Binding Bounds.Bottom, ElementName=Canvas}"
-        Width="{Binding Bounds.Width, ElementName=Canvas}"
-      />
+        Width="{Binding Bounds.Width, ElementName=Canvas}" />
     </views:ExampleTemplatedControl>
   </ControlTemplate>
 </ResourceDictionary>

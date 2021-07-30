@@ -22,7 +22,9 @@ namespace GarryDB.Specs.Plugins.Builders
 
             if (factory == null)
             {
-                WhenConfiguring(() => { });
+                WhenConfiguring(() =>
+                                {
+                                });
             }
         }
 
@@ -38,16 +40,18 @@ namespace GarryDB.Specs.Plugins.Builders
 
         public PluginBuilder WhenConfiguring<TConfiguration>(Action<TConfiguration> onConfigure) where TConfiguration : new()
         {
-            onConfiguring = o => onConfigure((TConfiguration) o);
+            onConfiguring = o => onConfigure((TConfiguration)o);
             factory = () => new PluginStub<TConfiguration>(this);
+
             return this;
         }
-        
+
         public PluginBuilder Register<TMessage>(string name, Action<TMessage> handler)
         {
             return Register(name, (TMessage message) =>
                                   {
                                       handler(message);
+
                                       return default(object);
                                   });
         }
@@ -57,6 +61,7 @@ namespace GarryDB.Specs.Plugins.Builders
             return Register(name, (TMessage message) =>
                                   {
                                       TResult result = handler(message);
+
                                       return Task.FromResult(result);
                                   });
         }
@@ -64,12 +69,14 @@ namespace GarryDB.Specs.Plugins.Builders
         public PluginBuilder Register<TMessage, TResult>(string name, Func<TMessage, Task<TResult>> handler)
         {
             registrations[name] = handler;
+
             return this;
         }
 
         public PluginBuilder Using(PluginContext pluginContext)
         {
             this.pluginContext = pluginContext;
+
             return this;
         }
 

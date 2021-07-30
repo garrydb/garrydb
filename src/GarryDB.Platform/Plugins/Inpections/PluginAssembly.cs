@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+
 using GarryDB.Platform.Extensions;
 using GarryDB.Plugins;
 
@@ -18,12 +19,10 @@ namespace GarryDB.Platform.Plugins.Inpections
             : base(assembly)
         {
             PluginType = assembly.DefinedTypes.Single(type => type.IsPluginType()).FullName!;
-            StartupOrder =
-                assembly
-                    .GetCustomAttributesData()
-                    .Where(x => x.AttributeType.Name == nameof(StartupOrderAttribute))
-                    .Select(x => (int?) x.ConstructorArguments.Single().Value ?? 0)
-                    .SingleOrDefault();
+            StartupOrder = assembly.GetCustomAttributesData()
+                                   .Where(x => x.AttributeType.Name == nameof(StartupOrderAttribute))
+                                   .Select(x => (int?)x.ConstructorArguments.Single().Value ?? 0)
+                                   .SingleOrDefault();
         }
 
         /// <summary>
@@ -44,6 +43,7 @@ namespace GarryDB.Platform.Plugins.Inpections
             get
             {
                 AssemblyName assemblyName = Assembly.GetName();
+
                 return new PluginIdentity(assemblyName.Name ?? "unknown", assemblyName.Version?.ToString() ?? "1.0.0.0");
             }
         }

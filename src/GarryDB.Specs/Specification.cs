@@ -10,7 +10,7 @@ namespace GarryDB.Specs
     public abstract class Specification<TSubject>
     {
         private TSubject subject;
-        
+
         protected Specification()
         {
             Setup();

@@ -99,6 +99,9 @@
                 when the startup progress is changed.
             </summary>
         </member>
+        <member name="M:GarryDB.Platform.Garry.Dispose">
+            <inheritdoc />
+        </member>
         <member name="M:GarryDB.Platform.Garry.StartAsync(System.String)">
             <summary>
                 Start <see cref="T:GarryDB.Platform.Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
@@ -181,6 +184,13 @@
             <summary>
                 Wrapped around a message and contains metadata about that message.
             </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Messaging.Address)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.MessageEnvelope" />.
+            </summary>
+            <param name="sender">The sender of the message.</param>
+            <param name="destination">The destination of the message.</param>
         </member>
         <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Messaging.Address,System.Object)">
             <summary>
@@ -291,15 +301,6 @@
             </summary>
             <param name="assembly">The assembly that has been inspected.</param>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.IsCompatibleWith(System.Reflection.AssemblyName)">
-            <summary>
-                Determines whether this assembly can be used instead of <paramref name="assemblyName" />.
-            </summary>
-            <param name="assemblyName">The <see cref="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.AssemblyName" /> to check.</param>
-            <returns>
-                <c>true</c> if <paramref name="assemblyName" /> is compatible with this assembly, otherwise <c>false</c>.
-            </returns>
-        </member>
         <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.AssemblyName">
             <summary>
                 Gets the <see cref="T:System.Reflection.AssemblyName" />.
@@ -314,6 +315,15 @@
             <summary>
                 Gets the path to the assembly.
             </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.IsCompatibleWith(System.Reflection.AssemblyName)">
+            <summary>
+                Determines whether this assembly can be used instead of <paramref name="assemblyName" />.
+            </summary>
+            <param name="assemblyName">The <see cref="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.AssemblyName" /> to check.</param>
+            <returns>
+                <c>true</c> if <paramref name="assemblyName" /> is compatible with this assembly, otherwise <c>false</c>.
+            </returns>
         </member>
         <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.ToString">
             <inheritdoc />
@@ -564,7 +574,6 @@
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginIdentity.op_Equality(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Plugins.PluginIdentity)">
             <summary>
-            
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -572,7 +581,6 @@
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginIdentity.op_Inequality(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Plugins.PluginIdentity)">
             <summary>
-            
             </summary>
             <param name="a"></param>
             <param name="b"></param>
@@ -633,6 +641,9 @@
             <summary>
                 Intializes a new <see cref="T:GarryDB.Platform.Startup.StartupSequence" />.
             </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Startup.StartupSequence.Dispose">
+            <inheritdoc />
         </member>
         <member name="M:GarryDB.Platform.Startup.StartupSequence.Subscribe(System.IObserver{GarryDB.Platform.Startup.StartupProgressUpdated})">
             <inheritdoc />

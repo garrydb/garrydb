@@ -19,7 +19,7 @@ namespace GarryDB.Specs.NUnit.Extensions
                 properties[DisposablesKey] = new List<IDisposable>();
             }
 
-            ((IList<IDisposable>) properties[DisposablesKey]).Add(disposable);
+            ((IList<IDisposable>)properties[DisposablesKey]).Add(disposable);
         }
 
         public static void DisposeAll(this TestExecutionContext testExecutionContext)
@@ -31,7 +31,7 @@ namespace GarryDB.Specs.NUnit.Extensions
                 return;
             }
 
-            foreach (IDisposable disposable in (IList<IDisposable>) properties[DisposablesKey])
+            foreach (IDisposable disposable in (IList<IDisposable>)properties[DisposablesKey])
             {
                 disposable.Dispose();
             }

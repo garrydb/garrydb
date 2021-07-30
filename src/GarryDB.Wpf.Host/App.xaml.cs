@@ -4,7 +4,6 @@ using System.Windows;
 
 using GarryDB.Platform;
 using GarryDB.Platform.Infrastructure;
-
 using GarryDB.Platform.Startup;
 
 namespace GarryDB.Wpf.Host
@@ -21,30 +20,29 @@ namespace GarryDB.Wpf.Host
             splashScreen.Show();
 
             Task.Run(async () =>
-            {
-                var garry = new Garry(new WindowsFileSystem());
+                     {
+                         using (var garry = new Garry(new WindowsFileSystem()))
+                         {
+                             using (garry.WhenProgressUpdated.Subscribe(updated => OnProgressUpdated(splashScreen, updated),
+                                                                        () => OnProgressCompleted(splashScreen)))
+                             {
+                                 await garry.StartAsync("C:\\Projects\\GarryDB\\Plugins").ConfigureAwait(false);
+                             }
 
-                using (garry.WhenProgressUpdated.Subscribe(
-                    updated => OnProgressUpdated(splashScreen, updated),
-                    () => OnProgressCompleted(splashScreen))
-                )
-                {
-                    await garry.StartAsync("C:\\Projects\\GarryDB\\Plugins").ConfigureAwait(false);
-                }
-
-                Dispatcher.Invoke(() => Shutdown());
-            });
+                             Dispatcher.Invoke(() => Shutdown());
+                         }
+                     });
         }
 
         private void OnProgressUpdated(SplashScreen splashScreen, StartupProgressUpdated updated)
         {
             Dispatcher.Invoke(() =>
-            {
-                splashScreen.Phase = updated.Stage;
-                splashScreen.Current = updated.CurrentStep;
-                splashScreen.CurrentPlugin = updated.PluginIdentity;
-                splashScreen.Total = updated.TotalSteps;
-            });
+                              {
+                                  splashScreen.Phase = updated.Stage;
+                                  splashScreen.Current = updated.CurrentStep;
+                                  splashScreen.CurrentPlugin = updated.PluginIdentity;
+                                  splashScreen.Total = updated.TotalSteps;
+                              });
         }
 
         private void OnProgressCompleted(SplashScreen splashScreen)

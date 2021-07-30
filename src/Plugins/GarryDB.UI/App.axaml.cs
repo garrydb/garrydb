@@ -18,8 +18,8 @@ namespace GarryDB.UI
 {
     public class App : Application
     {
-        private readonly Func<Task> shutdown;
         private readonly IEnumerable<Extension> extensions;
+        private readonly Func<Task> shutdown;
 
         public App()
             : this(() => Task.CompletedTask, Enumerable.Empty<Extension>())
@@ -50,17 +50,17 @@ namespace GarryDB.UI
                 desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
                 desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel()
-                };
+                                     {
+                                         DataContext = new MainWindowViewModel()
+                                     };
 
-                desktop.Events().Exit.InvokeCommand(
-                    ReactiveCommand.CreateFromTask((ControlledApplicationLifetimeExitEventArgs _) =>
-                    {
-                        _.ApplicationExitCode = -1;
+                desktop.Events()
+                       .Exit.InvokeCommand(ReactiveCommand.CreateFromTask((ControlledApplicationLifetimeExitEventArgs _) =>
+                                                                          {
+                                                                              _.ApplicationExitCode = -1;
 
-                        return shutdown();
-                    }));
+                                                                              return shutdown();
+                                                                          }));
             }
 
             base.OnFrameworkInitializationCompleted();

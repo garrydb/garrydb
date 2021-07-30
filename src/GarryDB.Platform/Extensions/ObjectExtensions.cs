@@ -24,7 +24,10 @@ namespace GarryDB.Platform.Extensions
                 return Enumerable.Empty<T>();
             }
 
-            return new[] { item };
+            return new[]
+                   {
+                       item
+                   };
         }
     }
 }

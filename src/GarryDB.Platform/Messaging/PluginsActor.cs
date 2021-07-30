@@ -20,16 +20,17 @@ namespace GarryDB.Platform.Messaging
             var plugins = new ConcurrentDictionary<PluginIdentity, IActorRef>();
 
             Receive((PluginLoaded message) =>
-            {
-                IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.PluginIdentity, message.Plugin), message.PluginIdentity.Name);
-                plugins[message.PluginIdentity] = pluginActorRef;
-            });
+                    {
+                        IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.PluginIdentity, message.Plugin),
+                                                                   message.PluginIdentity.Name);
+                        plugins[message.PluginIdentity] = pluginActorRef;
+                    });
 
             Receive((MessageEnvelope envelope) =>
-            {
-                IActorRef pluginActorRef = plugins[envelope.Destination.PluginIdentity];
-                pluginActorRef.Forward(envelope);
-            });
+                    {
+                        IActorRef pluginActorRef = plugins[envelope.Destination.PluginIdentity];
+                        pluginActorRef.Forward(envelope);
+                    });
         }
 
         /// <summary>

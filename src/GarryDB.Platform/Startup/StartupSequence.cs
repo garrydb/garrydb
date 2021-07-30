@@ -8,7 +8,7 @@ namespace GarryDB.Platform.Startup
     /// <summary>
     ///     The sequence of steps to take before Garry is started.
     /// </summary>
-    public sealed class StartupSequence : IObservable<StartupProgressUpdated>
+    public sealed class StartupSequence : IObservable<StartupProgressUpdated>, IDisposable
     {
         private const int NumberOfStages = 4;
 
@@ -22,6 +22,12 @@ namespace GarryDB.Platform.Startup
         public StartupSequence()
         {
             progress = new Subject<StartupProgressUpdated>();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            progress.Dispose();
         }
 
         /// <inheritdoc />

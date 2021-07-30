@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Specs.Platform.Plugins.Builders
 {
@@ -6,7 +6,7 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
     {
         protected override PluginLoaderFactory OnBuild()
         {
-            return new PluginLoaderFactory();
+            return new();
         }
     }
 }

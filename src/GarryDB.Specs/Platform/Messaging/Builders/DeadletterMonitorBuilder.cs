@@ -1,4 +1,4 @@
-﻿using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Messaging;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
@@ -6,7 +6,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
     {
         protected override DeadletterMonitor OnBuild()
         {
-            return new DeadletterMonitor();
+            return new();
         }
     }
 }

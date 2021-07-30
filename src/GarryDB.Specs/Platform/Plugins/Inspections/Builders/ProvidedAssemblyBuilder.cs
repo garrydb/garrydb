@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 using ExamplePlugin.Contract;
 
@@ -20,12 +20,13 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Builders
 
         protected override ProvidedAssembly OnBuild()
         {
-            return new ProvidedAssembly(assembly);
+            return new(assembly);
         }
 
         public ProvidedAssemblyBuilder ForAssembly(Assembly assembly)
         {
             this.assembly = assembly;
+
             return this;
         }
     }

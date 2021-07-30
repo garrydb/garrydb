@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
-
 using GarryDB.Plugins;
 
 namespace GarryDB.Platform.Plugins.Inpections
@@ -51,7 +50,7 @@ namespace GarryDB.Platform.Plugins.Inpections
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
             paths.AddRange(files);
-            
+
             return new PathAssemblyResolver(paths);
         }
 
@@ -66,17 +65,13 @@ namespace GarryDB.Platform.Plugins.Inpections
             }
 
             IEnumerable<Assembly> providedAssemblies =
-                assemblies
-                    .Where(assembly => IsProvidedAssembly(assembly, pluginAssembly))
-                    .ToList();
+                assemblies.Where(assembly => IsProvidedAssembly(assembly, pluginAssembly)).ToList();
 
             IEnumerable<Assembly> referencedAssemblies = assemblies.Except(pluginAssembly).Except(providedAssemblies).ToList();
 
-            return new InspectedPlugin(
-                new PluginAssembly(pluginAssembly),
-                providedAssemblies.Select(assembly => new ProvidedAssembly(assembly)),
-                referencedAssemblies.Select(assembly => new ReferencedAssembly(assembly))
-            );
+            return new InspectedPlugin(new PluginAssembly(pluginAssembly),
+                                       providedAssemblies.Select(assembly => new ProvidedAssembly(assembly)),
+                                       referencedAssemblies.Select(assembly => new ReferencedAssembly(assembly)));
         }
 
         private bool IsProvidedAssembly(Assembly assembly, Assembly pluginAssembly)

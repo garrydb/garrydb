@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,14 +11,11 @@ using Autofac;
 
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
-
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
-
 using GarryDB.Platform.Plugins;
 using GarryDB.Platform.Plugins.Inpections;
 using GarryDB.Platform.Plugins.Loading;
-
 using GarryDB.Platform.Startup;
 using GarryDB.Plugins;
 
@@ -29,7 +26,7 @@ namespace GarryDB.Platform
     /// <summary>
     ///     The Garry.
     /// </summary>
-    public sealed class Garry
+    public sealed class Garry : IDisposable
     {
         private readonly FileSystem fileSystem;
         private readonly StartupSequence startupSequence;
@@ -53,6 +50,12 @@ namespace GarryDB.Platform
             get { return startupSequence; }
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            startupSequence.Dispose();
+        }
+
         /// <summary>
         ///     Start <see cref="Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
         /// </summary>
@@ -60,14 +63,14 @@ namespace GarryDB.Platform
         public async Task StartAsync(string pluginsDirectory)
         {
             var shutdownRequested = new AutoResetEvent(false);
-            using (ActorSystem system = ActorSystem.Create("garry"))
+            using (var system = ActorSystem.Create("garry"))
             {
                 var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
                 IActorRef deadletterWatchActorRef = system.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
                 system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
 
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), "plugins");
-                
+
                 var containerBuilder = new ContainerBuilder();
                 IEnumerable<LoadedPlugin> loadedPlugins = LoadPlugins(pluginsDirectory, containerBuilder).ToList();
 
@@ -76,43 +79,41 @@ namespace GarryDB.Platform
                     IDictionary<PluginIdentity, Plugin> plugins =
                         loadedPlugins
                             .OrderBy(plugin => plugin.StartupOrder)
-                            .ToDictionary(
-                                plugin => plugin.PluginIdentity,
-                                plugin =>
-                                    container.ResolveKeyed<Plugin>(
-                                        plugin.PluginIdentity,
-                                        TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, plugin.PluginIdentity))
-                                    )
-                            );
+                            .ToDictionary(plugin => plugin.PluginIdentity,
+                                          plugin => container.ResolveKeyed<Plugin>(plugin.PluginIdentity,
+                                                                                   TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, plugin.PluginIdentity))));
 
-                    plugins[GarryPlugin.PluginIdentity] = new GarryPlugin(shutdownRequested, new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
+                    plugins[GarryPlugin.PluginIdentity] =
+                        new GarryPlugin(shutdownRequested, new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
 
                     plugins.ForEach(plugin =>
-                    {
-                        pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
-                    });
+                                    {
+                                        pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
+                                    });
 
                     plugins.Keys.ForEach(plugin =>
-                    {
-                        startupSequence.Configure(plugin);
-                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "configure"), new object()));
-                    });
+                                         {
+                                             startupSequence.Configure(plugin);
+                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                                   new Address(plugin, "configure")));
+                                         });
 
                     plugins.Keys.ForEach(plugin =>
-                    {
-                        startupSequence.Configure(plugin);
-                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "start"), new object()));
-                    });
+                                         {
+                                             startupSequence.Start(plugin);
+                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                                   new Address(plugin, "start")));
+                                         });
 
                     startupSequence.Complete();
 
                     shutdownRequested.WaitOne();
 
                     plugins.Keys.ForEach(plugin =>
-                    {
-                        startupSequence.Configure(plugin);
-                        pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity, new Address(plugin, "stop"), new object()));
-                    });
+                                         {
+                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                                   new Address(plugin, "stop")));
+                                         });
                 }
             }
         }
@@ -133,16 +134,16 @@ namespace GarryDB.Platform
         {
             var inspector = new Inspector(fileSystem);
 
-            IEnumerable<InspectedPlugin> inspectedPlugins =
-                fileSystem.GetTopLevelDirectories(pluginsDirectory)
-                    .Select(directory => inspector.Inspect(directory))
-                    .Where(plugin => plugin != null)
-                    .Select(plugin => plugin!)
-                    .ToList();
-            
+            IEnumerable<InspectedPlugin> inspectedPlugins = fileSystem.GetTopLevelDirectories(pluginsDirectory)
+                                                                      .Select(directory => inspector.Inspect(directory))
+                                                                      .Where(plugin => plugin != null)
+                                                                      .Select(plugin => plugin!)
+                                                                      .ToList();
+
             foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
             {
                 startupSequence.Inspect(inspectedPlugin.PluginIdentity);
+
                 yield return inspectedPlugin;
             }
         }
@@ -157,16 +158,17 @@ namespace GarryDB.Platform
 
         private sealed class GarryPlugin : Plugin
         {
-            public static readonly PluginIdentity PluginIdentity = new PluginIdentity("Garry", "1.0");
+            public static readonly PluginIdentity PluginIdentity = new("Garry", "1.0");
 
             public GarryPlugin(EventWaitHandle shutdownRequested, PluginContext pluginContext)
                 : base(pluginContext)
             {
                 Register("shutdown", (object _) =>
-                {
-                    shutdownRequested.Set();
-                    return Task.CompletedTask;
-                });
+                                     {
+                                         shutdownRequested.Set();
+
+                                         return Task.CompletedTask;
+                                     });
             }
         }
     }

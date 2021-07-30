@@ -22,17 +22,17 @@ namespace GarryDB.UI.Views
             this.AttachDevTools();
 #endif
             this.WhenActivated(disposables =>
-            {
-                this.WhenAnyValue(window => window.IsVisible)
-                    .Where(x => x)
-                    .Do(_ =>
-                    {
-                        Topmost = true;
-                        Topmost = false;
-                    })
-                    .Subscribe()
-                    .DisposeWith(disposables);
-            });
+                               {
+                                   this.WhenAnyValue(window => window.IsVisible)
+                                       .Where(x => x)
+                                       .Do(_ =>
+                                           {
+                                               Topmost = true;
+                                               Topmost = false;
+                                           })
+                                       .Subscribe()
+                                       .DisposeWith(disposables);
+                               });
         }
     }
 }

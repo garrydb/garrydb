@@ -31,11 +31,7 @@ namespace GarryDB.Specs.Builders.Randomized
                 return Activator.CreateInstance(type)!;
             }
 
-            ConstructorInfo constructor =
-                type
-                    .GetConstructors()
-                    .OrderByDescending(x => x.GetParameters().Length)
-                    .First();
+            ConstructorInfo constructor = type.GetConstructors().OrderByDescending(x => x.GetParameters().Length).First();
 
             object[] arguments = GetConstructorArguments(constructor).ToArray();
 
@@ -55,19 +51,17 @@ namespace GarryDB.Specs.Builders.Randomized
             foreach (ParameterInfo parameter in constructorParameters)
             {
                 object value = CreateValue(parameter.Name!, parameter.ParameterType);
+
                 yield return value;
             }
         }
 
         private void PopulateProperties(object result)
         {
-            IDictionary<string, PropertyInfo> properties =
-                type
-                    .GetProperties()
-                    .Where(x => x.CanWrite &&
-                                !overridden.Contains(x.Name.ToLower()) &&
-                                x.PropertyType.IsDefaultValue(x.GetValue(result)!))
-                    .ToDictionary(x => x.Name.ToLowerInvariant(), x => x);
+            IDictionary<string, PropertyInfo> properties = type.GetProperties()
+                                                               .Where(x => x.CanWrite && !overridden.Contains(x.Name.ToLower()) &&
+                                                                           x.PropertyType.IsDefaultValue(x.GetValue(result)!))
+                                                               .ToDictionary(x => x.Name.ToLowerInvariant(), x => x);
 
             foreach (KeyValuePair<string, PropertyInfo> property in properties)
             {

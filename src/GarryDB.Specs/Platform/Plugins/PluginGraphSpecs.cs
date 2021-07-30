@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Autofac;
@@ -10,9 +10,6 @@ using ExamplePlugin.Shared;
 using GarryDB.Platform.Plugins;
 using GarryDB.Platform.Plugins.Inpections;
 using GarryDB.Platform.Plugins.Loading;
-
-using GarryDB.Specs.Akka.Builders;
-
 using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
 
 using NUnit.Framework;
@@ -29,15 +26,14 @@ namespace GarryDB.Specs.Platform.Plugins
 
             protected override PluginLoaderFactory Given()
             {
-                return new PluginLoaderFactory();
+                return new();
             }
 
             protected override void When(PluginLoaderFactory subject)
             {
-                var test = new TestKitBuilder().Build();
-
                 InspectedPlugin plugin1 = new InspectedPluginBuilder().Build();
-                InspectedPlugin plugin2 = new InspectedPluginBuilder().For<DependsOnExample>().References<ExampleShared>().Build();
+                InspectedPlugin plugin2 =
+                    new InspectedPluginBuilder().For<DependsOnExample>().References<ExampleShared>().Build();
 
                 pluginLoaders = subject.Create(plugin1, plugin2).ToList();
                 plugins = pluginLoaders.Select(x => x.Load(new ContainerBuilder())).ToList();

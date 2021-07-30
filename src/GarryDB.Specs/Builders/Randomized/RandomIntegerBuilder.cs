@@ -17,12 +17,14 @@ namespace GarryDB.Specs.Builders.Randomized
         public RandomIntegerBuilder WithMinimum(int newMinimum)
         {
             minimum = newMinimum;
+
             return this;
         }
 
         public RandomIntegerBuilder WithMaximum(int newMaximum)
         {
             maximum = newMaximum;
+
             return this;
         }
     }

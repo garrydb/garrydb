@@ -1,10 +1,11 @@
 <reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:ChessboardViewModel" xmlns="https://github.com/avaloniaui"
                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                                xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:viewModels="clr-namespace:GarryDB.UI.ViewModels"
                                 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                                d:DataContext="{x:Static viewModels:DesignData.ChessboardViewModel}"
                                 x:Class="GarryDB.UI.Views.ChessboardView">
   Welcome to Avalonia!
 </reactiveUi:ReactiveUserControl>

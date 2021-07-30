@@ -23,20 +23,19 @@ namespace GarryDB.UI
             var configured = new AutoResetEvent(false);
 
             var mainThread = new Thread(_ =>
-            {
-                AppBuilder
-                    .Configure(() => appBuilder(() => SendAsync("Garry", "shutdown")))
-                    .UsePlatformDetect()
-                    .LogToTrace()
-                    .AfterSetup(_ => configured.Set())
-                    .StartWithClassicDesktopLifetime(Array.Empty<string>());
-            });
-            
+                                        {
+                                            AppBuilder.Configure(() => appBuilder(() => SendAsync("Garry", "shutdown")))
+                                                      .UsePlatformDetect()
+                                                      .LogToTrace()
+                                                      .AfterSetup(_ => configured.Set())
+                                                      .StartWithClassicDesktopLifetime(Array.Empty<string>());
+                                        });
+
             if (OperatingSystem.IsWindows())
             {
                 mainThread.SetApartmentState(ApartmentState.STA);
             }
-            
+
             mainThread.Start();
             configured.WaitOne();
         }

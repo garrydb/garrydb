@@ -29,7 +29,9 @@ namespace GarryDB.Platform.Plugins
                 {
                     InspectedPlugin? provider =
                         inspectedPlugins.SingleOrDefault(p =>
-                            p.ProvidedAssemblies.Any(x => x.IsCompatibleWith(assembly.AssemblyName)));
+                                                             p.ProvidedAssemblies.Any(x =>
+                                                                                          x.IsCompatibleWith(assembly
+                                                                                              .AssemblyName)));
 
                     if (provider != null)
                     {
