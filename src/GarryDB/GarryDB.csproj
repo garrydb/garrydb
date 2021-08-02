@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sprache" Version="3.0.0-develop-00048" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
+  </ItemGroup>
+
+</Project>

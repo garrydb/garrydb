@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendAvalonia", "src\Plugi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.UI.Shared", "src\Plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj", "{EA38133B-C859-4AD5-AD09-F60EED66C7F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB", "src\GarryDB\GarryDB.csproj", "{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{EA38133B-C859-4AD5-AD09-F60EED66C7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA38133B-C859-4AD5-AD09-F60EED66C7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA38133B-C859-4AD5-AD09-F60EED66C7F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
