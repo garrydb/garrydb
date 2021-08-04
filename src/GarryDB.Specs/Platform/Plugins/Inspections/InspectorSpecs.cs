@@ -1,13 +1,12 @@
-﻿using System.IO;
+using System.IO;
 using System.Reflection;
 
 using ExamplePlugin;
 using ExamplePlugin.Contract;
 using ExamplePlugin.Shared;
 
-using FluentAssertions;
-
 using GarryDB.Platform.Plugins.Inpections;
+using GarryDB.Plugins;
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 using GarryDB.Specs.Platform.Plugins.Inspections.Builders;
 using GarryDB.Specs.Platform.Plugins.Inspections.Extensions;
@@ -26,20 +25,26 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections
             private Assembly exampleAssembly;
             private Assembly contractAssembly;
             private Assembly sharedAssembly;
+            private Assembly sharedPluginsAssembly;
 
             protected override Inspector Given()
             {
                 exampleAssembly = typeof(Example).Assembly;
                 contractAssembly = typeof(ExampleContract).Assembly;
                 sharedAssembly = typeof(ExampleShared).Assembly;
+                sharedPluginsAssembly = typeof(Plugin).Assembly;
+
                 directory = Path.GetDirectoryName(exampleAssembly.Location);
 
-                return new InspectorBuilder().Using(new FileSystemBuilder()
-                                                    .WithFiles(directory, Path.GetFileName(exampleAssembly.Location),
-                                                               Path.GetFileName(contractAssembly.Location),
-                                                               Path.GetFileName(sharedAssembly.Location))
-                                                    .Build())
-                                             .Build();
+                return new InspectorBuilder()
+                       .Using(new FileSystemBuilder()
+                              .WithFiles(directory,
+                                         Path.GetFileName(exampleAssembly.Location),
+                                         Path.GetFileName(contractAssembly.Location),
+                                         Path.GetFileName(sharedAssembly.Location),
+                                         Path.GetFileName(sharedPluginsAssembly.Location))
+                              .Build())
+                       .Build();
             }
 
             protected override void When(Inspector subject)
@@ -61,9 +66,9 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections
             }
 
             [Test]
-            public void It_should_find_no_referenced_assemblies()
+            public void It_should_find_the_reference_to_the_shared_plugins_assembly()
             {
-                inspectResults.ReferencedAssemblies.Should().BeEmpty();
+                inspectResults.Should().Reference(sharedPluginsAssembly);
             }
         }
     }

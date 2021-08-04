@@ -1,3 +1,5 @@
+using System;
+
 using GarryDB.Specs.NUnit.Extensions;
 
 using NUnit.Framework;
@@ -5,8 +7,10 @@ using NUnit.Framework.Internal;
 
 namespace GarryDB.Specs
 {
-    public abstract class Specification
+    public abstract class Specification<TSubject>
     {
+        private TSubject subject;
+
         protected Specification()
         {
             Setup();
@@ -15,15 +19,16 @@ namespace GarryDB.Specs
         [SetUp]
         public void Setup()
         {
-            Given();
-            When();
+            subject = Given();
+            When(subject);
         }
 
-        protected virtual void Given()
+        protected virtual TSubject Given()
         {
+            return default;
         }
 
-        protected virtual void When()
+        protected virtual void When(TSubject subject)
         {
         }
 
@@ -33,6 +38,11 @@ namespace GarryDB.Specs
             CleanUp();
 
             TestExecutionContext.CurrentContext.DisposeAll();
+
+            if (subject is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
 
         protected virtual void CleanUp()

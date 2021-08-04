@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 
 using FluentAssertions;
@@ -12,20 +12,21 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
 {
     public class InspectedPluginAssertions : ReferenceTypeAssertions<InspectedPlugin, InspectedPluginAssertions>
     {
-        private static readonly PropertyInfo assemblyProperty =
+        private static readonly PropertyInfo AssemblyProperty =
             typeof(InspectedAssembly).GetProperty("Assembly",
                                                   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty);
 
         public InspectedPluginAssertions(InspectedPlugin subject)
+            : base(subject)
         {
-            Subject = subject;
         }
 
         protected override string Identifier
         {
-            get { return "inspected-plugin"; }
+            get { return "inspectedPlugin"; }
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> HavePluginAssembly(Assembly assembly,
                                                                            string because = "",
                                                                            params object[] becauseArgs
@@ -34,20 +35,22 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
             return HavePluginAssembly(assembly.GetName(), because, becauseArgs);
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> HavePluginAssembly(AssemblyName assemblyName,
                                                                            string because = "",
                                                                            params object[] becauseArgs
         )
         {
-            var assembly = (Assembly)assemblyProperty.GetValue(Subject.PluginAssembly);
+            var assembly = (Assembly)AssemblyProperty.GetValue(Subject.PluginAssembly);
 
             Execute.Assertion.BecauseOf(because, becauseArgs)
                    .ForCondition(assembly != null && assembly.GetName().IsCompatibleWith(assemblyName))
-                   .FailWith("Expected {context:inspected-plugin} to have {0} as the plugin assembly{reason}", assemblyName);
+                   .FailWith("Expected {context:inspectedPlugin} to have {0} as the plugin assembly{reason}", assemblyName);
 
             return new AndConstraint<InspectedPluginAssertions>(this);
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> Provide(Assembly assembly,
                                                                 string because = "",
                                                                 params object[] becauseArgs
@@ -56,6 +59,7 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
             return Provide(assembly.GetName(), because, becauseArgs);
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> Provide(AssemblyName assemblyName,
                                                                 string because = "",
                                                                 params object[] becauseArgs
@@ -63,13 +67,14 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
         {
             Execute.Assertion.BecauseOf(because, becauseArgs)
                    .Given(() => Subject.ProvidedAssemblies.Select(providedAssembly =>
-                                                                      (Assembly)assemblyProperty.GetValue(providedAssembly)))
+                                                                      (Assembly)AssemblyProperty.GetValue(providedAssembly)))
                    .ForCondition(assemblies => assemblies.Any(assembly => assembly.GetName().IsCompatibleWith(assemblyName)))
-                   .FailWith("Expected {context:inspected-plugin} to provide {0}{reason}", assemblyName);
+                   .FailWith("Expected {context:inspectedPlugin} to provide {0}{reason}", assemblyName);
 
             return new AndConstraint<InspectedPluginAssertions>(this);
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> Reference(Assembly assembly,
                                                                   string because = "",
                                                                   params object[] becauseArgs
@@ -78,16 +83,16 @@ namespace GarryDB.Specs.Platform.Plugins.Inspections.Extensions
             return Reference(assembly.GetName(), because, becauseArgs);
         }
 
+        [CustomAssertion]
         public AndConstraint<InspectedPluginAssertions> Reference(AssemblyName assemblyName,
                                                                   string because = "",
                                                                   params object[] becauseArgs
         )
         {
             Execute.Assertion.BecauseOf(because, becauseArgs)
-                   .Given(() => Subject.ReferencedAssemblies.Select(referencedAssembly =>
-                                                                        (Assembly)assemblyProperty.GetValue(referencedAssembly)))
+                   .Given(() => Subject.ReferencedAssemblies.Select(referencedAssembly => (Assembly)AssemblyProperty.GetValue(referencedAssembly)))
                    .ForCondition(assemblies => assemblies.Any(assembly => assembly.GetName().IsCompatibleWith(assemblyName)))
-                   .FailWith("Expected {context:inspected-plugin} to reference {0}{reason}", assemblyName);
+                   .FailWith("Expected {context:inspectedPlugin} to reference {0}{reason}", assemblyName);
 
             return new AndConstraint<InspectedPluginAssertions>(this);
         }

@@ -1,4 +1,4 @@
-namespace GarryDB
+namespace GarryDB.Pieces
 {
     public sealed class Knight : Piece
     {

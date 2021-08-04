@@ -2,24 +2,24 @@ using System.Threading.Tasks;
 
 namespace GarryDB.Specs
 {
-    public abstract class AsyncSpecification<TSubject> : Specification<TSubject>
+    public abstract class AsyncSpecification : Specification
     {
-        protected override TSubject Given()
+        protected override void Given()
         {
-            return GivenAsync().GetAwaiter().GetResult();
+            GivenAsync().GetAwaiter().GetResult();
         }
 
-        protected virtual Task<TSubject> GivenAsync()
+        protected virtual Task GivenAsync()
         {
-            return Task.FromResult<TSubject>(default(TSubject));
+            return Task.CompletedTask;
         }
 
-        protected override void When(TSubject subject)
+        protected override void When()
         {
-            WhenAsync(subject).GetAwaiter().GetResult();
+            WhenAsync().GetAwaiter().GetResult();
         }
 
-        protected virtual Task WhenAsync(TSubject subject)
+        protected virtual Task WhenAsync()
         {
             return Task.CompletedTask;
         }
