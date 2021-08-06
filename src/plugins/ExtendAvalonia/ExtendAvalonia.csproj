@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
+    <ProjectReference Include="..\..\main\GarryDB.Plugins\GarryDB.Plugins.csproj" />
     <ProjectReference Include="..\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
   </ItemGroup>
 

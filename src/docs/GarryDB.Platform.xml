@@ -1,0 +1,652 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GarryDB.Platform</name>
+    </assembly>
+    <members>
+        <member name="T:GarryDB.Platform.Extensions.AssemblyNameExtensions">
+            <summary>
+                Extends <see cref="T:System.Reflection.AssemblyName" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.AssemblyNameExtensions.IsCompatibleWith(System.Reflection.AssemblyName,System.Reflection.AssemblyName)">
+            <summary>
+                Determines whether <paramref name="compatibleWith" /> can be used instead of <paramref name="assemblyName" />.
+            </summary>
+            <param name="assemblyName">The <see cref="T:System.Reflection.AssemblyName" /> to check.</param>
+            <param name="compatibleWith">The <see cref="T:System.Reflection.AssemblyName" /> of check compatibility with.</param>
+            <returns>
+                <c>true</c> if <paramref name="assemblyName" /> is compatible with <paramref name="compatibleWith" />,
+                otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:GarryDB.Platform.Extensions.EnumerableExtensions">
+            <summary>
+                Extends <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.EnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+                Execute <paramref name="action" /> on each item in <paramref name="enumerable" />.
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.Generic.IEnumerable`1" />.</param>
+            <param name="action">The actino to execute.</param>
+            <typeparam name="T">The type of the items in <paramref name="enumerable" />.</typeparam>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.EnumerableExtensions.Concat``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+                Concatenates <paramref name="item" /> to the <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.Generic.IEnumerable`1" /> to concatenate the <paramref name="item" /> to.</param>
+            <param name="item">The item to concatenate.</param>
+            <typeparam name="T">The type of the <see cref="T:System.Collections.Generic.IEnumerable`1" />.</typeparam>
+            <returns>
+                An <see cref="T:System.Collections.Generic.IEnumerable`1" /> where <paramref name="item" /> is added,
+                unless <paramref name="item" /> is <c>null</c>.
+            </returns>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.EnumerableExtensions.Except``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+                Produces an <see cref="T:System.Collections.Generic.IEnumerable`1" /> without <paramref name="item" />.
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.Generic.IEnumerable`1" /> to exclude the <paramref name="item" /> from.</param>
+            <param name="item">The item to exclude.</param>
+            <typeparam name="T">The type of the <see cref="T:System.Collections.Generic.IEnumerable`1" />.</typeparam>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> where <paramref name="item" /> is excluded</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Extensions.ObjectExtensions">
+            <summary>
+                Extends <see cref="T:System.Object" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.ObjectExtensions.AsEnumerable``1(``0)">
+            <summary>
+                Returns an <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing <paramref name="item" />.
+            </summary>
+            <param name="item">The item.</param>
+            <typeparam name="T">The type of the item.</typeparam>
+            <returns>
+                An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing <paramref name="item" />,
+                or an empty <see cref="T:System.Collections.Generic.IEnumerable`1" /> if <paramref name="item" /> is <c>null</c>.
+            </returns>
+        </member>
+        <member name="T:GarryDB.Platform.Extensions.TypeExtensions">
+            <summary>
+                Extends <see cref="T:System.Type" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Extensions.TypeExtensions.IsPluginType(System.Type)">
+            <summary>
+                Determines whether <paramref name="type" /> is a plugin.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns><c>true</c> if it is a plugin, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Garry">
+            <summary>
+                The Garry.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Garry.#ctor(GarryDB.Platform.Infrastructure.FileSystem)">
+            <summary>
+                Initializes <see cref="T:GarryDB.Platform.Garry" />.
+            </summary>
+            <param name="fileSystem"></param>
+        </member>
+        <member name="P:GarryDB.Platform.Garry.WhenProgressUpdated">
+            <summary>
+                Gets the <see cref="T:System.IObservable`1">IObservable&lt;ProgressUpdated&gt;</see> to be notified
+                when the startup progress is changed.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Garry.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Garry.StartAsync(System.String)">
+            <summary>
+                Start <see cref="T:GarryDB.Platform.Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
+            </summary>
+            <param name="pluginsDirectory">The directory containing the plugins.</param>
+        </member>
+        <member name="T:GarryDB.Platform.Infrastructure.FileSystem">
+            <summary>
+                Interacts with the file system.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Infrastructure.FileSystem.GetFiles(System.String,System.String)">
+            <summary>
+                Returns the full paths of the files in the <paramref name="directory" /> that matches <paramref name="pattern" />.
+            </summary>
+            <param name="directory">The directory to search.</param>
+            <param name="pattern">The pattern to match.</param>
+            <returns>The files in the <paramref name="directory" /> that matches <paramref name="pattern" />.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Infrastructure.FileSystem.GetTopLevelDirectories(System.String)">
+            <summary>
+                Returns the full paths of the directories found in <paramref name="directory" />.
+            </summary>
+            <param name="directory">The directory to search.</param>
+            <returns>The directories in <paramref name="directory" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Infrastructure.WindowsFileSystem">
+            <summary>
+                The <see cref="T:GarryDB.Platform.Infrastructure.FileSystem" /> for Windows.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Infrastructure.WindowsFileSystem.GetFiles(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Infrastructure.WindowsFileSystem.GetTopLevelDirectories(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.Address">
+            <summary>
+                The address to a handler of a plugin.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.#ctor(GarryDB.Platform.Plugins.PluginIdentity,System.String)">
+            <summary>
+                Intializes a new <see cref="T:GarryDB.Platform.Messaging.Address" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="handler">The name of the handler.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Address.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Address.Handler">
+            <summary>
+                Gets the name of the handler.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Address.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.DeadletterMonitor">
+            <summary>
+                Monitors deadletters in the Akka.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.DeadletterMonitor.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.DeadletterMonitor" />.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.MessageEnvelope">
+            <summary>
+                Wrapped around a message and contains metadata about that message.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Messaging.Address)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.MessageEnvelope" />.
+            </summary>
+            <param name="sender">The sender of the message.</param>
+            <param name="destination">The destination of the message.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Messaging.Address,System.Object)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.MessageEnvelope" />.
+            </summary>
+            <param name="sender">The sender of the message.</param>
+            <param name="destination">The destination of the message.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.MessageEnvelope.Destination">
+            <summary>
+                Gets the destination of the message.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.MessageEnvelope.Message">
+            <summary>
+                Gets the message.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.MessageEnvelope.CreateReturnMessage(System.Object)">
+            <summary>
+                Create a <see cref="T:GarryDB.Platform.Messaging.MessageEnvelope" /> containing a response for the original sender.
+            </summary>
+            <param name="message">The message to send.</param>
+            <returns>A <see cref="T:GarryDB.Platform.Messaging.MessageEnvelope" /> containing the message and is addressed to the sender.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.Messages.PluginLoaded">
+            <summary>
+                The message that is sent when a <see cref="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.Plugin" /> has been loaded.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.Messages.PluginLoaded.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Plugins.Plugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.Messages.PluginLoaded" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Messaging.Messages.PluginLoaded.Plugin">
+            <summary>
+                Gets the plugin.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.PluginActor">
+            <summary>
+                The actor responsible for a plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginActor.#ctor(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Plugins.Plugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginActor.Props(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Plugins.Plugin)">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="plugin">The plugin.</param>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Messaging.PluginsActor">
+            <summary>
+                The actor responsible for all plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginsActor.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Messaging.PluginsActor.Props">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+            </summary>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.AkkaPluginContext">
+            <summary>
+                The plugin context that uses Akka.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.AkkaPluginContext" />.
+            </summary>
+            <param name="plugins">The reference to the plugins actor.</param>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.InspectedAssembly">
+            <summary>
+                The assembly that has been inspected by a <see cref="T:GarryDB.Platform.Plugins.Inpections.Inspector" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.#ctor(System.Reflection.Assembly)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.InspectedAssembly" />.
+            </summary>
+            <param name="assembly">The assembly that has been inspected.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.AssemblyName">
+            <summary>
+                Gets the <see cref="T:System.Reflection.AssemblyName" />.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.Assembly">
+            <summary>
+                Gets the <see cref="T:System.Reflection.Assembly" />.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.Path">
+            <summary>
+                Gets the path to the assembly.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.IsCompatibleWith(System.Reflection.AssemblyName)">
+            <summary>
+                Determines whether this assembly can be used instead of <paramref name="assemblyName" />.
+            </summary>
+            <param name="assemblyName">The <see cref="P:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.AssemblyName" /> to check.</param>
+            <returns>
+                <c>true</c> if <paramref name="assemblyName" /> is compatible with this assembly, otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedAssembly.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.InspectedPlugin">
+            <summary>
+                Contains the information gathered when inspecting a <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.#ctor(GarryDB.Platform.Plugins.Inpections.PluginAssembly,System.Collections.Generic.IEnumerable{GarryDB.Platform.Plugins.Inpections.ProvidedAssembly},System.Collections.Generic.IEnumerable{GarryDB.Platform.Plugins.Inpections.ReferencedAssembly})">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.InspectedPlugin" />.
+            </summary>
+            <param name="pluginAssembly">The assembly containing the <see cref="T:GarryDB.Plugins.Plugin" />.</param>
+            <param name="providedAssemblies">The assemblies the <see cref="T:GarryDB.Plugins.Plugin" /> provides.</param>
+            <param name="referencedAssemblies">The assemblies the <see cref="T:GarryDB.Plugins.Plugin" /> references,</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.StartupOrder">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.PluginIdentity">
+            <summary>
+                Gets the <see cref="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.PluginIdentity" /> of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.Path">
+            <summary>
+                Gets the path to the <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.PluginAssembly">
+            <summary>
+                Gets the assembly that contains the <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.ProvidedAssemblies">
+            <summary>
+                Gets the assemblies that the plugin provides.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.ReferencedAssemblies">
+            <summary>
+                Gets the assemblies that the plugin references.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.InspectedPlugin.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.Inspector">
+            <summary>
+                Inspects the <see cref="T:GarryDB.Plugins.Plugin" /> at a location.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.Inspector.#ctor(GarryDB.Platform.Infrastructure.FileSystem)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.Inspector" />.
+            </summary>
+            <param name="fileSystem">The file system.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.Inspector.Inspect(System.String)">
+            <summary>
+                Inspect the <see cref="T:GarryDB.Plugins.Plugin" /> located in <paramref name="directory" />.
+            </summary>
+            <param name="directory">The directory containing the plugin.</param>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.PluginAssembly">
+            <summary>
+                The assembly containing the <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.PluginAssembly.#ctor(System.Reflection.Assembly)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.PluginAssembly" />.
+            </summary>
+            <param name="assembly">The <see cref="T:System.Reflection.Assembly" /> containing the plugin.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.PluginAssembly.StartupOrder">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.PluginAssembly.PluginType">
+            <summary>
+                Gets the full name of the plugin type.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Inpections.PluginAssembly.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.ProvidedAssembly">
+            <summary>
+                The assembly that the <see cref="T:GarryDB.Plugins.Plugin" /> is providing to the rest of the system.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.ProvidedAssembly.#ctor(System.Reflection.Assembly)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.ProvidedAssembly" />.
+            </summary>
+            <param name="assembly">The <see cref="T:System.Reflection.Assembly" /> the plugin provides.</param>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Inpections.ReferencedAssembly">
+            <summary>
+                The assembly that is referenced by the <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Inpections.ReferencedAssembly.#ctor(System.Reflection.Assembly)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Inpections.ReferencedAssembly" />.
+            </summary>
+            <param name="assembly">The <see cref="T:System.Reflection.Assembly" /> the plugin references.</param>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Loading.Extensions.AssemblyLoadContextExtensions">
+            <summary>
+                Extends <see cref="T:System.Runtime.Loader.AssemblyLoadContext" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.Extensions.AssemblyLoadContextExtensions.TryLoad(System.Runtime.Loader.AssemblyLoadContext,System.Reflection.AssemblyName,System.Reflection.Assembly@)">
+            <summary>
+                Tries to load <paramref name="name" /> from the specified <paramref name="assemblyLoadContext" />.
+            </summary>
+            <param name="assemblyLoadContext">The assembly load context.</param>
+            <param name="name">The <see cref="T:System.Reflection.AssemblyName" /> of the assembly to load.</param>
+            <param name="assembly">
+                The loaded <see cref="T:System.Reflection.Assembly" />, or <c>null</c> if the <paramref name="assemblyLoadContext" /> can't load it.
+            </param>
+            <returns><c>true</c> if the loading has been successful, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Loading.LoadedPlugin">
+            <summary>
+                A plugin that has been loaded.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.LoadedPlugin.#ctor(GarryDB.Platform.Plugins.PluginIdentity,System.Int32)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Loading.LoadedPlugin" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="startupOrder">The startup order of the plugin.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Loading.LoadedPlugin.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Loading.LoadedPlugin.StartupOrder">
+            <summary>
+                Gets the startup order.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Loading.PluginLoadContext">
+            <summary>
+                Loads the assemblies of a <see cref="T:GarryDB.Plugins.Plugin" /> into their own scoped <see cref="T:System.Runtime.Loader.AssemblyLoadContext" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.#ctor(GarryDB.Platform.Plugins.Inpections.InspectedPlugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Loading.PluginLoadContext" />.
+            </summary>
+            <param name="inspectedPlugin">The inspected plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.AddProvider(System.Runtime.Loader.AssemblyLoadContext)">
+            <summary>
+                Add a provider of assemblies to this load context.
+            </summary>
+            <param name="provider">An <see cref="T:System.Runtime.Loader.AssemblyLoadContext" /> that can provide references.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.LoadPluginAssembly">
+            <summary>
+                Loads the assembly that contains the plugin.
+            </summary>
+            <returns>The assembly containing the plugin.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.LoadReferencedAssemblies">
+            <summary>
+                Loads the referenced assemblies.
+            </summary>
+            <returns>The assemblies that are referenced by the plugin.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.Load(System.Reflection.AssemblyName)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoadContext.LoadUnmanagedDll(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Loading.PluginLoader">
+            <summary>
+                Loads a <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoader.#ctor(GarryDB.Platform.Plugins.Inpections.InspectedPlugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Loading.PluginLoader" />.
+            </summary>
+            <param name="inspectedPlugin">The plugin metadata.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Loading.PluginLoader.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Loading.PluginLoader.PluginLoadContext">
+            <summary>
+                Gets the associated <see cref="P:GarryDB.Platform.Plugins.Loading.PluginLoader.PluginLoadContext" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Loading.PluginLoader.Load(Autofac.ContainerBuilder)">
+            <summary>
+                Loads the <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+            <param name="containerBuilder">The Autofac container builder.</param>
+            <returns>The plugin.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.PluginIdentity">
+            <summary>
+                The identity of a <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.#ctor(System.String,System.String)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PluginIdentity" />.
+            </summary>
+            <param name="name">The name of the plugin.</param>
+            <param name="version">The version of the plugin.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.PluginIdentity.Name">
+            <summary>
+                Gets the name of the plugin.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.op_Equality(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginIdentity.op_Inequality(GarryDB.Platform.Plugins.PluginIdentity,GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.PluginLoaderFactory">
+            <summary>
+                Creates <see cref="T:GarryDB.Platform.Plugins.Loading.PluginLoader" />s.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLoaderFactory.Create(GarryDB.Platform.Plugins.Inpections.InspectedPlugin[])">
+            <summary>
+                Create <see cref="T:GarryDB.Platform.Plugins.Loading.PluginLoader" /> from the supplied <paramref name="inspectedPlugins" />.
+            </summary>
+            <param name="inspectedPlugins">The inspected plugins.</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing the <see cref="T:GarryDB.Platform.Plugins.Loading.PluginLoader" />s for every plugin.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Startup.StartupProgressUpdated">
+            <summary>
+                Is raised when the progress of the startup has changed.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Startup.StartupProgressUpdated.#ctor(System.String,GarryDB.Platform.Plugins.PluginIdentity,System.Int32,System.Int32)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Startup.StartupProgressUpdated" />.
+            </summary>
+            <param name="stage">The name of the stage.</param>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <param name="currentStep">The current step.</param>
+            <param name="totalSteps">The total number of steps.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.Stage">
+            <summary>
+                Gets the name of the stage.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.PluginIdentity">
+            <summary>
+                Gets the identity of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.CurrentStep">
+            <summary>
+                Gets the current step.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.TotalSteps">
+            <summary>
+                Gets the total number of steps.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Startup.StartupSequence">
+            <summary>
+                The sequence of steps to take before Garry is started.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Startup.StartupSequence.#ctor">
+            <summary>
+                Intializes a new <see cref="T:GarryDB.Platform.Startup.StartupSequence" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Startup.StartupSequence.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Startup.StartupSequence.Subscribe(System.IObserver{GarryDB.Platform.Startup.StartupProgressUpdated})">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
