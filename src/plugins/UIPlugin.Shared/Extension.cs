@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Avalonia.Controls;
 using Avalonia.Styling;
 
-namespace GarryDB.UI.Shared
+namespace UIPlugin.Shared
 {
     public interface Extension
     {

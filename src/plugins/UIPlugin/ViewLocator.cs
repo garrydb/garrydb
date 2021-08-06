@@ -3,9 +3,9 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
-using GarryDB.UI.ViewModels;
+using UIPlugin.ViewModels;
 
-namespace GarryDB.UI
+namespace UIPlugin
 {
     public class ViewLocator : IDataTemplate
     {

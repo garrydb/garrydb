@@ -3,7 +3,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>disable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <RootNamespace>GarryDB.UI</RootNamespace>
+        <RootNamespace>UIPlugin</RootNamespace>
         <ApplicationIcon />
         <OutputType>Library</OutputType>
         <StartupObject />
@@ -26,6 +26,6 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\main\GarryDB.Plugins\GarryDB.Plugins.csproj" />
-      <ProjectReference Include="..\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
+      <ProjectReference Include="..\UIPlugin.Shared\UIPlugin.Shared.csproj" />
     </ItemGroup>
 </Project>

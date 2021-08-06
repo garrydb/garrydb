@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
@@ -8,7 +8,7 @@ using ReactiveUI;
 using Splat;
 using Splat.Autofac;
 
-namespace GarryDB.UI.Modules
+namespace UIPlugin.Modules
 {
     public class AvaloniaModule : Module
     {

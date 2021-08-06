@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -6,11 +6,11 @@ using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 
-using GarryDB.UI.ViewModels;
-
 using ReactiveUI;
 
-namespace GarryDB.UI.Views
+using UIPlugin.ViewModels;
+
+namespace UIPlugin.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {

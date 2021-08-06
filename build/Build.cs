@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
@@ -60,15 +63,12 @@ class Build : NukeBuild
             DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetAssemblyVersion(GitVersion.AssemblySemVer)
-                .SetFileVersion(GitVersion.AssemblySemFileVer)
-                .SetInformationalVersion(GitVersion.InformationalVersion)
                 .EnableNoRestore());
         });
 
     Target CopyPlugins =>
         _ => _
-             .After(Compile)
+             .DependsOn(Compile)
              .Executes(() =>
                        {
                            AbsolutePath pluginsOutputDirectory = RootDirectory / "plugins";
@@ -95,7 +95,7 @@ class Build : NukeBuild
                                DeleteDirectory(pluginsOutputDirectory / pluginProject.Name);
 
                                CopyDirectoryRecursively(pluginOutputDirectory, pluginsOutputDirectory / pluginProject.Name,
-                                                        excludeDirectory: info => info.Name == "ref");
+                                                        excludeDirectory: info => info.Name == "ref", excludeFile: file => file.Name.StartsWith("GarryDB.", StringComparison.InvariantCultureIgnoreCase));
                            }
                        });
 }

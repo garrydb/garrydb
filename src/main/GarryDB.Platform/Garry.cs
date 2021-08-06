@@ -107,7 +107,10 @@ namespace GarryDB.Platform
 
                     startupSequence.Complete();
 
-                    shutdownRequested.WaitOne();
+                    if (plugins.Any(x => x.Key != GarryPlugin.PluginIdentity))
+                    {
+                        shutdownRequested.WaitOne();
+                    }
 
                     plugins.Keys.ForEach(plugin =>
                                          {

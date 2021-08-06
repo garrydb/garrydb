@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 using ReactiveUI;
 
-namespace GarryDB.UI.ViewModels
+namespace UIPlugin.ViewModels
 {
     public class FirstViewModel : ReactiveObject, IRoutableViewModel
     {

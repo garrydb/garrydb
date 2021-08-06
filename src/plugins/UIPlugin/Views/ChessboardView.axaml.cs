@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace GarryDB.UI.Views
+namespace UIPlugin.Views
 {
     public partial class ChessboardView : UserControl
     {

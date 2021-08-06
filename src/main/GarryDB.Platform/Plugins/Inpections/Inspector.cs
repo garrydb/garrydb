@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +35,7 @@ namespace GarryDB.Platform.Plugins.Inpections
             IEnumerable<string> files = fileSystem.GetFiles(directory, "*.dll").ToList();
 
             PathAssemblyResolver resolver = CreateResolver(files);
-
+            
             using (var loadContext = new MetadataLoadContext(resolver))
             {
                 IList<Assembly> assemblies = files.Select(file => loadContext.LoadFromAssemblyPath(file)).ToList();
@@ -50,6 +50,9 @@ namespace GarryDB.Platform.Plugins.Inpections
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
             paths.AddRange(files);
+
+            var pluginAssembly = Assembly.GetAssembly(typeof(Plugin));
+            paths.Add(pluginAssembly!.Location);
 
             return new PathAssemblyResolver(paths);
         }

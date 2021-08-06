@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ using Avalonia;
 
 using GarryDB.Plugins;
 
-namespace GarryDB.UI
+namespace UIPlugin
 {
     public class UIPlugin : Plugin
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml.MarkupExtensions;
@@ -10,7 +10,7 @@ namespace ExtendAvalonia.Styles
     {
         public FirstViewStyle()
         {
-            Selector = Garry("GarryDB.UI.Views.FirstView");
+            Selector = Garry("UIPlugin.Views.FirstView");
             Setters.Add(new Setter(TemplatedControl.TemplateProperty, new DynamicResourceExtension("ForTheFirstView_Oud")));
             // Setters.Add(new Setter(TemplatedControl.TemplateProperty, new ControlTemplate
             // {
@@ -21,7 +21,7 @@ namespace ExtendAvalonia.Styles
 
         private static Selector Garry(string type)
         {
-            return default(Selector).Is(Type.GetType($"{type}, GarryDB.UI"));
+            return default(Selector).Is(Type.GetType($"{type}, UIPlugin"));
         }
     }
 }

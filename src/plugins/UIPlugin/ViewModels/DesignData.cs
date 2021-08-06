@@ -1,6 +1,6 @@
 // ReSharper disable UnassignedField.Global
 
-namespace GarryDB.UI.ViewModels
+namespace UIPlugin.ViewModels
 {
     public static class DesignData
     {

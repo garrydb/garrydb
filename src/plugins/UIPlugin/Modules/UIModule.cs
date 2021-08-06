@@ -1,12 +1,12 @@
-﻿using Autofac;
+using Autofac;
 
 using Avalonia;
 
-using GarryDB.UI.ViewModels;
-
 using ReactiveUI;
 
-namespace GarryDB.UI.Modules
+using UIPlugin.ViewModels;
+
+namespace UIPlugin.Modules
 {
     public class UIModule : Module
     {

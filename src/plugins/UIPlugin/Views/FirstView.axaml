@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:GarryDB.UI.ViewModels"
+             xmlns:viewModels="clr-namespace:UIPlugin.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              d:DataContext="{x:Static viewModels:DesignData.FirstViewModel}"
-             x:Class="GarryDB.UI.Views.FirstView">
+             x:Class="UIPlugin.Views.FirstView">
   <StackPanel HorizontalAlignment="Center"
               VerticalAlignment="Center">
     <TextBlock Text="Hi, I'm the first view!" />

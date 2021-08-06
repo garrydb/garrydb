@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
+    <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
     <ProjectReference Include="..\GarryDB\GarryDB.csproj" />
   </ItemGroup>
 

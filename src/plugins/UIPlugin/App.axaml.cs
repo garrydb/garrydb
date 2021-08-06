@@ -8,13 +8,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-using GarryDB.UI.Shared;
-using GarryDB.UI.ViewModels;
-using GarryDB.UI.Views;
-
 using ReactiveUI;
 
-namespace GarryDB.UI
+using UIPlugin.Shared;
+using UIPlugin.ViewModels;
+using UIPlugin.Views;
+
+namespace UIPlugin
 {
     public class App : Application
     {

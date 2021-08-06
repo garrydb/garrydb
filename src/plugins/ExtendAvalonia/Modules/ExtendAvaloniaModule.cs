@@ -1,6 +1,6 @@
-﻿using Autofac;
+using Autofac;
 
-using GarryDB.UI.Shared;
+using UIPlugin.Shared;
 
 namespace ExtendAvalonia.Modules
 {

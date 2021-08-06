@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Avalonia.Controls;
@@ -6,7 +6,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
 
-using GarryDB.UI.Shared;
+using UIPlugin.Shared;
 
 namespace ExtendAvalonia
 {

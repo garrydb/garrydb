@@ -2,7 +2,7 @@ using System.Reactive;
 
 using ReactiveUI;
 
-namespace GarryDB.UI.ViewModels
+namespace UIPlugin.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject, IScreen
     {

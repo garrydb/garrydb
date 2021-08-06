@@ -1,9 +1,9 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="clr-namespace:GarryDB.UI"
-             x:Class="GarryDB.UI.App">
+             xmlns:uiPlugin="clr-namespace:UIPlugin"
+             x:Class="UIPlugin.App">
   <Application.DataTemplates>
-    <ui:ViewLocator />
+    <uiPlugin:ViewLocator />
   </Application.DataTemplates>
 
   <Application.Styles>
