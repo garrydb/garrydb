@@ -22,28 +22,32 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.Wpf.Host", "src\Gar
 		{20BACEC0-216A-476E-8DD6-39B0F991DDA4} = {20BACEC0-216A-476E-8DD6-39B0F991DDA4}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Shared", "src\Plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj", "{34DDDD9C-1998-4F14-86BD-C630DAA7538B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Shared", "src\plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj", "{34DDDD9C-1998-4F14-86BD-C630DAA7538B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Contract", "src\Plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj", "{4EBF8187-6A43-40EC-9095-22D4858DA6CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin.Contract", "src\plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj", "{4EBF8187-6A43-40EC-9095-22D4858DA6CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin", "src\Plugins\ExamplePlugin\ExamplePlugin.csproj", "{20BACEC0-216A-476E-8DD6-39B0F991DDA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamplePlugin", "src\plugins\ExamplePlugin\ExamplePlugin.csproj", "{20BACEC0-216A-476E-8DD6-39B0F991DDA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependsOnExamplePlugin", "src\Plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj", "{0432286C-4683-4CCB-BDBC-D426EA883A5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependsOnExamplePlugin", "src\plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj", "{0432286C-4683-4CCB-BDBC-D426EA883A5D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.UI", "src\Plugins\GarryDB.UI\GarryDB.UI.csproj", "{A3CC7D89-3C99-4737-BAF9-C51F6C12F25E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.UI", "src\plugins\GarryDB.UI\GarryDB.UI.csproj", "{A3CC7D89-3C99-4737-BAF9-C51F6C12F25E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{5D35E271-2045-4C15-BFF8-1C6DF3E00877}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "plugins", "{5D35E271-2045-4C15-BFF8-1C6DF3E00877}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A500D6C0-659C-4202-BC6A-310AAF06E27F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendAvalonia", "src\Plugins\ExtendAvalonia\ExtendAvalonia.csproj", "{E8089A57-B2BF-423A-84CC-EBC1DAA9CDB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendAvalonia", "src\plugins\ExtendAvalonia\ExtendAvalonia.csproj", "{E8089A57-B2BF-423A-84CC-EBC1DAA9CDB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.UI.Shared", "src\Plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj", "{EA38133B-C859-4AD5-AD09-F60EED66C7F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB.UI.Shared", "src\plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj", "{EA38133B-C859-4AD5-AD09-F60EED66C7F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarryDB", "src\GarryDB\GarryDB.csproj", "{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GarryDB", "src\GarryDB\GarryDB.csproj", "{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{94DDBEBB-0F1C-460F-9826-9A553885C49B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LucenePlugin", "src\plugins\LucenePlugin\LucenePlugin.csproj", "{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +103,12 @@ Global
 		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EF6EE41-3A5C-416F-B1EF-562F6AF3B14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94DDBEBB-0F1C-460F-9826-9A553885C49B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94DDBEBB-0F1C-460F-9826-9A553885C49B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +121,7 @@ Global
 		{A3CC7D89-3C99-4737-BAF9-C51F6C12F25E} = {5D35E271-2045-4C15-BFF8-1C6DF3E00877}
 		{E8089A57-B2BF-423A-84CC-EBC1DAA9CDB7} = {5D35E271-2045-4C15-BFF8-1C6DF3E00877}
 		{EA38133B-C859-4AD5-AD09-F60EED66C7F5} = {5D35E271-2045-4C15-BFF8-1C6DF3E00877}
+		{5A9FC417-3ACE-4982-80D5-FA8D359EFF7E} = {5D35E271-2045-4C15-BFF8-1C6DF3E00877}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D6C06C0-8AA3-4D76-9CB8-C34B6BB614DA}

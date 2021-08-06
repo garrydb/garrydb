@@ -21,14 +21,14 @@
     <ItemGroup>
       <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
       <ProjectReference Include="..\GarryDB\GarryDB.csproj" />
-      <ProjectReference Include="..\Plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
-      <ProjectReference Include="..\Plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
-      <ProjectReference Include="..\Plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
-      <ProjectReference Include="..\Plugins\ExamplePlugin\ExamplePlugin.csproj" />
+      <ProjectReference Include="..\plugins\DependsOnExamplePlugin\DependsOnExamplePlugin.csproj" />
+      <ProjectReference Include="..\plugins\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
+      <ProjectReference Include="..\plugins\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
+      <ProjectReference Include="..\plugins\ExamplePlugin\ExamplePlugin.csproj" />
       <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
-      <ProjectReference Include="..\Plugins\ExtendAvalonia\ExtendAvalonia.csproj" />
-      <ProjectReference Include="..\Plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
-      <ProjectReference Include="..\Plugins\GarryDB.UI\GarryDB.UI.csproj" />
+      <ProjectReference Include="..\plugins\ExtendAvalonia\ExtendAvalonia.csproj" />
+      <ProjectReference Include="..\plugins\GarryDB.UI.Shared\GarryDB.UI.Shared.csproj" />
+      <ProjectReference Include="..\plugins\GarryDB.UI\GarryDB.UI.csproj" />
     </ItemGroup>
 
 </Project>
