@@ -2,7 +2,7 @@
 
 namespace ExtendAvalonia
 {
-    public class ExtendAvaloniaPlugin : Plugin
+    internal sealed class ExtendAvaloniaPlugin : Plugin
     {
         public ExtendAvaloniaPlugin(PluginContext pluginContext)
             : base(pluginContext)

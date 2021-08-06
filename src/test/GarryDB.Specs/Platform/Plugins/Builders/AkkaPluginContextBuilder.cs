@@ -5,7 +5,7 @@ using GarryDB.Specs.Platform.Messaging.Builders;
 
 namespace GarryDB.Specs.Platform.Plugins.Builders
 {
-    public sealed class AkkaPluginContextBuilder : TestDataBuilder<AkkaPluginContext>
+    internal sealed class AkkaPluginContextBuilder : TestDataBuilder<AkkaPluginContext>
     {
         private PluginIdentity pluginIdentity;
         private IActorRef plugins;

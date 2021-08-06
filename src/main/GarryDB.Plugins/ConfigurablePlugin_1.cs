@@ -5,7 +5,7 @@ namespace GarryDB.Plugins
     /// <summary>
     ///     A plugin that can be configured
     /// </summary>
-    public abstract class ConfigurablePlugin<TConfiguration> : Plugin where TConfiguration : new()
+    internal abstract class ConfigurablePlugin<TConfiguration> : Plugin where TConfiguration : new()
     {
         /// <summary>
         ///     Initializes a new <see cref="ConfigurablePlugin" />.

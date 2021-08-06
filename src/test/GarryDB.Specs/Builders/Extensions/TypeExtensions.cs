@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GarryDB.Specs.Builders.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static Type Unwrap(this Type type)
         {

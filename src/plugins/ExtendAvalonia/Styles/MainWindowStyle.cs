@@ -5,7 +5,7 @@ using Avalonia.Styling;
 
 namespace ExtendAvalonia.Styles
 {
-    public sealed class MainWindowStyle : Style
+    internal sealed class MainWindowStyle : Style
     {
         public MainWindowStyle()
         {

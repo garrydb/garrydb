@@ -8,7 +8,7 @@ using NUnit.Framework.Internal;
 
 namespace GarryDB.Specs.Akka.Builders
 {
-    public sealed class TestKitBuilder : TestDataBuilder<TestKit>
+    internal sealed class TestKitBuilder : TestDataBuilder<TestKit>
     {
         private const string TestKitKey = "testkit";
 

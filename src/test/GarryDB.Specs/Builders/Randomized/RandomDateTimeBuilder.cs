@@ -2,7 +2,7 @@
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomDateTimeBuilder : TestDataBuilder<DateTime>
+    internal sealed class RandomDateTimeBuilder : TestDataBuilder<DateTime>
     {
         private DateTime baseMoment = DateTime.Now;
         private bool includeTimeComponent = true;

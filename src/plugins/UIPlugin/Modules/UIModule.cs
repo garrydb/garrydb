@@ -8,7 +8,7 @@ using UIPlugin.ViewModels;
 
 namespace UIPlugin.Modules
 {
-    public class UIModule : Module
+    internal sealed class UIModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

@@ -10,7 +10,7 @@ using Splat.Autofac;
 
 namespace UIPlugin.Modules
 {
-    public class AvaloniaModule : Module
+    internal sealed class AvaloniaModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

@@ -4,7 +4,7 @@ using GarryDB.Plugins;
 
 namespace GarryDB.Specs.Plugins.Builders
 {
-    public sealed class PluginContextBuilder : TestDataBuilder<PluginContext>
+    internal sealed class PluginContextBuilder : TestDataBuilder<PluginContext>
     {
         protected override PluginContext OnBuild()
         {

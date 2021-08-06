@@ -6,7 +6,7 @@ namespace GarryDB.Platform.Messaging.Messages
     /// <summary>
     ///     The message that is sent when a <see cref="Plugin" /> has been loaded.
     /// </summary>
-    public sealed class PluginLoaded
+    internal sealed class PluginLoaded
     {
         /// <summary>
         ///     Initializes a new <see cref="PluginLoaded" />.

@@ -7,7 +7,7 @@ namespace GarryDB.Platform.Extensions
     /// <summary>
     ///     Extends <see cref="Type" />.
     /// </summary>
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         /// <summary>
         ///     Determines whether <paramref name="type" /> is a plugin.

@@ -1,6 +1,6 @@
 ﻿namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomBooleanBuilder : TestDataBuilder<bool>
+    internal sealed class RandomBooleanBuilder : TestDataBuilder<bool>
     {
         protected override bool OnBuild()
         {

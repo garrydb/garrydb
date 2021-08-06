@@ -11,10 +11,10 @@ using NUnit.Framework;
 
 namespace GarryDB.Specs.Plugins
 {
-    public static class PluginSpecs
+    internal static class PluginSpecs
     {
         [TestFixture]
-        public class When_a_message_arrives_for_a_registered_route : AsyncSpecification<Plugin>
+        internal sealed class When_a_message_arrives_for_a_registered_route : AsyncSpecification<Plugin>
         {
             private string route;
             private Guid message;
@@ -41,7 +41,7 @@ namespace GarryDB.Specs.Plugins
         }
 
         [TestFixture]
-        public class When_a_message_arrives_for_an_unkown_handler : Specification<Plugin>
+        internal sealed class When_a_message_arrives_for_an_unkown_handler : Specification<Plugin>
         {
             private string route;
             private Func<Task<object>> routeAsync;

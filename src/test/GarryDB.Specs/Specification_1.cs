@@ -7,7 +7,7 @@ using NUnit.Framework.Internal;
 
 namespace GarryDB.Specs
 {
-    public abstract class Specification<TSubject>
+    internal abstract class Specification<TSubject>
     {
         private TSubject subject;
 

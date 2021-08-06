@@ -1,11 +1,11 @@
-// ReSharper disable UnassignedField.Global
-
+// ReSharper disable UnassignedReadonlyField
+#pragma warning disable 649
 namespace UIPlugin.ViewModels
 {
-    public static class DesignData
+    internal static class DesignData
     {
-        public static MainWindowViewModel MainWindowViewModel;
-        public static FirstViewModel FirstViewModel;
-        public static ChessboardViewModel ChessboardViewModel;
+        public static readonly MainWindowViewModel MainWindowViewModel;
+        public static readonly FirstViewModel FirstViewModel;
+        public static readonly ChessboardViewModel ChessboardViewModel;
     }
 }

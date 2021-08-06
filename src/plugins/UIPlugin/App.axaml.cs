@@ -16,7 +16,7 @@ using UIPlugin.Views;
 
 namespace UIPlugin
 {
-    public class App : Application
+    internal sealed class App : Application
     {
         private readonly IEnumerable<Extension> extensions;
         private readonly Func<Task> shutdown;

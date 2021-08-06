@@ -6,7 +6,7 @@ using NUnit.Framework.Internal;
 
 namespace GarryDB.Specs.NUnit.Extensions
 {
-    public static class TestExecutionContextExtensions
+    internal static class TestExecutionContextExtensions
     {
         private const string DisposablesKey = "disposables";
 

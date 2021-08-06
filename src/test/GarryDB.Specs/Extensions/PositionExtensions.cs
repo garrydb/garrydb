@@ -1,6 +1,6 @@
 namespace GarryDB.Specs.Extensions
 {
-    public static class PositionExtensions
+    internal static class PositionExtensions
     {
         public static PositionAssertions Should(this Position position)
         {

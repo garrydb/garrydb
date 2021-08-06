@@ -4,7 +4,7 @@ using GarryDB.Platform.Extensions;
 
 namespace GarryDB.Builders.Positions
 {
-    public class CastlingBuilder<TBuilder> : ActiveColorBuilder<CastlingBuilder<TBuilder>>
+    public abstract class CastlingBuilder<TBuilder> : ActiveColorBuilder<CastlingBuilder<TBuilder>>
         where TBuilder : CastlingBuilder<TBuilder>
     {
         protected CastlingBuilder()

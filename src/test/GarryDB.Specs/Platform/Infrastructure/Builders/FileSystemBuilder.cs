@@ -8,7 +8,7 @@ using GarryDB.Platform.Infrastructure;
 
 namespace GarryDB.Specs.Platform.Infrastructure.Builders
 {
-    public sealed class FileSystemBuilder : TestDataBuilder<FileSystem>
+    internal sealed class FileSystemBuilder : TestDataBuilder<FileSystem>
     {
         private readonly IDictionary<string, string[]> files = new Dictionary<string, string[]>();
 

@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace UIPlugin.ViewModels
 {
-    public class FirstViewModel : ReactiveObject, IRoutableViewModel
+    public sealed class FirstViewModel : ReactiveObject, IRoutableViewModel
     {
         public FirstViewModel(IScreen screen)
         {

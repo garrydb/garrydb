@@ -5,7 +5,7 @@ namespace GarryDB.Platform.Messaging
     /// <summary>
     ///     Wrapped around a message and contains metadata about that message.
     /// </summary>
-    public sealed class MessageEnvelope
+    internal sealed class MessageEnvelope
     {
         private readonly PluginIdentity sender;
 

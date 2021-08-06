@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomStringBuilder : TestDataBuilder<string>
+    internal sealed class RandomStringBuilder : TestDataBuilder<string>
     {
         private const string Characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         private bool lettersOnly;

@@ -1,6 +1,6 @@
 ﻿namespace GarryDB.Specs.Builders.Randomized
 {
-    public interface IRecursionSupport
+    internal interface IRecursionSupport
     {
         void WithRecursionCount(int recursionCount);
     }

@@ -14,7 +14,7 @@ namespace GarryDB.Specs
     ///     https://blogs.msdn.microsoft.com/pfxteam/2012/02/02/await-synchronizationcontext-and-console-apps-part-3/
     /// </remarks>
     [DebuggerStepThrough]
-    public static class AsyncPump
+    internal static class AsyncPump
     {
         /// <summary>
         ///     Runs the specified asynchronous method.

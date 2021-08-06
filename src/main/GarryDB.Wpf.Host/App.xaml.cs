@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using GarryDB.Platform;
-using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Startup;
 
 namespace GarryDB.Wpf.Host

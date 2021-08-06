@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomObjectBuilder<T> : TestDataBuilder<T>
+    internal sealed class RandomObjectBuilder<T> : TestDataBuilder<T>
     {
         private readonly IDictionary<Type, Func<object>> randomGenerators = new Dictionary<Type, Func<object>>
                                                                             {

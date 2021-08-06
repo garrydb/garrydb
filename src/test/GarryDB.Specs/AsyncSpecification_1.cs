@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace GarryDB.Specs
 {
-    public abstract class AsyncSpecification<TSubject> : Specification<TSubject>
+    internal abstract class AsyncSpecification<TSubject> : Specification<TSubject>
     {
         protected override TSubject Given()
         {

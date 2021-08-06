@@ -10,7 +10,7 @@ using UIPlugin.Shared;
 
 namespace ExtendAvalonia
 {
-    public sealed class UIExtension : Extension
+    internal sealed class UIExtension : Extension
     {
         public IEnumerable<IStyle> Styles
         {

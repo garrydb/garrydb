@@ -6,7 +6,7 @@ namespace GarryDB.Platform.Extensions
     /// <summary>
     ///     Extends <see cref="object" />.
     /// </summary>
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
         /// <summary>
         ///     Returns an <see cref="IEnumerable{T}" /> containing <paramref name="item" />.

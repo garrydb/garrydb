@@ -7,7 +7,7 @@ using FluentAssertions.Formatting;
 
 namespace GarryDB.Specs.Extensions
 {
-    public class PositionFormatter : IValueFormatter
+    internal sealed class PositionFormatter : IValueFormatter
     {
         private static readonly FieldInfo PiecesField =
             typeof(Position).GetField("pieces", BindingFlags.GetField | BindingFlags.Instance | BindingFlags.NonPublic);

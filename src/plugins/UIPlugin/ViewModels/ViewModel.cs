@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace UIPlugin.ViewModels
 {
-    public abstract class ViewModel : ReactiveObject
+    internal abstract class ViewModel : ReactiveObject
     {
     }
 }

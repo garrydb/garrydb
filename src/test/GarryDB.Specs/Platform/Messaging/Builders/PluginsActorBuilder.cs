@@ -7,7 +7,7 @@ using GarryDB.Specs.Akka.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
-    public sealed class PluginsActorBuilder : TestDataBuilder<IActorRef>
+    internal sealed class PluginsActorBuilder : TestDataBuilder<IActorRef>
     {
         private TestKit testKit;
 

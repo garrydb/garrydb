@@ -4,7 +4,7 @@ using UIPlugin.Shared;
 
 namespace ExtendAvalonia.Modules
 {
-    public class ExtendAvaloniaModule : Module
+    internal sealed class ExtendAvaloniaModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

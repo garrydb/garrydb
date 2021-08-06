@@ -4,7 +4,7 @@ using GarryDB.Plugins;
 
 namespace DependsOnExamplePlugin
 {
-    public class DependsOnExample : Plugin
+    internal sealed class DependsOnExample : Plugin
     {
         public DependsOnExample(PluginContext pluginContext)
             : base(pluginContext)

@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace GarryDB.Platform.Infrastructure
+using GarryDB.Platform.Infrastructure;
+
+namespace GarryDB.Wpf.Host
 {
     /// <summary>
     ///     The <see cref="FileSystem" /> for Windows.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public sealed class WindowsFileSystem : FileSystem
+    internal sealed class WindowsFileSystem : FileSystem
     {
         /// <inheritdoc />
         public IEnumerable<string> GetFiles(string directory, string pattern = "*.*")

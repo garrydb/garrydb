@@ -6,7 +6,7 @@ using GarryDB.Specs.Platform.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
-    public sealed class MessageEnvelopeBuilder : TestDataBuilder<MessageEnvelope>
+    internal sealed class MessageEnvelopeBuilder : TestDataBuilder<MessageEnvelope>
     {
         private Address destination;
         private object message;

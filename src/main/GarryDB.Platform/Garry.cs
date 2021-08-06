@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,8 +15,6 @@ using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
-using GarryDB.Platform.Plugins.Inpections;
-using GarryDB.Platform.Plugins.Loading;
 using GarryDB.Platform.Startup;
 using GarryDB.Plugins;
 
@@ -30,6 +29,7 @@ namespace GarryDB.Platform
     {
         private readonly FileSystem fileSystem;
         private readonly StartupSequence startupSequence;
+        private IContainer? container;
 
         /// <summary>
         ///     Initializes <see cref="Garry" />.
@@ -54,6 +54,7 @@ namespace GarryDB.Platform
         public void Dispose()
         {
             startupSequence.Dispose();
+            container?.Dispose();
         }
 
         /// <summary>
@@ -62,7 +63,8 @@ namespace GarryDB.Platform
         /// <param name="pluginsDirectory">The directory containing the plugins.</param>
         public async Task StartAsync(string pluginsDirectory)
         {
-            var shutdownRequested = new AutoResetEvent(false);
+            await Task.CompletedTask;
+
             using (var system = ActorSystem.Create("garry"))
             {
                 var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
@@ -71,107 +73,138 @@ namespace GarryDB.Platform
 
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), "plugins");
 
-                var containerBuilder = new ContainerBuilder();
-                IEnumerable<LoadedPlugin> loadedPlugins = LoadPlugins(pluginsDirectory, containerBuilder).ToList();
+                IEnumerable<PluginDirectory> pluginDirectories =
+                    fileSystem.GetTopLevelDirectories(pluginsDirectory)
+                              .Select(directory => new PluginDirectory(fileSystem, directory))
+                              .OrderBy(directory => directory, Comparer<PluginDirectory>.Create((first, second) =>
+                                       {
+                                           if (first.DependentAssemblies.Any(assembly =>
+                                                                                 second.ProvidedAssemblies.Contains(assembly)))
+                                           {
+                                               return 1;
+                                           }
 
-                await using (IContainer container = containerBuilder.Build())
+                                           if (second.DependentAssemblies.Any(assembly =>
+                                                                                 first.ProvidedAssemblies.Contains(assembly)))
+                                           {
+                                               return -1;
+                                           }
+
+                                           return 0;
+                                       }))
+                              .ToList();
+
+                foreach (PluginDirectory pluginDirectory in pluginDirectories)
                 {
-                    IDictionary<PluginIdentity, Plugin> plugins =
-                        loadedPlugins
-                            .OrderBy(plugin => plugin.StartupOrder)
-                            .ToDictionary(plugin => plugin.PluginIdentity,
-                                          plugin => container.ResolveKeyed<Plugin>(plugin.PluginIdentity,
-                                                                                   TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, plugin.PluginIdentity))));
+                    startupSequence.Inspect(new PluginIdentity(pluginDirectory.PluginName));
+                }
 
-                    plugins[GarryPlugin.PluginIdentity] =
-                        new GarryPlugin(shutdownRequested, new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
+                var pluginAssemblies = new List<PluginAssembly>();
+                var containerBuilder = new ContainerBuilder();
+                    var pluginLoadContexts = new List<PluginLoadContext>();
 
-                    plugins.ForEach(plugin =>
-                                    {
-                                        pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
-                                    });
-
-                    plugins.Keys.ForEach(plugin =>
-                                         {
-                                             startupSequence.Configure(plugin);
-                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
-                                                                                   new Address(plugin, "configure")));
-                                         });
-
-                    plugins.Keys.ForEach(plugin =>
-                                         {
-                                             startupSequence.Start(plugin);
-                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
-                                                                                   new Address(plugin, "start")));
-                                         });
-
-                    startupSequence.Complete();
-
-                    if (plugins.Any(x => x.Key != GarryPlugin.PluginIdentity))
+                    foreach (PluginDirectory pluginDirectory in pluginDirectories)
                     {
-                        shutdownRequested.WaitOne();
+                        IEnumerable<PluginLoadContext> providers =
+                            pluginLoadContexts.Where(x => x.PluginDirectory.ProvidedAssemblies.Any(y => pluginDirectory
+                                                         .DependentAssemblies.Contains(y)));
+
+                        var loadContext = new PluginLoadContext(pluginDirectory,
+                                                                AssemblyLoadContext.Default.AsEnumerable()
+                                                                                   .Concat(providers)
+                                                                                   .ToList());
+                        pluginLoadContexts.Add(loadContext);
                     }
 
-                    plugins.Keys.ForEach(plugin =>
-                                         {
-                                             pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
-                                                                                   new Address(plugin, "stop")));
-                                         });
+                    foreach (PluginLoadContext pluginLoadContext in pluginLoadContexts)
+                    {
+                        startupSequence.Load(new PluginIdentity(pluginLoadContext.Name!));
+
+                        PluginAssembly? pluginAssembly = pluginLoadContext.Load();
+                        if (pluginAssembly == null)
+                        {
+                            continue;
+                        }
+
+                        pluginAssemblies.Add(pluginAssembly);
+
+                        containerBuilder.RegisterAssemblyModules(pluginLoadContext.Assemblies.ToArray());
+                        containerBuilder.RegisterType(pluginAssembly.PluginType)
+                                        .Keyed<Plugin>(pluginAssembly.PluginIdentity)
+                                        .SingleInstance();
+                    }
+
+                container = containerBuilder.Build();
+
+                IDictionary<PluginIdentity, Plugin> plugins =
+                    pluginAssemblies
+                        .OrderBy(x => x.StartupOrder)
+                        .ToDictionary(x => x.PluginIdentity,
+                                                  x => container.ResolveKeyed<Plugin>(x.PluginIdentity,
+                                                                                          TypedParameter
+                                                                                              .From<
+                                                                                                  PluginContext>(new
+                                                                                                  AkkaPluginContext(pluginsActor,
+                                                                                                      x.PluginIdentity))));
+
+                var garryPlugin = new GarryPlugin(new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity));
+                plugins[GarryPlugin.PluginIdentity] = garryPlugin;
+
+                plugins.ForEach(plugin =>
+                                {
+                                    pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
+                                });
+
+                plugins.Keys.ForEach(plugin =>
+                                     {
+                                         startupSequence.Configure(plugin);
+                                         pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                               new Address(plugin, "configure")));
+                                     });
+
+                plugins.Keys.ForEach(plugin =>
+                                     {
+                                         startupSequence.Start(plugin);
+                                         pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                               new Address(plugin, "start")));
+                                     });
+
+                startupSequence.Complete();
+
+                if (plugins.Any(x => x.Key != GarryPlugin.PluginIdentity))
+                {
+                    garryPlugin.WaitUntilShutdownRequested();
                 }
+
+                plugins.Keys.ForEach(plugin =>
+                                     {
+                                         pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                               new Address(plugin, "stop")));
+                                     });
             }
-        }
-
-        private IEnumerable<LoadedPlugin> LoadPlugins(string pluginsDirectory, ContainerBuilder containerBuilder)
-        {
-            var pluginLoaderFactory = new PluginLoaderFactory();
-            IEnumerable<InspectedPlugin> inspectedPlugins = InspectPlugins(pluginsDirectory).ToList();
-            IEnumerable<PluginLoader> loaders = pluginLoaderFactory.Create(inspectedPlugins.ToArray());
-
-            foreach (PluginLoader loader in loaders)
-            {
-                yield return LoadPlugin(loader, containerBuilder);
-            }
-        }
-
-        private IEnumerable<InspectedPlugin> InspectPlugins(string pluginsDirectory)
-        {
-            var inspector = new Inspector(fileSystem);
-
-            IEnumerable<InspectedPlugin> inspectedPlugins = fileSystem.GetTopLevelDirectories(pluginsDirectory)
-                                                                      .Select(directory => inspector.Inspect(directory))
-                                                                      .Where(plugin => plugin != null)
-                                                                      .Select(plugin => plugin!)
-                                                                      .ToList();
-
-            foreach (InspectedPlugin inspectedPlugin in inspectedPlugins)
-            {
-                startupSequence.Inspect(inspectedPlugin.PluginIdentity);
-
-                yield return inspectedPlugin;
-            }
-        }
-
-        private LoadedPlugin LoadPlugin(PluginLoader loader, ContainerBuilder containerBuilder)
-        {
-            startupSequence.Load(loader.PluginIdentity);
-            LoadedPlugin plugin = loader.Load(containerBuilder);
-
-            return plugin;
         }
 
         private sealed class GarryPlugin : Plugin
         {
             public static readonly PluginIdentity PluginIdentity = new("Garry", "1.0");
+            private readonly AutoResetEvent shutdownRequested;
 
-            public GarryPlugin(EventWaitHandle shutdownRequested, PluginContext pluginContext)
+            public GarryPlugin(PluginContext pluginContext)
                 : base(pluginContext)
             {
+                shutdownRequested = new AutoResetEvent(false);
+
                 Register("shutdown", (object _) =>
                                      {
                                          shutdownRequested.Set();
 
                                          return Task.CompletedTask;
                                      });
+            }
+
+            public void WaitUntilShutdownRequested()
+            {
+                shutdownRequested.WaitOne();
             }
         }
     }

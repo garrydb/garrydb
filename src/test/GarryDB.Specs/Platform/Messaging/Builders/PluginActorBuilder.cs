@@ -11,7 +11,7 @@ using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
-    public sealed class PluginActorBuilder : TestDataBuilder<IActorRef>
+    internal sealed class PluginActorBuilder : TestDataBuilder<IActorRef>
     {
         private Plugin plugin;
         private PluginIdentity pluginIdentity;

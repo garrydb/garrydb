@@ -3,7 +3,7 @@ using GarryDB.Specs.Builders.Randomized;
 
 namespace GarryDB.Specs.Platform.Plugins.Builders
 {
-    public sealed class PluginIdentityBuilder : TestDataBuilder<PluginIdentity>
+    internal sealed class PluginIdentityBuilder : TestDataBuilder<PluginIdentity>
     {
         private string name;
         private string version;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using GarryDB.Platform.Plugins;
 
@@ -7,7 +7,7 @@ namespace GarryDB.Platform.Messaging
     /// <summary>
     ///     The address to a handler of a plugin.
     /// </summary>
-    public sealed class Address
+    internal sealed class Address
     {
         /// <summary>
         ///     Intializes a new <see cref="Address" />.

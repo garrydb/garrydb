@@ -11,7 +11,7 @@ using GarryDB.Pieces;
 
 namespace GarryDB.Specs.Extensions
 {
-    public sealed class PositionAssertions : ReferenceTypeAssertions<Position, PositionAssertions>
+    internal sealed class PositionAssertions : ReferenceTypeAssertions<Position, PositionAssertions>
     {
         static PositionAssertions()
         {

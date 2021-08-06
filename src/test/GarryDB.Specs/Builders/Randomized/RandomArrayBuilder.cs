@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomArrayBuilder<T> : TestDataBuilder<T[]>, IRecursionSupport
+    internal sealed class RandomArrayBuilder<T> : TestDataBuilder<T[]>, IRecursionSupport
     {
         private int maximum = 5;
         private int minimum = 1;

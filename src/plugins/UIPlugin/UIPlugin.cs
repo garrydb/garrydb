@@ -8,7 +8,7 @@ using GarryDB.Plugins;
 
 namespace UIPlugin
 {
-    public class UIPlugin : Plugin
+    internal sealed class UIPlugin : Plugin
     {
         private readonly Func<Func<Task>, Application> appBuilder;
 

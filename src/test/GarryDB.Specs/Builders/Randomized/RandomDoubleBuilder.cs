@@ -2,7 +2,7 @@
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomDoubleBuilder : TestDataBuilder<double>
+    internal sealed class RandomDoubleBuilder : TestDataBuilder<double>
     {
         private double maximum = 32767;
         private double minimum;

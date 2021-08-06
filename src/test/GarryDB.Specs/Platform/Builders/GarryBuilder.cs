@@ -4,7 +4,7 @@ using GarryDB.Specs.Platform.Infrastructure.Builders;
 
 namespace GarryDB.Specs.Platform.Builders
 {
-    public sealed class GarryBuilder : TestDataBuilder<Garry>
+    internal sealed class GarryBuilder : TestDataBuilder<Garry>
     {
         private FileSystem fileSystem;
 

@@ -6,7 +6,7 @@ using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Messages.Builders
 {
-    public sealed class PluginLoadedBuilder : TestDataBuilder<PluginLoaded>
+    internal sealed class PluginLoadedBuilder : TestDataBuilder<PluginLoaded>
     {
         private Plugin plugin;
         private PluginIdentity pluginIdentity;

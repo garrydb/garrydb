@@ -2,7 +2,7 @@
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomDateTimeOffsetBuilder : TestDataBuilder<DateTimeOffset>
+    internal sealed class RandomDateTimeOffsetBuilder : TestDataBuilder<DateTimeOffset>
     {
         private bool includeTimeComponent = true;
         private TimeSpan maximum = TimeSpan.FromTicks(int.MaxValue);

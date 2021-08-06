@@ -9,7 +9,7 @@ using GarryDB.Specs.Builders.Extensions;
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class Instantiator
+    internal sealed class Instantiator
     {
         private readonly ISet<string> overridden;
         private readonly IDictionary<string, object> overrides;

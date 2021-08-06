@@ -5,12 +5,12 @@ using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
 
-namespace GarryDB.Platform.Plugins.Loading.Extensions
+namespace GarryDB.Platform.Plugins.Extensions
 {
     /// <summary>
     ///     Extends <see cref="AssemblyLoadContext" />.
     /// </summary>
-    public static class AssemblyLoadContextExtensions
+    internal static class AssemblyLoadContextExtensions
     {
         /// <summary>
         ///     Tries to load <paramref name="name" /> from the specified <paramref name="assemblyLoadContext" />.

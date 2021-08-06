@@ -7,7 +7,7 @@ using UIPlugin.ViewModels;
 
 namespace UIPlugin
 {
-    public class ViewLocator : IDataTemplate
+    internal sealed class ViewLocator : IDataTemplate
     {
         public bool SupportsRecycling
         {

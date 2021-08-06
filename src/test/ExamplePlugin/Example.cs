@@ -2,7 +2,7 @@
 
 namespace ExamplePlugin
 {
-    public class Example : Plugin
+    internal sealed class Example : Plugin
     {
         public Example(PluginContext pluginContext)
             : base(pluginContext)

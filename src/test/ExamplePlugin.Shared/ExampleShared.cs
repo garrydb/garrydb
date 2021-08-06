@@ -1,6 +1,6 @@
-﻿namespace ExamplePlugin.Shared
+namespace ExamplePlugin.Shared
 {
-    public class ExampleShared
+    public sealed class ExampleShared
     {
     }
 }

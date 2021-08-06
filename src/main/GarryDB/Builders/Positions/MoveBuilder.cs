@@ -1,6 +1,6 @@
 namespace GarryDB.Builders.Positions
 {
-    public class MoveBuilder<TBuilder> : EnPassantBuilder<MoveBuilder<TBuilder>>
+    public abstract class MoveBuilder<TBuilder> : EnPassantBuilder<MoveBuilder<TBuilder>>
         where TBuilder : MoveBuilder<TBuilder>
     {
         protected MoveBuilder()

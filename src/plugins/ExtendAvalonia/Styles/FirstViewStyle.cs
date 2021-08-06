@@ -6,7 +6,7 @@ using Avalonia.Styling;
 
 namespace ExtendAvalonia.Styles
 {
-    public class FirstViewStyle : Style
+    internal sealed class FirstViewStyle : Style
     {
         public FirstViewStyle()
         {

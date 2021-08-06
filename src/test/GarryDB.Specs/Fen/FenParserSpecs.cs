@@ -8,7 +8,7 @@ using Sprache;
 namespace GarryDB.Specs.Fen
 {
     [TestFixture]
-    public class FenParserSpecs
+    internal sealed class FenParserSpecs
     {
         [TestCase("8/8/8/8/8/8/8/8 w KQkq - 0 1")]
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
@@ -24,7 +24,7 @@ namespace GarryDB.Specs.Fen
         }
 
         [TestFixture]
-        public class When_parsing_a_fen_representing_an_empty_board : Specification
+        internal sealed class When_parsing_a_fen_representing_an_empty_board : Specification
         {
             private string fen;
             private Position position;

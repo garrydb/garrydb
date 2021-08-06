@@ -5,7 +5,7 @@ using GarryDB.Specs.Platform.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
 {
-    public sealed class AddressBuilder : TestDataBuilder<Address>
+    internal sealed class AddressBuilder : TestDataBuilder<Address>
     {
         private string handler;
         private PluginIdentity pluginIdentity;

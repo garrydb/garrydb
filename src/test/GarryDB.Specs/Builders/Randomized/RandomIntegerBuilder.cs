@@ -2,7 +2,7 @@
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomIntegerBuilder : TestDataBuilder<int>
+    internal sealed class RandomIntegerBuilder : TestDataBuilder<int>
     {
         private int maximum = 32767;
         private int minimum = -32767;

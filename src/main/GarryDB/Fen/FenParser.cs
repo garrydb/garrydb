@@ -9,7 +9,7 @@ using Sprache;
 
 namespace GarryDB.Fen
 {
-    public static class FenParser
+    internal static class FenParser
     {
         private static readonly Func<char, Piece> CharToPieceConverter = c =>
                                                                          {

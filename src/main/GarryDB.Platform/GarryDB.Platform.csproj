@@ -12,15 +12,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Akka" Version="1.4.21" />
+      <PackageReference Include="Akka" Version="1.4.22" />
       <PackageReference Include="Autofac" Version="6.2.0" />
       <PackageReference Include="System.Reactive" Version="5.0.0" />
       <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />

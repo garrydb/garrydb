@@ -8,7 +8,7 @@ namespace GarryDB.Platform.Messaging
     /// <summary>
     ///     The actor responsible for a plugins.
     /// </summary>
-    public sealed class PluginActor : ReceiveActor
+    internal sealed class PluginActor : ReceiveActor
     {
         private readonly Plugin plugin;
         private readonly PluginIdentity pluginIdentity;

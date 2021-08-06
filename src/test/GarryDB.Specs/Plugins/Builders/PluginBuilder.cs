@@ -6,7 +6,7 @@ using GarryDB.Plugins;
 
 namespace GarryDB.Specs.Plugins.Builders
 {
-    public sealed class PluginBuilder : TestDataBuilder<Plugin>
+    internal sealed class PluginBuilder : TestDataBuilder<Plugin>
     {
         private readonly IDictionary<string, dynamic> registrations = new Dictionary<string, dynamic>();
         private Func<Plugin> factory;

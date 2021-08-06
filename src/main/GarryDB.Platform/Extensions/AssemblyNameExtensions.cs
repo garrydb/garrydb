@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace GarryDB.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="AssemblyName" />.
     /// </summary>
-    public static class AssemblyNameExtensions
+    internal static class AssemblyNameExtensions
     {
         /// <summary>
         ///     Determines whether <paramref name="compatibleWith" /> can be used instead of <paramref name="assemblyName" />.

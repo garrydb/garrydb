@@ -2,7 +2,7 @@
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomDecimalBuilder : TestDataBuilder<decimal>
+    internal sealed class RandomDecimalBuilder : TestDataBuilder<decimal>
     {
         private decimal maximum = 32767;
         private decimal minimum;

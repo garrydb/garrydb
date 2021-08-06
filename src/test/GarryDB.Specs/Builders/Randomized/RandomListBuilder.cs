@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomListBuilder<T> : TestDataBuilder<IList<T>>, IRecursionSupport
+    internal sealed class RandomListBuilder<T> : TestDataBuilder<IList<T>>, IRecursionSupport
     {
         private int maximum = 5;
         private int minimum = 1;

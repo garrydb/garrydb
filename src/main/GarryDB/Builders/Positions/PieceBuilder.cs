@@ -5,7 +5,7 @@ using GarryDB.Pieces;
 
 namespace GarryDB.Builders.Positions
 {
-    public class PieceBuilder<TBuilder> : PositionBuilder where TBuilder : PieceBuilder<TBuilder>
+    public abstract class PieceBuilder<TBuilder> : PositionBuilder where TBuilder : PieceBuilder<TBuilder>
     {
         protected PieceBuilder()
         {

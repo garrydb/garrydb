@@ -1,6 +1,6 @@
 ﻿namespace GarryDB.Specs.Builders.Randomized
 {
-    public sealed class RandomHexStringBuilder : TestDataBuilder<string>
+    internal sealed class RandomHexStringBuilder : TestDataBuilder<string>
     {
         private long value;
 

@@ -5,7 +5,7 @@ using NUnit.Framework.Internal;
 
 namespace GarryDB.Specs
 {
-    public abstract class Specification
+    internal abstract class Specification
     {
         protected Specification()
         {

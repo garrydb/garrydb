@@ -1,6 +1,6 @@
-﻿namespace ExamplePlugin.Contract
+namespace ExamplePlugin.Contract
 {
-    public class ExampleContract
+    public sealed class ExampleContract
     {
     }
 }
