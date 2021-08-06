@@ -1,12 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutDir>..\..\..\Plugins\$(MSBuildProjectName)\</OutDir>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
+    <ProjectReference Include="..\ExamplePlugin.Contract\ExamplePlugin.Contract.csproj" />
     <ProjectReference Include="..\ExamplePlugin.Shared\ExamplePlugin.Shared.csproj" />
   </ItemGroup>
 </Project>

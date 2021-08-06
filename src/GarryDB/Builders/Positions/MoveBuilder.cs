@@ -1,9 +1,9 @@
 namespace GarryDB.Builders.Positions
 {
-    public class PositionMoveBuilder<TBuilder> : PositionEnPassantBuilder<PositionMoveBuilder<TBuilder>>
-        where TBuilder : PositionMoveBuilder<TBuilder>
+    public class MoveBuilder<TBuilder> : EnPassantBuilder<MoveBuilder<TBuilder>>
+        where TBuilder : MoveBuilder<TBuilder>
     {
-        protected PositionMoveBuilder()
+        protected MoveBuilder()
         {
             halfMoveClock = 0;
             fullMoveNumber = 1;

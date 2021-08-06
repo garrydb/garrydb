@@ -6,7 +6,7 @@ namespace GarryDB
 {
     public sealed partial class Position
     {
-        public static PositionBuilderDirector New()
+        public static BuilderDirector New()
         {
             return new();
         }

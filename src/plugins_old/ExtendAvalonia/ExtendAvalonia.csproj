@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <OutDir>..\..\..\Plugins\$(MSBuildProjectName)\</OutDir>
   </PropertyGroup>
 
   <ItemGroup>

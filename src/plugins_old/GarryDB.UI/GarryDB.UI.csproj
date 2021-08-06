@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>disable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <RootNamespace>GarryDB.UI</RootNamespace>
-        <OutDir>..\..\..\Plugins\$(MSBuildProjectName)\</OutDir>
         <ApplicationIcon />
         <OutputType>Library</OutputType>
         <StartupObject />
@@ -24,7 +23,6 @@
         <PackageReference Include="Avalonia.ReactiveUI.Events" Version="0.10.6" />
         <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
         <PackageReference Include="Splat.Autofac" Version="11.1.1" />
-        <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\GarryDB.Plugins\GarryDB.Plugins.csproj" />

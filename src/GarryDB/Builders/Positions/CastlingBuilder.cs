@@ -4,10 +4,10 @@ using GarryDB.Platform.Extensions;
 
 namespace GarryDB.Builders.Positions
 {
-    public class PositionCastlingBuilder<TBuilder> : PositionActiveColorBuilder<PositionCastlingBuilder<TBuilder>>
-        where TBuilder : PositionCastlingBuilder<TBuilder>
+    public class CastlingBuilder<TBuilder> : ActiveColorBuilder<CastlingBuilder<TBuilder>>
+        where TBuilder : CastlingBuilder<TBuilder>
     {
-        protected PositionCastlingBuilder()
+        protected CastlingBuilder()
         {
             castlingPossibilities = new List<Piece>();
         }

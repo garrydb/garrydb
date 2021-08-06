@@ -1,9 +1,9 @@
 namespace GarryDB.Builders.Positions
 {
-    public class PositionEnPassantBuilder<TBuilder> : PositionCastlingBuilder<PositionEnPassantBuilder<TBuilder>>
-        where TBuilder : PositionEnPassantBuilder<TBuilder>
+    public class EnPassantBuilder<TBuilder> : CastlingBuilder<EnPassantBuilder<TBuilder>>
+        where TBuilder : EnPassantBuilder<TBuilder>
     {
-        protected PositionEnPassantBuilder()
+        protected EnPassantBuilder()
         {
             enPassant = null;
         }

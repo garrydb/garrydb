@@ -1,9 +1,9 @@
 namespace GarryDB.Builders.Positions
 {
-    public class PositionActiveColorBuilder<TBuilder> : PositionPieceBuilder<PositionActiveColorBuilder<TBuilder>>
-        where TBuilder : PositionActiveColorBuilder<TBuilder>
+    public class ActiveColorBuilder<TBuilder> : PieceBuilder<ActiveColorBuilder<TBuilder>>
+        where TBuilder : ActiveColorBuilder<TBuilder>
     {
-        protected PositionActiveColorBuilder()
+        protected ActiveColorBuilder()
         {
             activeColor = Color.White;
         }

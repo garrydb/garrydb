@@ -5,9 +5,9 @@ using GarryDB.Pieces;
 
 namespace GarryDB.Builders.Positions
 {
-    public class PositionPieceBuilder<TBuilder> : PositionBuilder where TBuilder : PositionPieceBuilder<TBuilder>
+    public class PieceBuilder<TBuilder> : PositionBuilder where TBuilder : PieceBuilder<TBuilder>
     {
-        protected PositionPieceBuilder()
+        protected PieceBuilder()
         {
             pieces = new Dictionary<Square, Piece>();
 
