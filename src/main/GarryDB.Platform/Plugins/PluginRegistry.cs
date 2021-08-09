@@ -8,6 +8,8 @@ using Autofac;
 
 using GarryDB.Plugins;
 
+using JetBrains.Annotations;
+
 namespace GarryDB.Platform.Plugins
 {
     internal sealed class PluginRegistry : IDisposable
@@ -26,8 +28,7 @@ namespace GarryDB.Platform.Plugins
                             .As<Plugin>()
                             .WithParameter(TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity)))
                             .WithMetadata<RegisterdPluginMetadata>(c => c.For(m => m.StartupOrder, int.MinValue)
-                                                                         .For(m => m.PluginIdentity, GarryPlugin.PluginIdentity)
-                                                                  )
+                                                                         .For(m => m.PluginIdentity, GarryPlugin.PluginIdentity))
                             .SingleInstance();
         }
 
@@ -67,6 +68,7 @@ namespace GarryDB.Platform.Plugins
             }
         }
 
+        [UsedImplicitly]
         private sealed class RegisterdPluginMetadata
         {
             public int StartupOrder { get; set; }

@@ -17,14 +17,14 @@ namespace GarryDB.Platform.Databases
             this.databasePath = databasePath;
         }
 
-        public SQLiteConnection Open()
+        public SQLiteConnection Open(string databaseName)
         {
             if (!fileSystem.Exists(databasePath))
             {
                 fileSystem.CreateDirectory(databasePath);
             }
-
-            return new SQLiteConnection(Path.Combine(databasePath, "garry.db"));
+            
+            return new SQLiteConnection(Path.Combine(databasePath, $"{databaseName}.db"));
         }
 
         public void Close(SQLiteConnection connection)

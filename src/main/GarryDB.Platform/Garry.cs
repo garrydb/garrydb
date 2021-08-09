@@ -125,7 +125,7 @@ namespace GarryDB.Platform
 
             foreach (PluginDirectory pluginDirectory in pluginDirectories)
             {
-                startupSequence.Inspect(new PluginIdentity(pluginDirectory.PluginName));
+                startupSequence.Inspect(PluginIdentity.Parse(pluginDirectory.PluginName));
             }
 
             var pluginLoadContexts = new List<PluginLoadContext>();

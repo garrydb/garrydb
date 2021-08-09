@@ -27,7 +27,7 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 
         protected override PluginIdentity OnBuild()
         {
-            return new(name, version);
+            return PluginIdentity.Parse($"{name}:{version}");
         }
 
         public PluginIdentityBuilder Named(string name)

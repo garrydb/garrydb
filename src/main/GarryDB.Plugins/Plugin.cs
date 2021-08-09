@@ -55,8 +55,7 @@ namespace GarryDB.Plugins
         {
             Func<object, Task<object?>> handlerWrapper = async message =>
                                                          {
-                                                             TResult? result =
-                                                                 await handler((TMessage)message).ConfigureAwait(false);
+                                                             TResult? result = await handler((TMessage)message).ConfigureAwait(false);
 
                                                              return result;
                                                          };
@@ -83,24 +82,14 @@ namespace GarryDB.Plugins
         }
 
         /// <summary>
-        ///     Sends and empty message to <paramref name="destination" />.
-        /// </summary>
-        /// <param name="destination">The destination plugin.</param>
-        /// <param name="handler">The name of the handler.</param>
-        protected Task SendAsync(string destination, string handler)
-        {
-            return SendAsync(destination, handler, new object());
-        }
-
-        /// <summary>
         ///     Sends <paramref name="message" /> to <paramref name="destination" />.
         /// </summary>
         /// <param name="destination">The destination plugin.</param>
         /// <param name="handler">The name of the handler.</param>
-        /// <param name="message">The message.</param>
-        protected Task SendAsync(string destination, string handler, object message)
+        /// <param name="message">The (optional) message.</param>
+        protected Task SendAsync(string destination, string handler, object? message = null)
         {
-            return pluginContext.SendAsync(destination, handler, message);
+            return pluginContext.SendAsync(destination, handler, message ?? new object());
         }
 
         /// <summary>

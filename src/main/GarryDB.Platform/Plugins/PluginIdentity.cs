@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using GarryDB.Plugins;
 
@@ -9,6 +10,8 @@ namespace GarryDB.Platform.Plugins
     /// </summary>
     public sealed class PluginIdentity
     {
+        private const string AnyVersion = "*";
+
         private readonly string version;
 
         /// <summary>
@@ -16,7 +19,7 @@ namespace GarryDB.Platform.Plugins
         /// </summary>
         /// <param name="name">The name of the plugin.</param>
         /// <param name="version">The version of the plugin.</param>
-        public PluginIdentity(string name, string version = "*")
+        private PluginIdentity(string name, string version = AnyVersion)
         {
             Name = name;
             this.version = version;
@@ -40,7 +43,7 @@ namespace GarryDB.Platform.Plugins
                 return false;
             }
 
-            if (version == "*" || other.version == "*")
+            if (version == AnyVersion || other.version == AnyVersion)
             {
                 return true;
             }
@@ -57,14 +60,30 @@ namespace GarryDB.Platform.Plugins
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{Name}.{version}";
+            return $"{Name}:{version}";
+        }
+        
+        /// <summary>
+        ///     Parse the string into a valid <see cref="PluginIdentity" />.
+        /// </summary>
+        /// <param name="value">The string to parse.</param>
+        /// <returns>The <see cref="PluginIdentity" />.</returns>
+        public static PluginIdentity Parse(string value)
+        {
+            string[] nameVersionPair = value.Split(':');
+
+            return new PluginIdentity(nameVersionPair.First(), nameVersionPair.LastOrDefault() ?? AnyVersion);
         }
 
         /// <summary>
+        ///     Determines whether two instances of <see cref="PluginIdentity" /> represent the same <see cref="PluginIdentity" />.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="PluginIdentity" />.</param>
+        /// <param name="b">The second <see cref="PluginIdentity" />.</param>
+        /// <returns>
+        ///     <c>true</c> if <paramref name="a" /> is the same <see cref="PluginIdentity" /> as <paramref name="b" />,
+        ///     otherwise <c>false</c>.
+        /// </returns>
         public static bool operator ==(PluginIdentity? a, PluginIdentity? b)
         {
             if (a is null)
@@ -81,10 +100,14 @@ namespace GarryDB.Platform.Plugins
         }
 
         /// <summary>
+        ///     Determines whether two instances of <see cref="PluginIdentity" /> represent a different <see cref="PluginIdentity" />.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">The first <see cref="PluginIdentity" />.</param>
+        /// <param name="b">The second <see cref="PluginIdentity" />.</param>
+        /// <returns>
+        ///     <c>true</c> if <paramref name="a" /> is different <see cref="PluginIdentity" /> as <paramref name="b" />,
+        ///     otherwise <c>false</c>.
+        /// </returns>
         public static bool operator !=(PluginIdentity? a, PluginIdentity? b)
         {
             return !(a == b);

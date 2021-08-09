@@ -8,7 +8,7 @@ namespace GarryDB.Platform
 {
     internal sealed class GarryPlugin : Plugin
     {
-        public static readonly PluginIdentity PluginIdentity = new("Garry", "1.0");
+        public static readonly PluginIdentity PluginIdentity = PluginIdentity.Parse("Garry:1.0");
         private readonly AutoResetEvent shutdownRequested;
 
         public GarryPlugin(PluginContext pluginContext)

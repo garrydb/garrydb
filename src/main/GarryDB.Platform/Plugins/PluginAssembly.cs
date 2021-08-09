@@ -49,7 +49,7 @@ namespace GarryDB.Platform.Plugins
             {
                 AssemblyName assemblyName = assembly.GetName();
 
-                return new PluginIdentity(assemblyName.Name ?? "unknown", assemblyName.Version?.ToString() ?? "1.0.0.0");
+                return PluginIdentity.Parse($"{assemblyName.Name}:{assemblyName.Version}");
             }
         }
     }

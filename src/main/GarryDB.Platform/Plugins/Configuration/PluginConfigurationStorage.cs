@@ -13,24 +13,19 @@ namespace GarryDB.Platform.Plugins.Configuration
 {
     internal sealed class PluginConfigurationStorage
     {
-        private static readonly MethodInfo GetConfigurationMethod;
+        private static readonly MethodInfo GetConfigurationMethod =
+            typeof(PluginConfigurationStorage)
+                .GetMethod(nameof(GetConfiguration),
+                           BindingFlags.Instance | BindingFlags.NonPublic,
+                           null,
+                           new[]
+                           {
+                               typeof(PluginIdentity)
+                           },
+                           null)!;
 
         private readonly ConnectionFactory connectionFactory;
         private readonly PluginRegistry pluginRegistry;
-
-        static PluginConfigurationStorage()
-        {
-            GetConfigurationMethod =
-                typeof(PluginConfigurationStorage)
-                    .GetMethod(nameof(GetConfiguration),
-                               BindingFlags.Instance | BindingFlags.NonPublic,
-                               null,
-                               new[]
-                               {
-                                   typeof(PluginIdentity)
-                               },
-                               null)!;
-        }
 
         public PluginConfigurationStorage(ConnectionFactory connectionFactory, PluginRegistry pluginRegistry)
         {
@@ -53,24 +48,18 @@ namespace GarryDB.Platform.Plugins.Configuration
 
         private TConfiguration GetConfiguration<TConfiguration>(PluginIdentity pluginIdentity) where TConfiguration : new()
         {
-            SQLiteConnection connection = connectionFactory.Open();
+            SQLiteConnection connection = connectionFactory.Open("garry");
             try
             {
                 connection.CreateTable<ConfigurationTable>();
 
                 ConfigurationTable? record = connection.Find<ConfigurationTable>(t => t.Plugin == pluginIdentity.Name);
-                if (record == null)
+                if (record != null)
                 {
-                    var configuration = new TConfiguration();
-                    connection.Insert(new ConfigurationTable
-                                      {
-                                          Plugin = pluginIdentity.Name, Configuration = JsonSerializer.Serialize(configuration)
-                                      });
-
-                    return new TConfiguration();
+                    return JsonSerializer.Deserialize<TConfiguration>(record.Configuration) ?? new TConfiguration();
                 }
 
-                return JsonSerializer.Deserialize<TConfiguration>(record.Configuration) ?? new TConfiguration();
+                return new TConfiguration();
             }
             finally
             {

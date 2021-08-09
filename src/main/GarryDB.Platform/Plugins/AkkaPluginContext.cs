@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 using Akka.Actor;
 
@@ -31,7 +31,7 @@ namespace GarryDB.Platform.Plugins
         /// <inheritdoc />
         public Task SendAsync(string destination, string handler, object message)
         {
-            var envelope = new MessageEnvelope(pluginIdentity, new Address(new PluginIdentity(destination), handler), message);
+            var envelope = new MessageEnvelope(pluginIdentity, new Address(PluginIdentity.Parse(destination), handler), message);
 
             plugins.Tell(envelope);
 

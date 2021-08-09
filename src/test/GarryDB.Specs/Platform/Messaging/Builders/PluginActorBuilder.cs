@@ -1,12 +1,10 @@
-﻿using Akka.Actor;
+using Akka.Actor;
 using Akka.TestKit;
 using Akka.TestKit.NUnit;
 
 using GarryDB.Platform.Messaging;
-using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 using GarryDB.Specs.Akka.Builders;
-using GarryDB.Specs.Platform.Plugins.Builders;
 using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Messaging.Builders
@@ -14,14 +12,13 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
     internal sealed class PluginActorBuilder : TestDataBuilder<IActorRef>
     {
         private Plugin plugin;
-        private PluginIdentity pluginIdentity;
         private TestKit testKit;
 
         protected override void OnPreBuild()
         {
-            if (pluginIdentity == null && plugin == null)
+            if (plugin == null)
             {
-                For(new PluginIdentityBuilder().Build(), new PluginBuilder().Build());
+                For(new PluginBuilder().Build());
             }
 
             if (testKit == null)
@@ -32,12 +29,11 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
         protected override IActorRef OnBuild()
         {
-            return testKit.Sys.ActorOf(PluginActor.Props(pluginIdentity, plugin).WithDispatcher(CallingThreadDispatcher.Id));
+            return testKit.Sys.ActorOf(PluginActor.Props(plugin).WithDispatcher(CallingThreadDispatcher.Id));
         }
 
-        public PluginActorBuilder For(PluginIdentity pluginIdentity, Plugin plugin)
+        public PluginActorBuilder For(Plugin plugin)
         {
-            this.pluginIdentity = pluginIdentity;
             this.plugin = plugin;
 
             return this;

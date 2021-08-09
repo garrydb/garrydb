@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 
 using Akka.Actor;
 
@@ -21,8 +21,7 @@ namespace GarryDB.Platform.Messaging
 
             Receive((PluginLoaded message) =>
                     {
-                        IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.PluginIdentity, message.Plugin),
-                                                                   message.PluginIdentity.Name);
+                        IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.Plugin), message.PluginIdentity.Name);
                         plugins[message.PluginIdentity] = pluginActorRef;
                     });
 
