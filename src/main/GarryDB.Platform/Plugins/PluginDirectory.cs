@@ -7,7 +7,7 @@ using GarryDB.Platform.Infrastructure;
 
 namespace GarryDB.Platform.Plugins
 {
-    internal sealed class PluginDirectory
+    internal sealed class PluginDirectory : IComparable<PluginDirectory>
     {
         private readonly FileSystem fileSystem;
 
@@ -66,6 +66,31 @@ namespace GarryDB.Platform.Plugins
         public override string ToString()
         {
             return PluginName;
+        }
+
+        public int CompareTo(PluginDirectory? other)
+        {
+            if (ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+
+            if (ReferenceEquals(null, other))
+            {
+                return 1;
+            }
+
+            if (DependentAssemblies.Any(assembly => other.ProvidedAssemblies.Contains(assembly)))
+            {
+                return 1;
+            }
+
+            if (other.DependentAssemblies.Any(assembly => ProvidedAssemblies.Contains(assembly)))
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

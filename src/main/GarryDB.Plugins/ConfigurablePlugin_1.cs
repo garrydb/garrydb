@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace GarryDB.Plugins
 {
     /// <summary>
     ///     A plugin that can be configured
     /// </summary>
-    internal abstract class ConfigurablePlugin<TConfiguration> : Plugin where TConfiguration : new()
+    public abstract class ConfigurablePlugin<TConfiguration> : Plugin where TConfiguration : new()
     {
         /// <summary>
         ///     Initializes a new <see cref="ConfigurablePlugin" />.
