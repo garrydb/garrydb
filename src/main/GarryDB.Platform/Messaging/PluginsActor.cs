@@ -15,6 +15,7 @@ namespace GarryDB.Platform.Messaging
         /// <summary>
         ///     Initializes a new <see cref="PluginsActor" />.
         /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
         public PluginsActor()
         {
             var plugins = new ConcurrentDictionary<PluginIdentity, IActorRef>();

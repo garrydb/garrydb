@@ -6,7 +6,7 @@
     <members>
         <member name="T:GarryDB.Plugins.ConfigurablePlugin">
             <summary>
-                A plugin that can be configured
+                A plugin that can be configured.
             </summary>
         </member>
         <member name="M:GarryDB.Plugins.ConfigurablePlugin.#ctor(GarryDB.Plugins.PluginContext)">
@@ -88,20 +88,13 @@
             <param name="message">The message to handle.</param>
             <returns>The result of handling the message.</returns>
         </member>
-        <member name="M:GarryDB.Plugins.Plugin.SendAsync(System.String,System.String)">
-            <summary>
-                Sends and empty message to <paramref name="destination" />.
-            </summary>
-            <param name="destination">The destination plugin.</param>
-            <param name="handler">The name of the handler.</param>
-        </member>
         <member name="M:GarryDB.Plugins.Plugin.SendAsync(System.String,System.String,System.Object)">
             <summary>
                 Sends <paramref name="message" /> to <paramref name="destination" />.
             </summary>
             <param name="destination">The destination plugin.</param>
             <param name="handler">The name of the handler.</param>
-            <param name="message">The message.</param>
+            <param name="message">The (optional) message.</param>
         </member>
         <member name="M:GarryDB.Plugins.Plugin.Start">
             <summary>

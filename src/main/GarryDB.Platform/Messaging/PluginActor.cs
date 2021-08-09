@@ -13,6 +13,7 @@ namespace GarryDB.Platform.Messaging
         ///     Initializes a new <see cref="PluginActor" />.
         /// </summary>
         /// <param name="plugin">The plugin.</param>
+        // ReSharper disable once MemberCanBePrivate.Global
         public PluginActor(Plugin plugin)
         {
             ReceiveAsync(async (MessageEnvelope envelope) =>

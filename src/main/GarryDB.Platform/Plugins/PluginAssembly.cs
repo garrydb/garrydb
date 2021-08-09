@@ -24,10 +24,7 @@ namespace GarryDB.Platform.Plugins
             TypeInfo? singleOrDefault = assembly.DefinedTypes.SingleOrDefault(type => type.IsPluginType());
 
             PluginType = singleOrDefault!;
-            StartupOrder = assembly.GetCustomAttributesData()
-                                   .Where(x => x.AttributeType.Name == nameof(StartupOrderAttribute))
-                                   .Select(x => (int?)x.ConstructorArguments.Single().Value ?? 0)
-                                   .SingleOrDefault();
+            StartupOrder = assembly.GetCustomAttribute<StartupOrderAttribute>()?.Order ?? 0;
         }
 
         /// <summary>

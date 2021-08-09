@@ -49,12 +49,6 @@ namespace GarryDB.Platform
             get { return startupSequence; }
         }
 
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            startupSequence.Dispose();
-        }
-
         /// <summary>
         ///     Start <see cref="Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
         /// </summary>
@@ -73,7 +67,11 @@ namespace GarryDB.Platform
                 List<PluginLoadContext> pluginLoadContexts = CreatePluginLoadContexts(pluginsDirectory);
                 var pluginRegistry = new PluginRegistry(pluginsActor);
 
-                pluginLoadContexts.ForEach(pluginLoadContext => pluginRegistry.Load(pluginLoadContext));
+                pluginLoadContexts.ForEach(pluginLoadContext =>
+                                           {
+                                               startupSequence.Load(PluginIdentity.Parse(pluginLoadContext.PluginDirectory.PluginName));
+                                               pluginRegistry.Load(pluginLoadContext);
+                                           });
 
                 IDictionary<PluginIdentity, Plugin> plugins = pluginRegistry.Plugins;
 
@@ -82,7 +80,7 @@ namespace GarryDB.Platform
                                     pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
                                 });
 
-                var storage = new PluginConfigurationStorage(new SqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data")), pluginRegistry);
+                var storage = new PluginConfigurationStorage(new PersistentSqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data")), pluginRegistry);
                 plugins.ForEach(plugin =>
                                      {
                                          startupSequence.Configure(plugin.Key);
@@ -115,6 +113,12 @@ namespace GarryDB.Platform
             }
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            startupSequence.Dispose();
+        }
+
         private List<PluginLoadContext> CreatePluginLoadContexts(string pluginsDirectory)
         {
             IEnumerable<PluginDirectory> pluginDirectories =
@@ -132,9 +136,7 @@ namespace GarryDB.Platform
 
             foreach (PluginDirectory pluginDirectory in pluginDirectories)
             {
-                IEnumerable<PluginLoadContext> providers =
-                    pluginLoadContexts.Where(x => x.PluginDirectory.ProvidedAssemblies.Any(y => pluginDirectory
-                                                 .DependentAssemblies.Contains(y)));
+                IEnumerable<PluginLoadContext> providers = pluginLoadContexts.Where(x => pluginDirectory.IsDependentOn(x.PluginDirectory));
 
                 var loadContext = new PluginLoadContext(pluginDirectory,
                                                         AssemblyLoadContext.Default.AsEnumerable()

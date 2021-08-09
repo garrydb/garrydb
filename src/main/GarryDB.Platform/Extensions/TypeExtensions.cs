@@ -35,19 +35,26 @@ namespace GarryDB.Platform.Extensions
             return false;
         }
 
-        public static Type? FindConfigurationType(this Type? type)
+        /// <summary>
+        ///     Find the type of the configuration class for <see cref="ConfigurablePlugin{TConfiguration}" />.
+        /// </summary>
+        /// <param name="pluginType">The plugin type.</param>
+        /// <returns>
+        ///     The type of the configuration class if the plugin is a <see cref="ConfigurablePlugin{TConfiguration}" />.
+        /// </returns>
+        public static Type? FindConfigurationType(this Type? pluginType)
         {
-            if (type == null)
+            if (pluginType == null)
             {
                 return null;
             }
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ConfigurablePlugin<>))
+            if (pluginType.IsGenericType && pluginType.GetGenericTypeDefinition() == typeof(ConfigurablePlugin<>))
             {
-                return type.GetGenericArguments().Single();
+                return pluginType.GetGenericArguments().Single();
             }
 
-            return type.BaseType.FindConfigurationType();
+            return pluginType.BaseType.FindConfigurationType();
         }
     }
 }

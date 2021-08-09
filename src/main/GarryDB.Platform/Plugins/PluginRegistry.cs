@@ -12,12 +12,19 @@ using JetBrains.Annotations;
 
 namespace GarryDB.Platform.Plugins
 {
+    /// <summary>
+    ///     A registry containing all loaded <see cref="Plugin" />s.
+    /// </summary>
     internal sealed class PluginRegistry : IDisposable
     {
         private readonly IActorRef pluginsActor;
         private readonly ContainerBuilder containerBuilder;
         private readonly Lazy<IContainer> container;
 
+        /// <summary>
+        ///     Intializes a new <see cref="PluginRegistry" />.
+        /// </summary>
+        /// <param name="pluginsActor">The receiving actor for the messages that are sent by the plugin.</param>
         public PluginRegistry(IActorRef pluginsActor)
         {
             this.pluginsActor = pluginsActor;
@@ -32,6 +39,10 @@ namespace GarryDB.Platform.Plugins
                             .SingleInstance();
         }
 
+        /// <summary>
+        ///     Load the plugin from the <paramref name="pluginLoadContext" />.
+        /// </summary>
+        /// <param name="pluginLoadContext">The plugin load context.</param>
         public void Load(PluginLoadContext pluginLoadContext)
         {
             PluginAssembly? pluginAssembly = pluginLoadContext.Load();
@@ -50,6 +61,9 @@ namespace GarryDB.Platform.Plugins
                             .SingleInstance();
         }
 
+        /// <summary>
+        ///     Gets the plugins.
+        /// </summary>
         public IDictionary<PluginIdentity, Plugin> Plugins
         {
             get
@@ -60,6 +74,7 @@ namespace GarryDB.Platform.Plugins
             }
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             if (container.IsValueCreated)

@@ -12,19 +12,30 @@ using GarryDB.Plugins;
 
 namespace GarryDB.Platform.Plugins
 {
+    /// <summary>
+    ///     A dedicated <see cref="AssemblyLoadContext" /> for loading assemblies for a <see cref="Plugin" />.
+    /// </summary>
     internal sealed class PluginLoadContext : AssemblyLoadContext
     {
         private readonly IEnumerable<AssemblyLoadContext> providers;
         private readonly AssemblyDependencyResolver resolver;
 
+        /// <summary>
+        ///     Initializes a new <see cref="PluginLoadContext" />.
+        /// </summary>
+        /// <param name="pluginDirectory">The directory containing the .dlls.</param>
+        /// <param name="providers">The <see cref="AssemblyLoadContext" />s to use for referenced assemblies.</param>
         public PluginLoadContext(PluginDirectory pluginDirectory, IEnumerable<AssemblyLoadContext> providers)
             : base(pluginDirectory.PluginName)
         {
             PluginDirectory = pluginDirectory;
             this.providers = providers;
-            resolver = new AssemblyDependencyResolver(Path.Combine(pluginDirectory.PluginAssembly!));
+            resolver = new AssemblyDependencyResolver(Path.Combine(pluginDirectory.Directory, $"{pluginDirectory.PluginName}.dll"));
         }
 
+        /// <summary>
+        ///     Gets the plugin directory.
+        /// </summary>
         public PluginDirectory PluginDirectory { get; }
 
         /// <summary>
@@ -33,25 +44,14 @@ namespace GarryDB.Platform.Plugins
         /// <returns>The <see cref="PluginAssembly" />.</returns>
         public PluginAssembly? Load()
         {
-            string? pluginAssembly = PluginDirectory.PluginAssembly;
+            PluginDirectory.LoadInto(this);
 
-            if (pluginAssembly == null)
-            {
-                return null;
-            }
+            Assembly? assembly = Assemblies.SingleOrDefault(x => x.GetName().Name == PluginDirectory.PluginName);
 
-            Assembly? assembly = Load(new AssemblyName(Path.GetFileNameWithoutExtension(pluginAssembly)));
-
-            if (assembly == null)
-            {
-                return null;
-            }
-
-            PluginDirectory.Files.ForEach(file => Load(new AssemblyName(Path.GetFileNameWithoutExtension(file))));
-
-            return new PluginAssembly(assembly);
+            return assembly != null ? new PluginAssembly(assembly) : null;
         }
 
+        /// <inheritdoc />
         protected override Assembly? Load(AssemblyName assemblyName)
         {
             var assemblyFromParent = providers.Select(x => new
@@ -82,6 +82,7 @@ namespace GarryDB.Platform.Plugins
             return result;
         }
 
+        /// <inheritdoc />
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             string fullPath = DetermineFullPath(unmanagedDllName, PluginDirectory.Directory);

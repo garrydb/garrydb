@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 namespace GarryDB.Plugins
 {
     /// <summary>
-    ///     A plugin that can be configured
+    ///     A plugin that can be configured.
     /// </summary>
     public abstract class ConfigurablePlugin : ConfigurablePlugin<object>
     {
