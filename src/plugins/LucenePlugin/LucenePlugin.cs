@@ -2,7 +2,12 @@ using GarryDB.Plugins;
 
 namespace LucenePlugin
 {
-    internal sealed class LucenePlugin : Plugin
+    public sealed class LuceneConfiguration
+    {
+        public string SomeData { get; set; } 
+    }
+
+    public sealed class LucenePlugin : ConfigurablePlugin<LuceneConfiguration>
     {
         public LucenePlugin(PluginContext pluginContext)
             : base(pluginContext)

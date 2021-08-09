@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,6 +50,16 @@ namespace GarryDB.Specs.Platform.Infrastructure.Builders
             }
 
             public IEnumerable<string> GetTopLevelDirectories(string directory)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool Exists(string path)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void CreateDirectory(string directory)
             {
                 throw new NotImplementedException();
             }

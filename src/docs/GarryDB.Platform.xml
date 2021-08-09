@@ -128,6 +128,19 @@
             <param name="directory">The directory to search.</param>
             <returns>The directories in <paramref name="directory" />.</returns>
         </member>
+        <member name="M:GarryDB.Platform.Infrastructure.FileSystem.Exists(System.String)">
+            <summary>
+                Determines whether a directory or file exists at <paramref name="path" />.
+            </summary>
+            <param name="path">The path to check.</param>
+            <returns><c>true</c> if the directory or file exists, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Infrastructure.FileSystem.CreateDirectory(System.String)">
+            <summary>
+                Create the directory.
+            </summary>
+            <param name="directory">The directory to create.</param>
+        </member>
         <member name="T:GarryDB.Platform.Messaging.Address">
             <summary>
                 The address to a handler of a plugin.
@@ -278,6 +291,26 @@
         </member>
         <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
             <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Configuration.ConfigurationTable">
+            <summary>
+                The table with the configuration of plugins.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Configuration.ConfigurationTable.Id">
+            <summary>
+                Gets and sets the id of the record.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Configuration.ConfigurationTable.Plugin">
+            <summary>
+                Gets and sets the name of the plugin.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.Configuration.ConfigurationTable.Configuration">
+            <summary>
+                Gets and sets the configuration as JSON.
+            </summary>
         </member>
         <member name="T:GarryDB.Platform.Plugins.Extensions.AssemblyLoadContextExtensions">
             <summary>

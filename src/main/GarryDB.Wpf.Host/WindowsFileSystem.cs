@@ -23,5 +23,17 @@ namespace GarryDB.Wpf.Host
         {
             return Directory.GetDirectories(directory, "*.*", SearchOption.TopDirectoryOnly);
         }
+
+        /// <inheritdoc />
+        public bool Exists(string path)
+        {
+            return Directory.Exists(path) || File.Exists(path);
+        }
+
+        /// <inheritdoc />
+        public void CreateDirectory(string directory)
+        {
+            Directory.CreateDirectory(directory);
+        }
     }
 }

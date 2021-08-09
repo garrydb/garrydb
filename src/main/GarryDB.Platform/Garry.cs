@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -7,11 +8,13 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.Event;
 
+using GarryDB.Platform.Databases;
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Platform.Startup;
 using GarryDB.Plugins;
 
@@ -79,11 +82,14 @@ namespace GarryDB.Platform
                                     pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
                                 });
 
+                var storage = new PluginConfigurationStorage(new SqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data")), pluginRegistry);
                 plugins.ForEach(plugin =>
                                      {
                                          startupSequence.Configure(plugin.Key);
+                                         object? configuration = storage.FindConfiguration(plugin.Key);
                                          pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
-                                                                               new Address(plugin.Key, "configure")));
+                                                                               new Address(plugin.Key, "configure"),
+                                                                               configuration ?? new object()));
                                      });
 
                 plugins.ForEach(plugin =>
@@ -100,7 +106,7 @@ namespace GarryDB.Platform
                     var garryPlugin = (GarryPlugin)plugins[GarryPlugin.PluginIdentity];
                     garryPlugin.WaitUntilShutdownRequested();
                 }
-
+                
                 plugins.Keys.ForEach(plugin =>
                                      {
                                          pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,

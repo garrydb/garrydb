@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 
 using GarryDB.Plugins;
 
@@ -32,6 +33,21 @@ namespace GarryDB.Platform.Extensions
             }
 
             return false;
+        }
+
+        public static Type? FindConfigurationType(this Type? type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ConfigurablePlugin<>))
+            {
+                return type.GetGenericArguments().Single();
+            }
+
+            return type.BaseType.FindConfigurationType();
         }
     }
 }

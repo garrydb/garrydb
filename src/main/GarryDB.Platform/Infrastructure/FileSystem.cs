@@ -21,5 +21,18 @@ namespace GarryDB.Platform.Infrastructure
         /// <param name="directory">The directory to search.</param>
         /// <returns>The directories in <paramref name="directory" />.</returns>
         IEnumerable<string> GetTopLevelDirectories(string directory);
+
+        /// <summary>
+        ///     Determines whether a directory or file exists at <paramref name="path" />.
+        /// </summary>
+        /// <param name="path">The path to check.</param>
+        /// <returns><c>true</c> if the directory or file exists, otherwise <c>false</c>.</returns>
+        bool Exists(string path);
+
+        /// <summary>
+        ///     Create the directory.
+        /// </summary>
+        /// <param name="directory">The directory to create.</param>
+        void CreateDirectory(string directory);
     }
 }
