@@ -49,7 +49,7 @@ namespace GarryDB.Platform.Messaging
         /// <returns>A <see cref="MessageEnvelope" /> containing the message and is addressed to the sender.</returns>
         public MessageEnvelope CreateReturnMessage(object message)
         {
-            return new(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
+            return new MessageEnvelope(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
         }
     }
 }

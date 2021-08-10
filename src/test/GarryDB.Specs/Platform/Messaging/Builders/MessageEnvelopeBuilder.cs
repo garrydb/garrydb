@@ -32,7 +32,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
         protected override MessageEnvelope OnBuild()
         {
-            return new(sender, destination, message);
+            return new MessageEnvelope(sender, destination, message);
         }
 
         public MessageEnvelopeBuilder SentFrom(PluginIdentity sender)

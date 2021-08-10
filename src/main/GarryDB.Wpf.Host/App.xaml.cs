@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
 using GarryDB.Platform;
+using GarryDB.Platform.Persistence;
 using GarryDB.Platform.Startup;
 
 namespace GarryDB.Wpf.Host
@@ -20,7 +22,8 @@ namespace GarryDB.Wpf.Host
 
             Task.Run(async () =>
                      {
-                         using (var garry = new Garry(new WindowsFileSystem()))
+                         var fileSystem = new WindowsFileSystem();
+                         using (var garry = new Garry(fileSystem, new PersistentSqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data"))))
                          {
                              using (garry.WhenProgressUpdated.Subscribe(updated => OnProgressUpdated(splashScreen, updated),
                                                                         () => OnProgressCompleted(splashScreen)))

@@ -8,7 +8,7 @@ namespace GarryDB
     {
         public static BuilderDirector New()
         {
-            return new();
+            return new BuilderDirector();
         }
 
         internal interface Builder

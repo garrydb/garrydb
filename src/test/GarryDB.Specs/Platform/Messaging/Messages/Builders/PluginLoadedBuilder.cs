@@ -21,7 +21,7 @@ namespace GarryDB.Specs.Platform.Messaging.Messages.Builders
 
         protected override PluginLoaded OnBuild()
         {
-            return new(pluginIdentity, plugin);
+            return new PluginLoaded(pluginIdentity, plugin);
         }
 
         public PluginLoadedBuilder For(PluginIdentity pluginIdentity, Plugin plugin)

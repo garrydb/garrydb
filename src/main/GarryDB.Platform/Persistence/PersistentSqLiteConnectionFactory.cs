@@ -4,12 +4,12 @@ using GarryDB.Platform.Infrastructure;
 
 using SQLite;
 
-namespace GarryDB.Platform.Databases
+namespace GarryDB.Platform.Persistence
 {
     /// <summary>
     ///     Creates <see cref="SQLiteConnection" />s where the database is stored on disk.
     /// </summary>
-    internal sealed class PersistentSqLiteConnectionFactory : ConnectionFactory
+    public sealed class PersistentSqLiteConnectionFactory : ConnectionFactory
     {
         private readonly FileSystem fileSystem;
         private readonly string databasePath;

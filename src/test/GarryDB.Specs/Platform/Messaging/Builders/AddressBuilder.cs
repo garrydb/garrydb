@@ -25,7 +25,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
 
         protected override Address OnBuild()
         {
-            return new(pluginIdentity, handler);
+            return new Address(pluginIdentity, handler);
         }
 
         public AddressBuilder For(PluginIdentity pluginIdentity)

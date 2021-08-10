@@ -1,11 +1,11 @@
 using SQLite;
 
-namespace GarryDB.Platform.Databases
+namespace GarryDB.Platform.Persistence
 {
     /// <summary>
     ///     Opens and closes connections to a SQLite database.
     /// </summary>
-    internal interface ConnectionFactory
+    public interface ConnectionFactory
     {
         /// <summary>
         ///     Open a connection to the database named <paramref name="databaseName" />.

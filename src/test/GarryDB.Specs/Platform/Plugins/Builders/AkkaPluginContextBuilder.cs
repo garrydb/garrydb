@@ -25,7 +25,7 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 
         protected override AkkaPluginContext OnBuild()
         {
-            return new(plugins, pluginIdentity);
+            return new AkkaPluginContext(plugins, pluginIdentity);
         }
 
         public AkkaPluginContextBuilder WithPluginsActor(IActorRef plugins)

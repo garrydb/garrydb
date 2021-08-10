@@ -1,6 +1,6 @@
-﻿namespace GarryDB.Specs
+namespace GarryDB.Specs
 {
-    internal abstract class TestDataBuilder<TSubject>
+    public abstract class TestDataBuilder<TSubject>
     {
         public TSubject Build()
         {

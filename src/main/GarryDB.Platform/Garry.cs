@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.Event;
 
-using GarryDB.Platform.Databases;
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
+using GarryDB.Platform.Persistence;
 using GarryDB.Platform.Plugins;
 using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Platform.Startup;
@@ -28,15 +28,18 @@ namespace GarryDB.Platform
     public sealed class Garry : IDisposable
     {
         private readonly FileSystem fileSystem;
+        private readonly ConnectionFactory connectionFactory;
         private readonly StartupSequence startupSequence;
 
         /// <summary>
         ///     Initializes <see cref="Garry" />.
         /// </summary>
         /// <param name="fileSystem"></param>
-        public Garry(FileSystem fileSystem)
+        /// <param name="connectionFactory">The connectino factory.</param>
+        public Garry(FileSystem fileSystem, ConnectionFactory connectionFactory)
         {
             this.fileSystem = fileSystem;
+            this.connectionFactory = connectionFactory;
             startupSequence = new StartupSequence();
         }
 
@@ -58,36 +61,30 @@ namespace GarryDB.Platform
             await Task.CompletedTask;
             using (var system = ActorSystem.Create("garry"))
             {
-                var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
-                IActorRef deadletterWatchActorRef = system.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
-                system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
+                MonitorDeadletters(system);
 
                 IActorRef pluginsActor = system.ActorOf(PluginsActor.Props(), "plugins");
 
-                List<PluginLoadContext> pluginLoadContexts = CreatePluginLoadContexts(pluginsDirectory);
-                var pluginRegistry = new PluginRegistry(pluginsActor);
-
-                pluginLoadContexts.ForEach(pluginLoadContext =>
-                                           {
-                                               startupSequence.Load(PluginIdentity.Parse(pluginLoadContext.PluginDirectory.PluginName));
-                                               pluginRegistry.Load(pluginLoadContext);
-                                           });
+                PluginRegistry pluginRegistry = LoadPlugins(pluginsActor, pluginsDirectory);
 
                 IDictionary<PluginIdentity, Plugin> plugins = pluginRegistry.Plugins;
 
-                plugins.ForEach(plugin =>
-                                {
-                                    pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value));
-                                });
+                plugins.ForEach(plugin => pluginsActor.Tell(new PluginLoaded(plugin.Key, plugin.Value)));
 
-                var storage = new PluginConfigurationStorage(new PersistentSqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data")), pluginRegistry);
+                var storage = new PluginConfigurationStorage(connectionFactory, pluginRegistry);
                 plugins.ForEach(plugin =>
                                      {
                                          startupSequence.Configure(plugin.Key);
                                          object? configuration = storage.FindConfiguration(plugin.Key);
+
+                                         if (configuration == null)
+                                         {
+                                             return;
+                                         }
+
                                          pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
                                                                                new Address(plugin.Key, "configure"),
-                                                                               configuration ?? new object()));
+                                                                               configuration));
                                      });
 
                 plugins.ForEach(plugin =>
@@ -105,21 +102,19 @@ namespace GarryDB.Platform
                     garryPlugin.WaitUntilShutdownRequested();
                 }
                 
-                plugins.Keys.ForEach(plugin =>
-                                     {
-                                         pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
-                                                                               new Address(plugin, "stop")));
-                                     });
+                plugins.Keys.ForEach(plugin => pluginsActor.Tell(new MessageEnvelope(GarryPlugin.PluginIdentity,
+                                                                                     new Address(plugin, "stop"))));
             }
         }
 
-        /// <inheritdoc />
-        public void Dispose()
+        private void MonitorDeadletters(ActorSystem system)
         {
-            startupSequence.Dispose();
+            var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
+            IActorRef deadletterWatchActorRef = system.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+            system.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
         }
 
-        private List<PluginLoadContext> CreatePluginLoadContexts(string pluginsDirectory)
+        private PluginRegistry LoadPlugins(IActorRef pluginsActor, string pluginsDirectory)
         {
             IEnumerable<PluginDirectory> pluginDirectories =
                 fileSystem.GetTopLevelDirectories(pluginsDirectory)
@@ -132,8 +127,8 @@ namespace GarryDB.Platform
                 startupSequence.Inspect(PluginIdentity.Parse(pluginDirectory.PluginName));
             }
 
+            var registry = new PluginRegistry(pluginsActor);
             var pluginLoadContexts = new List<PluginLoadContext>();
-
             foreach (PluginDirectory pluginDirectory in pluginDirectories)
             {
                 IEnumerable<PluginLoadContext> providers = pluginLoadContexts.Where(x => pluginDirectory.IsDependentOn(x.PluginDirectory));
@@ -143,9 +138,16 @@ namespace GarryDB.Platform
                                                                            .Concat(providers)
                                                                            .ToList());
                 pluginLoadContexts.Add(loadContext);
+                registry.Load(loadContext);
             }
 
-            return pluginLoadContexts;
+            return registry;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            startupSequence.Dispose();
         }
     }
 }

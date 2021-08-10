@@ -6,7 +6,7 @@ namespace GarryDB.Specs.Platform.Messaging.Builders
     {
         protected override DeadletterMonitor OnBuild()
         {
-            return new();
+            return new DeadletterMonitor();
         }
     }
 }
