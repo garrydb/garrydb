@@ -1,7 +1,8 @@
 using Akka.Actor;
 
+using GarryDB.Platform.Actors;
 using GarryDB.Platform.Plugins;
-using GarryDB.Specs.Platform.Messaging.Builders;
+using GarryDB.Specs.Platform.Actors.Builders;
 
 namespace GarryDB.Specs.Platform.Plugins.Builders
 {

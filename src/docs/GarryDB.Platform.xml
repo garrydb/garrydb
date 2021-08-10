@@ -4,41 +4,87 @@
         <name>GarryDB.Platform</name>
     </assembly>
     <members>
-        <member name="T:GarryDB.Platform.Databases.ConnectionFactory">
+        <member name="T:GarryDB.Platform.Actors.AkkaPluginContext">
             <summary>
-                Opens and closes connections to a SQLite database.
+                The plugin context that uses Akka.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Databases.ConnectionFactory.Open(System.String)">
+        <member name="M:GarryDB.Platform.Actors.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDB.Platform.Plugins.PluginIdentity)">
             <summary>
-                Open a connection to the database named <paramref name="databaseName" />.
+                Initializes a new <see cref="T:GarryDB.Platform.Actors.AkkaPluginContext" />.
             </summary>
-            <param name="databaseName">The name of the database.</param>
-            <returns>A connectino to the database.</returns>
+            <param name="pluginsActor">The reference to the plugins actor.</param>
+            <param name="pluginIdentity">The identity of the plugin.</param>
         </member>
-        <member name="M:GarryDB.Platform.Databases.ConnectionFactory.Close(SQLite.SQLiteConnection)">
-            <summary>
-                Close the <paramref name="connection" />.
-            </summary>
-            <param name="connection">The connection to close.</param>
-        </member>
-        <member name="T:GarryDB.Platform.Databases.PersistentSqLiteConnectionFactory">
-            <summary>
-                Creates <see cref="T:SQLite.SQLiteConnection" />s where the database is stored on disk.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Databases.PersistentSqLiteConnectionFactory.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
-            <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Databases.PersistentSqLiteConnectionFactory" />.
-            </summary>
-            <param name="fileSystem">The file system.</param>
-            <param name="databasePath">The path where the databases should be stored.</param>
-        </member>
-        <member name="M:GarryDB.Platform.Databases.PersistentSqLiteConnectionFactory.Open(System.String)">
+        <member name="M:GarryDB.Platform.Actors.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Databases.PersistentSqLiteConnectionFactory.Close(SQLite.SQLiteConnection)">
-            <inheritdoc />
+        <member name="T:GarryDB.Platform.Actors.AkkaPluginContextFactory">
+            <summary>
+                Creates a <see cref="T:GarryDB.Plugins.PluginContext" /> to use with Akka.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.AkkaPluginContextFactory.#ctor(Akka.Actor.IActorRef)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Actors.AkkaPluginContextFactory" />.
+            </summary>
+            <param name="pluginsActor">The actor reference to the plugins actor.</param>
+        </member>
+        <member name="T:GarryDB.Platform.Actors.DeadletterMonitor">
+            <summary>
+                Monitors deadletters in the Akka.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.DeadletterMonitor.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Actors.DeadletterMonitor" />.
+            </summary>
+        </member>
+        <member name="T:GarryDB.Platform.Actors.PluginActor">
+            <summary>
+                The actor responsible for a plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.PluginActor.#ctor(GarryDB.Plugins.Plugin)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Actors.PluginActor" />.
+            </summary>
+            <param name="plugin">The plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.PluginActor.Props(GarryDB.Plugins.Plugin)">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Actors.PluginActor" />.
+            </summary>
+            <param name="plugin">The plugin.</param>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Actors.PluginActor" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Actors.PluginContextFactory">
+            <summary>
+                Creates a <see cref="T:GarryDB.Plugins.PluginContext" /> for a <see cref="T:GarryDB.Plugins.Plugin" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.PluginContextFactory.Create(GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+                Create the <see cref="T:GarryDB.Plugins.PluginContext" /> for <paramref name="pluginIdentity" />.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <returns>A <see cref="T:GarryDB.Plugins.PluginContext" />.</returns>
+        </member>
+        <member name="T:GarryDB.Platform.Actors.PluginsActor">
+            <summary>
+                The actor responsible for all plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.PluginsActor.#ctor">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Actors.PluginsActor" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Actors.PluginsActor.Props">
+            <summary>
+                Create the <see cref="T:GarryDB.Platform.Actors.PluginsActor" />.
+            </summary>
+            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Actors.PluginsActor" />.</returns>
         </member>
         <member name="T:GarryDB.Platform.Extensions.AssemblyNameExtensions">
             <summary>
@@ -132,19 +178,24 @@
                 The Garry.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Garry.#ctor(GarryDB.Platform.Infrastructure.FileSystem)">
+        <member name="M:GarryDB.Platform.Garry.#ctor(GarryDB.Platform.Infrastructure.FileSystem,GarryDB.Platform.Persistence.ConnectionFactory)">
             <summary>
                 Initializes <see cref="T:GarryDB.Platform.Garry" />.
             </summary>
             <param name="fileSystem"></param>
+            <param name="connectionFactory">The connectino factory.</param>
         </member>
-        <member name="P:GarryDB.Platform.Garry.WhenProgressUpdated">
+        <member name="E:GarryDB.Platform.Garry.PluginLoading">
             <summary>
-                Gets the <see cref="T:System.IObservable`1">IObservable&lt;ProgressUpdated&gt;</see> to be notified
-                when the startup progress is changed.
+                Raised when a <see cref="T:GarryDB.Plugins.Plugin" /> is being loaded.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Garry.StartAsync(System.String)">
+        <member name="E:GarryDB.Platform.Garry.Starting">
+            <summary>
+                Raised when Garry is about to start.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Garry.Start(System.String)">
             <summary>
                 Start <see cref="T:GarryDB.Platform.Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
             </summary>
@@ -217,16 +268,6 @@
         <member name="M:GarryDB.Platform.Messaging.Address.ToString">
             <inheritdoc />
         </member>
-        <member name="T:GarryDB.Platform.Messaging.DeadletterMonitor">
-            <summary>
-                Monitors deadletters in the Akka.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Messaging.DeadletterMonitor.#ctor">
-            <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Messaging.DeadletterMonitor" />.
-            </summary>
-        </member>
         <member name="T:GarryDB.Platform.Messaging.MessageEnvelope">
             <summary>
                 Wrapped around a message and contains metadata about that message.
@@ -286,53 +327,40 @@
                 Gets the plugin.
             </summary>
         </member>
-        <member name="T:GarryDB.Platform.Messaging.PluginActor">
+        <member name="T:GarryDB.Platform.Persistence.ConnectionFactory">
             <summary>
-                The actor responsible for a plugins.
+                Opens and closes connections to a SQLite database.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Messaging.PluginActor.#ctor(GarryDB.Plugins.Plugin)">
+        <member name="M:GarryDB.Platform.Persistence.ConnectionFactory.Open(System.String)">
             <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+                Open a connection to the database named <paramref name="databaseName" />.
             </summary>
-            <param name="plugin">The plugin.</param>
+            <param name="databaseName">The name of the database.</param>
+            <returns>A connectino to the database.</returns>
         </member>
-        <member name="M:GarryDB.Platform.Messaging.PluginActor.Props(GarryDB.Plugins.Plugin)">
+        <member name="M:GarryDB.Platform.Persistence.ConnectionFactory.Close(SQLite.SQLiteConnection)">
             <summary>
-                Create the <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.
+                Close the <paramref name="connection" />.
             </summary>
-            <param name="plugin">The plugin.</param>
-            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginActor" />.</returns>
+            <param name="connection">The connection to close.</param>
         </member>
-        <member name="T:GarryDB.Platform.Messaging.PluginsActor">
+        <member name="T:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory">
             <summary>
-                The actor responsible for all plugins.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Messaging.PluginsActor.#ctor">
-            <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+                Creates <see cref="T:SQLite.SQLiteConnection" />s where the database is stored on disk.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Messaging.PluginsActor.Props">
+        <member name="M:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
             <summary>
-                Create the <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.
+                Initializes a new <see cref="T:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory" />.
             </summary>
-            <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Messaging.PluginsActor" />.</returns>
+            <param name="fileSystem">The file system.</param>
+            <param name="databasePath">The path where the databases should be stored.</param>
         </member>
-        <member name="T:GarryDB.Platform.Plugins.AkkaPluginContext">
-            <summary>
-                The plugin context that uses Akka.
-            </summary>
+        <member name="M:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory.Open(System.String)">
+            <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDB.Platform.Plugins.PluginIdentity)">
-            <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Plugins.AkkaPluginContext" />.
-            </summary>
-            <param name="plugins">The reference to the plugins actor.</param>
-            <param name="pluginIdentity">The identity of the plugin.</param>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
+        <member name="M:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory.Close(SQLite.SQLiteConnection)">
             <inheritdoc />
         </member>
         <member name="T:GarryDB.Platform.Plugins.Configuration.ConfigurationTable">
@@ -360,7 +388,7 @@
                 Handles the loading and saving of the configuration for plugins.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Configuration.PluginConfigurationStorage.#ctor(GarryDB.Platform.Databases.ConnectionFactory,GarryDB.Platform.Plugins.PluginRegistry)">
+        <member name="M:GarryDB.Platform.Plugins.Configuration.PluginConfigurationStorage.#ctor(GarryDB.Platform.Persistence.ConnectionFactory,GarryDB.Platform.Plugins.PluginRegistry)">
             <summary>
                 Initializes a new <see cref="T:GarryDB.Platform.Plugins.Configuration.PluginConfigurationStorage" />.
             </summary>
@@ -566,11 +594,11 @@
                 A registry containing all loaded <see cref="T:GarryDB.Plugins.Plugin" />s.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginRegistry.#ctor(Akka.Actor.IActorRef)">
+        <member name="M:GarryDB.Platform.Plugins.PluginRegistry.#ctor(GarryDB.Platform.Actors.PluginContextFactory)">
             <summary>
                 Intializes a new <see cref="T:GarryDB.Platform.Plugins.PluginRegistry" />.
             </summary>
-            <param name="pluginsActor">The receiving actor for the messages that are sent by the plugin.</param>
+            <param name="pluginContextFactory">The factory for creating a <see cref="T:GarryDB.Plugins.PluginContext" />.</param>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginRegistry.Load(GarryDB.Platform.Plugins.PluginLoadContext)">
             <summary>
@@ -578,63 +606,37 @@
             </summary>
             <param name="pluginLoadContext">The plugin load context.</param>
         </member>
-        <member name="P:GarryDB.Platform.Plugins.PluginRegistry.Plugins">
+        <member name="P:GarryDB.Platform.Plugins.PluginRegistry.Item(GarryDB.Platform.Plugins.PluginIdentity)">
             <summary>
-                Gets the plugins.
+                Gets the <see cref="T:GarryDB.Plugins.Plugin" /> based on the identity.
             </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <returns>The plugin, or <c>null</c> if the plugin can't be found.</returns>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginRegistry.Dispose">
             <inheritdoc />
         </member>
-        <member name="T:GarryDB.Platform.Startup.StartupProgressUpdated">
+        <member name="T:GarryDB.Platform.Startup.PluginLoading">
             <summary>
-                Is raised when the progress of the startup has changed.
+                Is raised when a plugin is being loaded.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Startup.StartupProgressUpdated.#ctor(System.String,GarryDB.Platform.Plugins.PluginIdentity,System.Int32,System.Int32)">
+        <member name="M:GarryDB.Platform.Startup.PluginLoading.#ctor(GarryDB.Platform.Plugins.PluginIdentity,System.Int32)">
             <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Startup.StartupProgressUpdated" />.
+                Initializes a new <see cref="T:GarryDB.Platform.Startup.PluginLoading" />.
             </summary>
-            <param name="stage">The name of the stage.</param>
             <param name="pluginIdentity">The identity of the plugin.</param>
-            <param name="currentStep">The current step.</param>
-            <param name="totalSteps">The total number of steps.</param>
+            <param name="totalNumberOfPlugins">The total number of plugins.</param>
         </member>
-        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.Stage">
-            <summary>
-                Gets the name of the stage.
-            </summary>
-        </member>
-        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.PluginIdentity">
+        <member name="P:GarryDB.Platform.Startup.PluginLoading.PluginIdentity">
             <summary>
                 Gets the identity of the plugin.
             </summary>
         </member>
-        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.CurrentStep">
-            <summary>
-                Gets the current step.
-            </summary>
-        </member>
-        <member name="P:GarryDB.Platform.Startup.StartupProgressUpdated.TotalSteps">
+        <member name="P:GarryDB.Platform.Startup.PluginLoading.TotalNumberOfPlugins">
             <summary>
                 Gets the total number of steps.
             </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Startup.StartupSequence">
-            <summary>
-                The sequence of steps to take before Garry is started.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Startup.StartupSequence.#ctor">
-            <summary>
-                Intializes a new <see cref="T:GarryDB.Platform.Startup.StartupSequence" />.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Startup.StartupSequence.Dispose">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Startup.StartupSequence.Subscribe(System.IObserver{GarryDB.Platform.Startup.StartupProgressUpdated})">
-            <inheritdoc />
         </member>
     </members>
 </doc>

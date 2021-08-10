@@ -33,7 +33,8 @@ namespace GarryDB.Platform.Messaging
         /// <inheritdoc />
         public override bool Equals(object? obj)
         {
-            return obj is Address that && PluginIdentity.Equals(that.PluginIdentity) && Handler.Equals(that.Handler);
+            return obj is Address that && PluginIdentity.Equals(that.PluginIdentity) &&
+                   Handler.Equals(that.Handler, StringComparison.Ordinal);
         }
 
         /// <inheritdoc />

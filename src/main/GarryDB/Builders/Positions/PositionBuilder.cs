@@ -4,12 +4,12 @@ namespace GarryDB.Builders.Positions
 {
     public abstract class PositionBuilder : Position.Builder
     {
-        protected IDictionary<Square, Piece> pieces;
-        protected IList<Piece> castlingPossibilities;
-        protected Color activeColor;
-        protected Square? enPassant;
-        protected int halfMoveClock;
-        protected int fullMoveNumber;
+        protected IDictionary<Square, Piece> Pieces = null!;
+        protected IList<Piece> CastlingPossibilities = null!;
+        protected Color ActiveColor = null!;
+        protected Square? EnPassant;
+        protected int HalfMoveClock;
+        protected int FullMoveNumber;
 
         public Position Build()
         {
@@ -18,32 +18,32 @@ namespace GarryDB.Builders.Positions
 
         IDictionary<Square, Piece> Position.Builder.Pieces
         {
-            get { return pieces; }
+            get { return Pieces; }
         }
 
-        IList<Piece> Position.Builder.CastlingPossibilities
+        IEnumerable<Piece> Position.Builder.CastlingPossibilities
         {
-            get { return castlingPossibilities; }
+            get { return CastlingPossibilities; }
         }
 
         Color Position.Builder.ActiveColor
         {
-            get { return activeColor; }
+            get { return ActiveColor; }
         }
 
         Square? Position.Builder.EnPassant
         {
-            get { return enPassant; }
+            get { return EnPassant; }
         }
 
         int Position.Builder.HalfMoveClock
         {
-            get { return halfMoveClock; }
+            get { return HalfMoveClock; }
         }
 
         int Position.Builder.FullMoveNumber
         {
-            get { return fullMoveNumber; }
+            get { return FullMoveNumber; }
         }
     }
 }

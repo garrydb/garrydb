@@ -5,20 +5,20 @@ namespace GarryDB.Builders.Positions
     {
         protected MoveBuilder()
         {
-            halfMoveClock = 0;
-            fullMoveNumber = 1;
+            HalfMoveClock = 0;
+            FullMoveNumber = 1;
         }
         
         public TBuilder WitHalfMoveClock(int ply)
         {
-            halfMoveClock = ply;
+            HalfMoveClock = ply;
 
             return (TBuilder)this;
         }
 
         public TBuilder WithFullMove(int move)
         {
-            fullMoveNumber = move;
+            FullMoveNumber = move;
 
             return (TBuilder)this;
         }

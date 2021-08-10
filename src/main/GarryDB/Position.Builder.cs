@@ -14,7 +14,7 @@ namespace GarryDB
         internal interface Builder
         {
             IDictionary<Square, Piece> Pieces { get; }
-            IList<Piece> CastlingPossibilities { get; }
+            IEnumerable<Piece> CastlingPossibilities { get; }
             Color ActiveColor { get; }
             Square? EnPassant { get; }
             int HalfMoveClock { get; }

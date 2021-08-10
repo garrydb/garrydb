@@ -9,12 +9,12 @@ namespace GarryDB.Builders.Positions
     {
         protected CastlingBuilder()
         {
-            castlingPossibilities = new List<Piece>();
+            CastlingPossibilities = new List<Piece>();
         }
         
         public TBuilder WithCastlingAvalability(params Piece[] pieces)
         {
-            pieces.ForEach(piece => castlingPossibilities.Add(piece));
+            pieces.ForEach(piece => CastlingPossibilities.Add(piece));
 
             return (TBuilder)this;
         }

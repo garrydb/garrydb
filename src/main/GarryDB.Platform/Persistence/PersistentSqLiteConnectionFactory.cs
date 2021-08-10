@@ -32,7 +32,7 @@ namespace GarryDB.Platform.Persistence
             {
                 fileSystem.CreateDirectory(databasePath);
             }
-            
+
             return new SQLiteConnection(Path.Combine(databasePath, $"{databaseName}.db"));
         }
 

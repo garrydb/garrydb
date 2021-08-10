@@ -30,7 +30,8 @@ namespace GarryDB.Platform.Plugins
         {
             PluginDirectory = pluginDirectory;
             this.providers = providers;
-            resolver = new AssemblyDependencyResolver(Path.Combine(pluginDirectory.Directory, $"{pluginDirectory.PluginName}.dll"));
+            resolver = new AssemblyDependencyResolver(
+                Path.Combine(pluginDirectory.Directory, $"{pluginDirectory.PluginName}.dll"));
         }
 
         /// <summary>
@@ -55,12 +56,12 @@ namespace GarryDB.Platform.Plugins
         protected override Assembly? Load(AssemblyName assemblyName)
         {
             var assemblyFromParent = providers.Select(x => new
-                                                           {
-                                                               Success = x.TryLoad(assemblyName, out Assembly? assembly),
-                                                               Assembly = assembly,
-                                                               Provider = x.Name
-                                                           })
-                                              .FirstOrDefault(x => x.Success);
+                {
+                    Success = x.TryLoad(assemblyName, out Assembly? assembly),
+                    Assembly = assembly,
+                    Provider = x.Name
+                })
+                .FirstOrDefault(x => x.Success);
 
             if (assemblyFromParent != null)
             {

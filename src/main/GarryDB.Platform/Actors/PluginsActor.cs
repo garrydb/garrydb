@@ -2,10 +2,11 @@ using System.Collections.Concurrent;
 
 using Akka.Actor;
 
+using GarryDB.Platform.Messaging;
 using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
 
-namespace GarryDB.Platform.Messaging
+namespace GarryDB.Platform.Actors
 {
     /// <summary>
     ///     The actor responsible for all plugins.
@@ -21,16 +22,16 @@ namespace GarryDB.Platform.Messaging
             var plugins = new ConcurrentDictionary<PluginIdentity, IActorRef>();
 
             Receive((PluginLoaded message) =>
-                    {
-                        IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.Plugin), message.PluginIdentity.Name);
-                        plugins[message.PluginIdentity] = pluginActorRef;
-                    });
+            {
+                IActorRef pluginActorRef = Context.ActorOf(PluginActor.Props(message.Plugin), message.PluginIdentity.Name);
+                plugins[message.PluginIdentity] = pluginActorRef;
+            });
 
             Receive((MessageEnvelope envelope) =>
-                    {
-                        IActorRef pluginActorRef = plugins[envelope.Destination.PluginIdentity];
-                        pluginActorRef.Forward(envelope);
-                    });
+            {
+                IActorRef pluginActorRef = plugins[envelope.Destination.PluginIdentity];
+                pluginActorRef.Forward(envelope);
+            });
         }
 
         /// <summary>

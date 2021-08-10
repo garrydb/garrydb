@@ -38,7 +38,7 @@ namespace GarryDB.Platform.Plugins
 
         private bool Equals(PluginIdentity other)
         {
-            if (!Name.Equals(other.Name, StringComparison.InvariantCultureIgnoreCase))
+            if (!Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -62,7 +62,7 @@ namespace GarryDB.Platform.Plugins
         {
             return $"{Name}:{version}";
         }
-        
+
         /// <summary>
         ///     Parse the string into a valid <see cref="PluginIdentity" />.
         /// </summary>
@@ -72,7 +72,7 @@ namespace GarryDB.Platform.Plugins
         {
             string[] nameVersionPair = value.Split(':');
 
-            return new PluginIdentity(nameVersionPair.First(), nameVersionPair.LastOrDefault() ?? AnyVersion);
+            return new PluginIdentity(nameVersionPair.First(), nameVersionPair.Skip(1).LastOrDefault() ?? AnyVersion);
         }
 
         /// <summary>

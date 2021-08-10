@@ -59,8 +59,8 @@ namespace GarryDB.Platform.Plugins
         public void LoadInto(PluginLoadContext pluginLoadContext)
         {
             fileSystem.GetFiles(Directory, "*.dll")
-                      .Select(file => Path.GetFileNameWithoutExtension(file))
-                      .ForEach(file => pluginLoadContext.LoadFromAssemblyName(new AssemblyName(file)));
+                .Select(file => Path.GetFileNameWithoutExtension(file))
+                .ForEach(file => pluginLoadContext.LoadFromAssemblyName(new AssemblyName(file)));
         }
 
         private IEnumerable<string> ProvidedAssemblies
@@ -68,27 +68,27 @@ namespace GarryDB.Platform.Plugins
             get
             {
                 return fileSystem.GetFiles(Directory)
-                                 .Select(path => Path.GetFileName(path))
-                                 .Where(filename =>
-                                        {
-                                            return filename.Equals($"{PluginName}.Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
-                                                   filename.Equals($"{PluginName}.Shared.dll", StringComparison.InvariantCultureIgnoreCase);
-                                        });
+                    .Select(path => Path.GetFileName(path))
+                    .Where(filename =>
+                    {
+                        return filename.Equals($"{PluginName}.Contract.dll", StringComparison.OrdinalIgnoreCase) ||
+                               filename.Equals($"{PluginName}.Shared.dll", StringComparison.OrdinalIgnoreCase);
+                    });
             }
         }
-        
+
         private IEnumerable<string> DependentAssemblies
         {
             get
             {
                 return fileSystem.GetFiles(Directory)
-                                 .Select(path => Path.GetFileName(path))
-                                 .Where(filename =>
-                                        {
-                                            return filename.EndsWith(".Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
-                                                   filename.EndsWith(".Shared.dll", StringComparison.InvariantCultureIgnoreCase);
-                                        })
-                                 .Except(ProvidedAssemblies);
+                    .Select(path => Path.GetFileName(path))
+                    .Where(filename =>
+                    {
+                        return filename.EndsWith(".Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
+                               filename.EndsWith(".Shared.dll", StringComparison.InvariantCultureIgnoreCase);
+                    })
+                    .Except(ProvidedAssemblies);
             }
         }
 

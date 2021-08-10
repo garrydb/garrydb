@@ -1,8 +1,9 @@
 using Akka.Actor;
 
+using GarryDB.Platform.Messaging;
 using GarryDB.Plugins;
 
-namespace GarryDB.Platform.Messaging
+namespace GarryDB.Platform.Actors
 {
     /// <summary>
     ///     The actor responsible for a plugins.
@@ -17,15 +18,15 @@ namespace GarryDB.Platform.Messaging
         public PluginActor(Plugin plugin)
         {
             ReceiveAsync(async (MessageEnvelope envelope) =>
-                         {
-                             object? returnMessage = await plugin.RouteAsync(envelope.Destination.Handler, envelope.Message)
-                                                                 .ConfigureAwait(false);
+            {
+                object? returnMessage = await plugin.RouteAsync(envelope.Destination.Handler, envelope.Message)
+                    .ConfigureAwait(false);
 
-                             if (returnMessage != null)
-                             {
-                                 Sender.Tell(envelope.CreateReturnMessage(returnMessage));
-                             }
-                         });
+                if (returnMessage != null)
+                {
+                    Sender.Tell(envelope.CreateReturnMessage(returnMessage));
+                }
+            });
         }
 
         /// <summary>

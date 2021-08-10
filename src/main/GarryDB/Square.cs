@@ -4,8 +4,8 @@ namespace GarryDB
 {
     public sealed class Square
     {
-        public readonly string file;
-        public readonly int rank;
+        private readonly string file;
+        private readonly int rank;
 
         public Square(string file, int rank)
         {

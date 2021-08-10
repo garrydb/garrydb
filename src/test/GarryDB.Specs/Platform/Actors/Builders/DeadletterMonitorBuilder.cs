@@ -1,6 +1,6 @@
-using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Actors;
 
-namespace GarryDB.Specs.Platform.Messaging.Builders
+namespace GarryDB.Specs.Platform.Actors.Builders
 {
     internal sealed class DeadletterMonitorBuilder : TestDataBuilder<DeadletterMonitor>
     {

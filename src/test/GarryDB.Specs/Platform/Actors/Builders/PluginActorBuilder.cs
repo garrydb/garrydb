@@ -2,12 +2,12 @@ using Akka.Actor;
 using Akka.TestKit;
 using Akka.TestKit.NUnit;
 
-using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Actors;
 using GarryDB.Plugins;
 using GarryDB.Specs.Akka.Builders;
 using GarryDB.Specs.Plugins.Builders;
 
-namespace GarryDB.Specs.Platform.Messaging.Builders
+namespace GarryDB.Specs.Platform.Actors.Builders
 {
     internal sealed class PluginActorBuilder : TestDataBuilder<IActorRef>
     {

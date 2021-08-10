@@ -1,4 +1,4 @@
-﻿<Window x:Class="GarryDB.Wpf.Host.SplashScreen"
+<Window x:Class="GarryDB.Wpf.Host.SplashScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"

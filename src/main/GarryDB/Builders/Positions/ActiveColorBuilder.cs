@@ -5,12 +5,12 @@ namespace GarryDB.Builders.Positions
     {
         protected ActiveColorBuilder()
         {
-            activeColor = Color.White;
+            ActiveColor = Color.White;
         }
 
         public TBuilder WithActiveColor(Color activeColor)
         {
-            this.activeColor = activeColor;
+            ActiveColor = activeColor;
 
             return (TBuilder)this;
         }

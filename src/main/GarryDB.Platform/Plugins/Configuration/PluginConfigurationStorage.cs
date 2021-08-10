@@ -19,13 +19,13 @@ namespace GarryDB.Platform.Plugins.Configuration
         private static readonly MethodInfo GetConfigurationMethod =
             typeof(PluginConfigurationStorage)
                 .GetMethod(nameof(GetConfiguration),
-                           BindingFlags.Instance | BindingFlags.NonPublic,
-                           null,
-                           new[]
-                           {
-                               typeof(PluginIdentity)
-                           },
-                           null)!;
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    new[]
+                    {
+                        typeof(PluginIdentity)
+                    },
+                    null)!;
 
         private readonly ConnectionFactory connectionFactory;
         private readonly PluginRegistry pluginRegistry;
@@ -50,15 +50,13 @@ namespace GarryDB.Platform.Plugins.Configuration
         /// </returns>
         public object? FindConfiguration(PluginIdentity pluginIdentity)
         {
-            Plugin plugin = pluginRegistry.Plugins[pluginIdentity];
-            Type? configurationType = plugin.FindConfigurationType();
+            Plugin? plugin = pluginRegistry[pluginIdentity];
 
-            if (configurationType == null)
-            {
-                return null;
-            }
+            Type? configurationType = plugin?.FindConfigurationType();
 
-            return GetConfigurationMethod.MakeGenericMethod(configurationType).Invoke(this, new object[] { pluginIdentity });
+            return configurationType == null
+                ? null
+                : GetConfigurationMethod.MakeGenericMethod(configurationType).Invoke(this, new object[] { pluginIdentity });
         }
 
         private TConfiguration GetConfiguration<TConfiguration>(PluginIdentity pluginIdentity) where TConfiguration : new()
@@ -68,13 +66,10 @@ namespace GarryDB.Platform.Plugins.Configuration
             {
                 connection.CreateTable<ConfigurationTable>();
 
-                ConfigurationTable? record = connection.Find<ConfigurationTable>(t => t.Plugin == pluginIdentity.Name);
-                if (record != null)
-                {
-                    return JsonSerializer.Deserialize<TConfiguration>(record.Configuration) ?? new TConfiguration();
-                }
-
-                return new TConfiguration();
+                ConfigurationTable record = connection.Find<ConfigurationTable>(t => t.Plugin == pluginIdentity.Name);
+                return record != null
+                    ? JsonSerializer.Deserialize<TConfiguration>(record.Configuration) ?? new TConfiguration()
+                    : new TConfiguration();
             }
             finally
             {

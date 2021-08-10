@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using GarryDB.Pieces;
-
 using Sprache;
 
 namespace GarryDB.Fen
@@ -12,29 +10,29 @@ namespace GarryDB.Fen
     internal static class FenParser
     {
         private static readonly Func<char, Piece> CharToPieceConverter = c =>
-                                                                         {
-                                                                             Color color = char.IsUpper(c)
-                                                                                 ? Color.White
-                                                                                 : Color.Black;
+        {
+            Color color = char.IsUpper(c)
+                ? Color.White
+                : Color.Black;
 
-                                                                             switch (char.ToUpperInvariant(c))
-                                                                             {
-                                                                                 case 'K':
-                                                                                     return new King(color);
-                                                                                 case 'Q':
-                                                                                     return new Queen(color);
-                                                                                 case 'R':
-                                                                                     return new Rook(color);
-                                                                                 case 'B':
-                                                                                     return new Bishop(color);
-                                                                                 case 'N':
-                                                                                     return new Knight(color);
-                                                                                 case 'P':
-                                                                                     return new Pawn(color);
-                                                                                 default:
-                                                                                     return new None();
-                                                                             }
-                                                                         };
+            switch (char.ToUpperInvariant(c))
+            {
+                case 'K':
+                    return new King(color);
+                case 'Q':
+                    return new Queen(color);
+                case 'R':
+                    return new Rook(color);
+                case 'B':
+                    return new Bishop(color);
+                case 'N':
+                    return new Knight(color);
+                case 'P':
+                    return new Pawn(color);
+                default:
+                    return new None();
+            }
+        };
 
         private static readonly Parser<Color> ColorParser =
             from color in Parse.Chars('w', 'b')
@@ -55,8 +53,8 @@ namespace GarryDB.Fen
             select Enumerable.Repeat('-', int.Parse(amount, CultureInfo.InvariantCulture)).Select(_ => new None());
 
         private static readonly Parser<Piece> PieceParser = Parse
-                                                            .Chars('K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p')
-                                                            .Select(piece => CharToPieceConverter(piece));
+            .Chars('K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p')
+            .Select(piece => CharToPieceConverter(piece));
 
         private static readonly Parser<IEnumerable<Piece>> RankParser =
             from pieces in PieceParser.Many().Or(EmptySquareParser).Until(Parse.Chars('/', ' ').Once())
@@ -76,43 +74,43 @@ namespace GarryDB.Fen
             from ____ in Parse.WhiteSpace.Once()
             from fullMoveNumber in MoveNumberParser
             select CreatePosition(
-                                  ranks.Reverse(),
-                                  activeColor,
-                                  castlingAvailabilities,
-                                  enPassantSquare,
-                                  int.Parse(halfMoveNumber, CultureInfo.InvariantCulture),
-                                  int.Parse(fullMoveNumber, CultureInfo.InvariantCulture));
+                ranks.Reverse(),
+                activeColor,
+                castlingAvailabilities,
+                enPassantSquare,
+                int.Parse(halfMoveNumber, CultureInfo.InvariantCulture),
+                int.Parse(fullMoveNumber, CultureInfo.InvariantCulture));
 
         private static Position CreatePosition(IEnumerable<IEnumerable<Piece>> ranks,
-                                               Color activeColor,
-                                               IEnumerable<Piece> castlingAvailabilities,
-                                               Square enPassantSquare,
-                                               int halfMoveNumber,
-                                               int fullMoveNumber
+            Color activeColor,
+            IEnumerable<Piece> castlingAvailabilities,
+            Square enPassantSquare,
+            int halfMoveNumber,
+            int fullMoveNumber
         )
         {
             IDictionary<Square, Piece> pieces =
                 ranks.SelectMany((rank, rankNumber) => rank.Select((piece, fileNumber) =>
-                                                                   {
-                                                                       string file = char.ToString((char)(fileNumber + 'a'));
+                    {
+                        string file = char.ToString((char)(fileNumber + 'a'));
 
-                                                                       return new
-                                                                              {
-                                                                                  Square = new Square(file, rankNumber + 1),
-                                                                                  Piece = piece
-                                                                              };
-                                                                   }))
-                     .ToDictionary(x => x.Square, x => x.Piece);
+                        return new
+                        {
+                            Square = new Square(file, rankNumber + 1),
+                            Piece = piece
+                        };
+                    }))
+                    .ToDictionary(x => x.Square, x => x.Piece);
 
             return
                 Position.New()
-                        .WithPieces(pieces)
-                        .WithActiveColor(activeColor)
-                        .WithCastlingAvalability(castlingAvailabilities.ToArray())
-                        .WithEnPassantSquare(enPassantSquare)
-                        .WitHalfMoveClock(halfMoveNumber)
-                        .WithFullMove(fullMoveNumber)
-                        .Build();
+                    .WithPieces(pieces)
+                    .WithActiveColor(activeColor)
+                    .WithCastlingAvalability(castlingAvailabilities.ToArray())
+                    .WithEnPassantSquare(enPassantSquare)
+                    .WitHalfMoveClock(halfMoveNumber)
+                    .WithFullMove(fullMoveNumber)
+                    .Build();
         }
     }
 }

@@ -1,11 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using Akka.Actor;
-
 using Autofac;
 
+using GarryDB.Platform.Actors;
 using GarryDB.Plugins;
 
 using JetBrains.Annotations;
@@ -15,28 +15,32 @@ namespace GarryDB.Platform.Plugins
     /// <summary>
     ///     A registry containing all loaded <see cref="Plugin" />s.
     /// </summary>
-    internal sealed class PluginRegistry : IDisposable
+    internal sealed class PluginRegistry : IEnumerable<PluginIdentity>, IDisposable
     {
-        private readonly IActorRef pluginsActor;
+        private readonly PluginContextFactory pluginContextFactory;
+        private readonly IList<RegisteredPluginMetadata> registeredPlugins;
+
         private readonly ContainerBuilder containerBuilder;
         private readonly Lazy<IContainer> container;
 
         /// <summary>
         ///     Intializes a new <see cref="PluginRegistry" />.
         /// </summary>
-        /// <param name="pluginsActor">The receiving actor for the messages that are sent by the plugin.</param>
-        public PluginRegistry(IActorRef pluginsActor)
+        /// <param name="pluginContextFactory">The factory for creating a <see cref="PluginContext" />.</param>
+        public PluginRegistry(PluginContextFactory pluginContextFactory)
         {
-            this.pluginsActor = pluginsActor;
+            this.pluginContextFactory = pluginContextFactory;
+            registeredPlugins = new List<RegisteredPluginMetadata>();
+
             containerBuilder = new ContainerBuilder();
             container = new Lazy<IContainer>(() => containerBuilder.Build());
 
             containerBuilder.RegisterType<GarryPlugin>()
-                            .As<Plugin>()
-                            .WithParameter(TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, GarryPlugin.PluginIdentity)))
-                            .WithMetadata<RegisterdPluginMetadata>(c => c.For(m => m.StartupOrder, int.MinValue)
-                                                                         .For(m => m.PluginIdentity, GarryPlugin.PluginIdentity))
-                            .SingleInstance();
+                .Keyed<Plugin>(GarryPlugin.PluginIdentity)
+                .WithParameter(TypedParameter.From(pluginContextFactory.Create(GarryPlugin.PluginIdentity)))
+                .SingleInstance();
+
+            registeredPlugins.Add(new RegisteredPluginMetadata(int.MinValue, GarryPlugin.PluginIdentity));
         }
 
         /// <summary>
@@ -53,25 +57,31 @@ namespace GarryDB.Platform.Plugins
 
             containerBuilder.RegisterAssemblyModules(pluginLoadContext.Assemblies.ToArray());
             containerBuilder.RegisterType(pluginAssembly.PluginType)
-                            .As<Plugin>()
-                            .WithParameter(TypedParameter.From<PluginContext>(new AkkaPluginContext(pluginsActor, pluginAssembly.PluginIdentity)))
-                            .WithMetadata<RegisterdPluginMetadata>(c => c.For(m => m.StartupOrder, pluginAssembly.StartupOrder)
-                                                                         .For(m => m.PluginIdentity, pluginAssembly.PluginIdentity)
-                                                                       )
-                            .SingleInstance();
+                .Keyed<Plugin>(pluginAssembly.PluginIdentity)
+                .WithParameter(TypedParameter.From(pluginContextFactory.Create(pluginAssembly.PluginIdentity)))
+                .SingleInstance();
+
+            registeredPlugins.Add(new RegisteredPluginMetadata(pluginAssembly.StartupOrder, pluginAssembly.PluginIdentity));
         }
 
         /// <summary>
-        ///     Gets the plugins.
+        ///     Gets the <see cref="Plugin" /> based on the identity.
         /// </summary>
-        public IDictionary<PluginIdentity, Plugin> Plugins
+        /// <param name="pluginIdentity">The identity of the plugin.</param>
+        /// <returns>The plugin, or <c>null</c> if the plugin can't be found.</returns>
+        public Plugin? this[PluginIdentity pluginIdentity]
         {
-            get
-            {
-                return container.Value.Resolve<IEnumerable<Lazy<Plugin, RegisterdPluginMetadata>>>()
-                                .OrderBy(x => x.Metadata.StartupOrder)
-                                .ToDictionary(x => x.Metadata.PluginIdentity, x => x.Value);
-            }
+            get { return container.Value.ResolveOptionalKeyed<Plugin>(pluginIdentity); }
+        }
+
+        public IEnumerator<PluginIdentity> GetEnumerator()
+        {
+            return registeredPlugins.OrderBy(x => x.StartupOrder).Select(x => x.PluginIdentity).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         /// <inheritdoc />
@@ -84,10 +94,16 @@ namespace GarryDB.Platform.Plugins
         }
 
         [UsedImplicitly]
-        private sealed class RegisterdPluginMetadata
+        private sealed class RegisteredPluginMetadata
         {
-            public int StartupOrder { get; set; }
-            public PluginIdentity PluginIdentity { get; set; } = null!;
+            public RegisteredPluginMetadata(int startupOrder, PluginIdentity pluginIdentity)
+            {
+                StartupOrder = startupOrder;
+                PluginIdentity = pluginIdentity;
+            }
+
+            public int StartupOrder { get; }
+            public PluginIdentity PluginIdentity { get; }
         }
     }
 }

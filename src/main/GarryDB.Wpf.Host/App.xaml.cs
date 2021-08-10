@@ -5,7 +5,6 @@ using System.Windows;
 
 using GarryDB.Platform;
 using GarryDB.Platform.Persistence;
-using GarryDB.Platform.Startup;
 
 namespace GarryDB.Wpf.Host
 {
@@ -20,36 +19,37 @@ namespace GarryDB.Wpf.Host
             var splashScreen = new SplashScreen();
             splashScreen.Show();
 
-            Task.Run(async () =>
-                     {
-                         var fileSystem = new WindowsFileSystem();
-                         using (var garry = new Garry(fileSystem, new PersistentSqLiteConnectionFactory(fileSystem, Path.Combine(Environment.CurrentDirectory, "data"))))
-                         {
-                             using (garry.WhenProgressUpdated.Subscribe(updated => OnProgressUpdated(splashScreen, updated),
-                                                                        () => OnProgressCompleted(splashScreen)))
-                             {
-                                 await garry.StartAsync("C:\\Projects\\GarryDB\\Plugins").ConfigureAwait(false);
-                             }
-
-                             Dispatcher.Invoke(() => Shutdown());
-                         }
-                     });
+            Task.Run(() => Start(splashScreen));
         }
 
-        private void OnProgressUpdated(SplashScreen splashScreen, StartupProgressUpdated updated)
+        private void Start(SplashScreen splashScreen)
         {
-            Dispatcher.Invoke(() =>
-                              {
-                                  splashScreen.Phase = updated.Stage;
-                                  splashScreen.Current = updated.CurrentStep;
-                                  splashScreen.CurrentPlugin = updated.PluginIdentity;
-                                  splashScreen.Total = updated.TotalSteps;
-                              });
-        }
+            var fileSystem = new WindowsFileSystem();
+            string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
+            var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-        private void OnProgressCompleted(SplashScreen splashScreen)
-        {
-            Dispatcher.Invoke(() => splashScreen.Close());
+            using (var garry = new Garry(fileSystem, connectionFactory))
+            {
+                garry.PluginLoading += (_, loaded) =>
+                                       {
+                                           Dispatcher.Invoke(() =>
+                                                             {
+                                                                 splashScreen.Current++;
+                                                                 splashScreen.CurrentPlugin = loaded.PluginIdentity;
+                                                                 splashScreen.Total = loaded.TotalNumberOfPlugins + 1;
+                                                             });
+                                       };
+
+                garry.Starting += (_, _) => Dispatcher.Invoke(() =>
+                                                              {
+                                                                  splashScreen.Current++;
+                                                                  splashScreen.CurrentPlugin = null;
+                                                              });
+
+                garry.Start("C:\\Projects\\GarryDB\\Plugins");
+
+                Dispatcher.Invoke(() => Shutdown());
+            }
         }
     }
 }

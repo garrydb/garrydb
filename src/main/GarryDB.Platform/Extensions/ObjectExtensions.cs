@@ -19,15 +19,7 @@ namespace GarryDB.Platform.Extensions
         /// </returns>
         public static IEnumerable<T> AsEnumerable<T>(this T? item)
         {
-            if (item == null)
-            {
-                return Enumerable.Empty<T>();
-            }
-
-            return new[]
-                   {
-                       item
-                   };
+            return item != null ? new[] { item } : Enumerable.Empty<T>();
         }
     }
 }

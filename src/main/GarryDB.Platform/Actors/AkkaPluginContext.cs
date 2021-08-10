@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using Akka.Actor;
 
 using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDB.Platform.Actors
 {
     /// <summary>
     ///     The plugin context that uses Akka.
@@ -15,16 +16,16 @@ namespace GarryDB.Platform.Plugins
     internal sealed class AkkaPluginContext : PluginContext
     {
         private readonly PluginIdentity pluginIdentity;
-        private readonly IActorRef plugins;
+        private readonly IActorRef pluginsActor;
 
         /// <summary>
         ///     Initializes a new <see cref="AkkaPluginContext" />.
         /// </summary>
-        /// <param name="plugins">The reference to the plugins actor.</param>
+        /// <param name="pluginsActor">The reference to the plugins actor.</param>
         /// <param name="pluginIdentity">The identity of the plugin.</param>
-        public AkkaPluginContext(IActorRef plugins, PluginIdentity pluginIdentity)
+        public AkkaPluginContext(IActorRef pluginsActor, PluginIdentity pluginIdentity)
         {
-            this.plugins = plugins;
+            this.pluginsActor = pluginsActor;
             this.pluginIdentity = pluginIdentity;
         }
 
@@ -33,7 +34,7 @@ namespace GarryDB.Platform.Plugins
         {
             var envelope = new MessageEnvelope(pluginIdentity, new Address(PluginIdentity.Parse(destination), handler), message);
 
-            plugins.Tell(envelope);
+            pluginsActor.Tell(envelope);
 
             return Task.CompletedTask;
         }

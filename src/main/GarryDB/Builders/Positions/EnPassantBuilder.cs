@@ -5,12 +5,12 @@ namespace GarryDB.Builders.Positions
     {
         protected EnPassantBuilder()
         {
-            enPassant = null;
+            EnPassant = null;
         }
 
         public TBuilder WithEnPassantSquare(Square square)
         {
-            enPassant = square;
+            EnPassant = square;
 
             return (TBuilder)this;
         }

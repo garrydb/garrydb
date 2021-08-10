@@ -1,9 +1,9 @@
-﻿using Akka.Actor;
+using Akka.Actor;
 using Akka.Event;
 
 using Debug = System.Diagnostics.Debug;
 
-namespace GarryDB.Platform.Messaging
+namespace GarryDB.Platform.Actors
 {
     /// <summary>
     ///     Monitors deadletters in the Akka.

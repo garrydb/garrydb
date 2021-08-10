@@ -1,82 +1,17 @@
-root = true
-; EditorConfig to support per-solution formatting.
-; Use the EditorConfig VS add-in to make this work.
-; http://editorconfig.org/
-;
-; Here are some resources for what's supported for .NET/C#
-; https://kent-boogaart.com/blog/editorconfig-reference-for-c-developers
-; https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference?view=vs-2017
-;
-; Be **careful** editing this because some of the rules don't support adding a severity level
-; For instance if you change to `dotnet_sort_system_directives_first = true:warning` (adding `:warning`)
-; then the rule will be silently ignored.
-
-; This is the default for the codeline.
-
-[*]
-indent_style = space
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-# Microsoft .NET properties
-csharp_new_line_before_members_in_object_initializers = true
-csharp_new_line_between_query_expression_clauses = true
-csharp_space_after_cast = false
-dotnet_separate_import_directive_groups = true
-
-# ReSharper properties
-resharper_align_first_arg_by_paren = true
-resharper_align_linq_query = true
-resharper_align_multiline_argument = true
-resharper_align_multiline_array_and_object_initializer = true
-resharper_align_multiline_calls_chain = true
-resharper_align_multiline_expression = true
-resharper_align_multiline_extends_list = true
-resharper_align_multiline_for_stmt = true
-resharper_align_multiline_parameter = true
-resharper_align_multiline_property_pattern = true
-resharper_align_multiline_switch_expression = true
-resharper_align_multiple_declaration = true
-resharper_align_multline_type_parameter_constrains = true
-resharper_align_multline_type_parameter_list = true
-resharper_align_tuple_components = true
-resharper_blank_lines_after_control_transfer_statements = 1
-resharper_blank_lines_before_control_transfer_statements = 1
-resharper_csharp_keep_blank_lines_in_code = 1
-resharper_csharp_keep_blank_lines_in_declarations = 1
-resharper_csharp_stick_comment = false
-resharper_csharp_wrap_parameters_style = chop_if_long
-resharper_default_value_when_type_not_evident = default_expression
-resharper_indent_anonymous_method_block = true
-resharper_int_align_comments = true
-resharper_keep_existing_arrangement = false
-resharper_keep_user_linebreaks = true
-resharper_object_creation_when_type_evident = target_typed
-resharper_place_constructor_initializer_on_same_line = false
-resharper_place_linq_into_on_new_line = false
-resharper_place_simple_anonymousmethod_on_single_line = false
-resharper_place_simple_embedded_statement_on_same_line = false
-resharper_place_simple_initializer_on_single_line = false
-resharper_wrap_array_initializer_style = chop_always
-resharper_wrap_before_declaration_rpar = true
-resharper_wrap_chained_method_calls = chop_if_long
-resharper_wrap_linq_expressions = chop_always
-resharper_wrap_object_and_collection_initializer_style = chop_always
+﻿root = true
 
 [*.cs]
-indent_size = 4
-dotnet_sort_system_directives_first = true
 
-# Don't use this. qualifier
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
+insert_final_newline=true
+csharp_style_expression_bodied_properties=false:silent
+csharp_style_expression_bodied_indexers=false:silent
+csharp_style_expression_bodied_accessors=false:silent
+csharp_style_expression_bodied_lambdas=false:silent
 
-# use int x = .. over Int32
-dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
-
-# use int.MaxValue over Int32.MaxValue
-dotnet_style_predefined_type_for_member_access = true:suggestion
+# CA1001: Types that own disposable fields should be disposable
+dotnet_diagnostic.CA1001.severity = error
 
 # Require var only when evident.
 csharp_style_var_for_built_in_types = false:suggestion
@@ -84,15 +19,6 @@ csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_var_elsewhere = false:suggestion
 
 # Disallow throw expressions.
-csharp_style_throw_expression = false:suggestion
-
-# Newline settings
-csharp_new_line_before_open_brace = all
-csharp_new_line_before_else = true
-csharp_new_line_before_catch = true
-csharp_new_line_before_finally = true
-csharp_new_line_before_members_in_object_initializers = true
-csharp_new_line_before_members_in_anonymous_types = true
 
 # IDE0063: Use simple 'using' statement
 csharp_prefer_simple_using_statement = false
@@ -100,207 +26,22 @@ csharp_prefer_simple_using_statement = false
 # IDE0090: Use 'new(...)'
 csharp_style_implicit_object_creation_when_type_is_apparent = false
 
-[*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks}]
-indent_size = 2
-
-# Xml config files
-[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
-indent_size = 2
-
-[*.json]
-indent_size = 2
-
-[*.{ps1,psm1}]
-indent_size = 4
-
-[*.sh]
-indent_size = 4
-end_of_line = lf
-
-[*.{razor,cshtml}]
-charset = utf-8-bom
+# CA1715: Identifiers should have correct prefix
+dotnet_naming_style.pascal_case_and_prefix_with_I_style.required_prefix =
 
 [*.{cs,vb}]
-# CA1018: Mark attributes with AttributeUsageAttribute
-dotnet_diagnostic.ca1018.severity = warning
+dotnet_style_prefer_is_null_check_over_reference_equality_method=false:suggestion
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
 
-# CA1047: Do not declare protected member in sealed type
-dotnet_diagnostic.ca1047.severity = warning
+# Async methods should have "Async" suffix
+dotnet_naming_rule.async_methods_end_in_async.symbols = any_async_methods
+dotnet_naming_rule.async_methods_end_in_async.style = end_in_async
+dotnet_naming_rule.async_methods_end_in_async.severity = warning
 
-# CA1305: Specify IFormatProvider
-dotnet_diagnostic.ca1305.severity = suggestion
+dotnet_naming_symbols.any_async_methods.applicable_kinds = method
+dotnet_naming_symbols.any_async_methods.applicable_accessibilities = *
+dotnet_naming_symbols.any_async_methods.required_modifiers = async
 
-# CA1507: Use nameof to express symbol names
-dotnet_diagnostic.ca1507.severity = warning
-
-# CA1725: Parameter names should match base declaration
-dotnet_diagnostic.ca1725.severity = suggestion
-
-# CA1802: Use literals where appropriate
-dotnet_diagnostic.ca1802.severity = warning
-
-# CA1805: Do not initialize unnecessarily
-dotnet_diagnostic.ca1805.severity = warning
-
-# CA1810: Do not initialize unnecessarily
-dotnet_diagnostic.ca1810.severity = suggestion
-
-# CA1821: Remove empty Finalizers
-dotnet_diagnostic.ca1821.severity = warning
-
-# CA1822: Make member static
-dotnet_diagnostic.ca1822.severity = suggestion
-
-# CA1823: Avoid unused private fields
-dotnet_diagnostic.ca1823.severity = warning
-
-# CA1825: Avoid zero-length array allocations
-dotnet_diagnostic.ca1825.severity = warning
-
-# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
-dotnet_diagnostic.ca1826.severity = warning
-
-# CA1827: Do not use Count() or LongCount() when Any() can be used
-dotnet_diagnostic.ca1827.severity = warning
-
-# CA1828: Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used
-dotnet_diagnostic.ca1828.severity = warning
-
-# CA1829: Use Length/Count property instead of Count() when available
-dotnet_diagnostic.ca1829.severity = warning
-
-# CA1830: Prefer strongly-typed Append and Insert method overloads on StringBuilder
-dotnet_diagnostic.ca1830.severity = warning
-
-# CA1831: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
-# CA1832: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
-# CA1833: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
-dotnet_diagnostic.ca1831.severity = warning
-dotnet_diagnostic.ca1832.severity = warning
-dotnet_diagnostic.ca1833.severity = warning
-
-# CA1834: Consider using 'StringBuilder.Append(char)' when applicable
-dotnet_diagnostic.ca1834.severity = warning
-
-# CA1835: Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'
-dotnet_diagnostic.ca1835.severity = warning
-
-# CA1836: Prefer IsEmpty over Count
-dotnet_diagnostic.ca1836.severity = warning
-
-# CA1837: Use 'Environment.ProcessId'
-dotnet_diagnostic.ca1837.severity = warning
-
-# CA1838: Avoid 'StringBuilder' parameters for P/Invokes
-dotnet_diagnostic.ca1838.severity = warning
-
-# CA1839: Use 'Environment.ProcessPath'
-dotnet_diagnostic.ca1839.severity = warning
-
-# CA1840: Use 'Environment.CurrentManagedThreadId'
-dotnet_diagnostic.ca1840.severity = warning
-
-# CA1841: Prefer Dictionary.Contains methods
-dotnet_diagnostic.ca1841.severity = warning
-
-# CA1842: Do not use 'WhenAll' with a single task
-dotnet_diagnostic.ca1842.severity = warning
-
-# CA1843: Do not use 'WaitAll' with a single task
-dotnet_diagnostic.ca1843.severity = warning
-
-# CA1845: Use span-based 'string.Concat'
-dotnet_diagnostic.ca1845.severity = warning
-
-# CA1846: Prefer AsSpan over Substring
-dotnet_diagnostic.ca1846.severity = warning
-
-# CA2008: Do not create tasks without passing a TaskScheduler
-dotnet_diagnostic.ca2008.severity = warning
-
-# CA2009: Do not call ToImmutableCollection on an ImmutableCollection value
-dotnet_diagnostic.ca2009.severity = warning
-
-# CA2011: Avoid infinite recursion
-dotnet_diagnostic.ca2011.severity = warning
-
-# CA2012: Use ValueTask correctly
-dotnet_diagnostic.ca2012.severity = warning
-
-# CA2013: Do not use ReferenceEquals with value types
-dotnet_diagnostic.ca2013.severity = warning
-
-# CA2014: Do not use stackalloc in loops.
-dotnet_diagnostic.ca2014.severity = warning
-
-# CA2016: Forward the 'CancellationToken' parameter to methods that take one
-dotnet_diagnostic.ca2016.severity = warning
-
-# CA2200: Rethrow to preserve stack details
-dotnet_diagnostic.ca2200.severity = warning
-
-# CA2208: Instantiate argument exceptions correctly
-dotnet_diagnostic.ca2208.severity = warning
-
-# IDE0035: Remove unreachable code
-dotnet_diagnostic.ide0035.severity = warning
-
-# IDE0036: Order modifiers
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
-dotnet_diagnostic.ide0036.severity = warning
-
-# IDE0043: Format string contains invalid placeholder
-dotnet_diagnostic.ide0043.severity = warning
-
-# IDE0044: Make field readonly
-dotnet_diagnostic.ide0044.severity = warning
-
-# IDE0073: File header
-dotnet_diagnostic.ide0073.severity = none
-
-# IDE0041: Use 'is null' check
-dotnet_style_prefer_is_null_check_over_reference_equality_method = false
-
-[**/{test,samples,perf}/**.{cs,vb}]
-# CA1018: Mark attributes with AttributeUsageAttribute
-dotnet_diagnostic.ca1018.severity = suggestion
-# CA1507: Use nameof to express symbol names
-dotnet_diagnostic.ca1507.severity = suggestion
-# CA1802: Use literals where appropriate
-dotnet_diagnostic.ca1802.severity = suggestion
-# CA1805: Do not initialize unnecessarily
-dotnet_diagnostic.ca1805.severity = suggestion
-# CA1823: Avoid zero-length array allocations
-dotnet_diagnostic.ca1825.severity = suggestion
-# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
-dotnet_diagnostic.ca1826.severity = suggestion
-# CA1827: Do not use Count() or LongCount() when Any() can be used
-dotnet_diagnostic.ca1827.severity = suggestion
-# CA1829: Use Length/Count property instead of Count() when available
-dotnet_diagnostic.ca1829.severity = suggestion
-# CA1834: Consider using 'StringBuilder.Append(char)' when applicable
-dotnet_diagnostic.ca1834.severity = suggestion
-# CA1835: Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'
-dotnet_diagnostic.ca1835.severity = suggestion
-# CA1837: Use 'Environment.ProcessId'
-dotnet_diagnostic.ca1837.severity = suggestion
-# CA1838: Avoid 'StringBuilder' parameters for P/Invokes
-dotnet_diagnostic.ca1838.severity = suggestion
-# CA1841: Prefer Dictionary.Contains methods
-dotnet_diagnostic.ca1841.severity = suggestion
-# CA1844: Provide memory-based overrides of async methods when subclassing 'Stream'
-dotnet_diagnostic.ca1844.severity = suggestion
-# CA1845: Use span-based 'string.Concat'
-dotnet_diagnostic.ca1845.severity = suggestion
-# CA1846: Prefer AsSpan over Substring
-dotnet_diagnostic.ca1846.severity = suggestion
-# CA2008: Do not create tasks without passing a TaskScheduler
-dotnet_diagnostic.ca2008.severity = suggestion
-# CA2012: Use ValueTask correctly
-dotnet_diagnostic.ca2012.severity = suggestion
-# IDE0044: Make field readonly
-dotnet_diagnostic.ide0044.severity = suggestion
-
-
-# CA2016: Forward the 'CancellationToken' parameter to methods that take one
-dotnet_diagnostic.ca2016.severity = suggestion
+dotnet_naming_style.end_in_async.required_suffix = Async
+dotnet_naming_style.end_in_async.capitalization = pascal_case
