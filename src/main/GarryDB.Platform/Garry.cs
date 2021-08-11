@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +12,7 @@ namespace GarryDB.Platform
     /// <summary>
     ///     The Garry.
     /// </summary>
-    public sealed class Garry : IDisposable
+    public sealed class Garry
     {
         private readonly Bootstrapper bootstrapper;
 
@@ -50,15 +49,10 @@ namespace GarryDB.Platform
 
             bootstrapper.Start(plugins.Keys.ToList());
 
-            var garryPlugin = (GarryPlugin)plugins[GarryPlugin.PluginIdentity];
+            GarryPlugin garryPlugin = plugins.Values.OfType<GarryPlugin>().Single();
             garryPlugin.WaitUntilShutdownRequested();
 
-            bootstrapper.Stop(pluginIdentities);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
+            bootstrapper.Stop(plugins.Keys.ToList());
         }
     }
 }

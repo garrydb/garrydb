@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using GarryDB.Platform.Actors;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Persistence;
 using GarryDB.Platform.Plugins;
@@ -155,33 +154,33 @@ namespace GarryDB.Platform.Bootstrapping
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="replacer"></param>
+        /// <param name="pluginContextFactory"></param>
         /// <returns></returns>
-        public Bootstrapper Replace(Func<PluginContextFactory, PluginContextFactory> replacer)
+        public Bootstrapper Use(PluginContextFactory pluginContextFactory)
         {
-            PluginContextFactory = replacer(PluginContextFactory);
+            PluginContextFactory = pluginContextFactory;
             return this;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="replacer"></param>
+        /// <param name="fileSystem"></param>
         /// <returns></returns>
-        public Bootstrapper Replace(Func<FileSystem, FileSystem> replacer)
+        public Bootstrapper Use(FileSystem fileSystem)
         {
-            FileSystem = replacer(FileSystem);
+            FileSystem = fileSystem;
             return this;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="replacer"></param>
+        /// <param name="connectionFactory"></param>
         /// <returns></returns>
-        public Bootstrapper Replace(Func<ConnectionFactory, ConnectionFactory> replacer)
+        public Bootstrapper Use(ConnectionFactory connectionFactory)
         {
-            ConnectionFactory = replacer(ConnectionFactory);
+            ConnectionFactory = connectionFactory;
             return this;
         }
 

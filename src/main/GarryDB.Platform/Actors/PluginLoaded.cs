@@ -1,7 +1,7 @@
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 
-namespace GarryDB.Platform.Messaging.Messages
+namespace GarryDB.Platform.Actors
 {
     /// <summary>
     ///     The message that is sent when a <see cref="GarryDB.Plugins.Plugin" /> has been loaded.

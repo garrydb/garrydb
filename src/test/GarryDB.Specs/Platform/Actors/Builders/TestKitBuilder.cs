@@ -6,7 +6,7 @@ using GarryDB.Specs.NUnit.Extensions;
 
 using NUnit.Framework.Internal;
 
-namespace GarryDB.Specs.Akka.Builders
+namespace GarryDB.Specs.Platform.Actors.Builders
 {
     internal sealed class TestKitBuilder : TestDataBuilder<TestKit>
     {

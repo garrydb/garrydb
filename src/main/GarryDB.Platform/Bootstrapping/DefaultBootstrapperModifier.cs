@@ -5,7 +5,6 @@ using System.Runtime.Loader;
 
 using Autofac;
 
-using GarryDB.Platform.Actors;
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Plugins;

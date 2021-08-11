@@ -1,7 +1,6 @@
-using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 
-namespace GarryDB.Platform.Actors
+namespace GarryDB.Platform.Plugins
 {
     /// <summary>
     ///     Creates a <see cref="PluginContext" /> for a <see cref="Plugin" />.

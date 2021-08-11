@@ -31,12 +31,12 @@ namespace GarryDB.Wpf.Host
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
             var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-            using (var garry = new Garry(config =>
+            var garry = new Garry(config =>
             {
                 return
                     config
-                        .Replace(_ => fileSystem)
-                        .Replace(_ => connectionFactory)
+                        .Use(fileSystem)
+                        .Use(connectionFactory)
                         .Finder(inner => pluginsDirectory =>
                         {
                             IEnumerable<PluginDirectory> result = inner(pluginsDirectory).ToList();
@@ -66,12 +66,11 @@ namespace GarryDB.Wpf.Host
                                 splashScreen.CurrentPlugin = null;
                             });
                         });
-            }))
-            {
-                garry.Start("C:\\Projects\\GarryDB\\Plugins");
+            });
 
-                Dispatcher.Invoke(() => Shutdown());
-            }
+            garry.Start("C:\\Projects\\GarryDB\\Plugins");
+
+            Dispatcher.Invoke(() => Shutdown());
         }
     }
 }

@@ -3,7 +3,6 @@ using Akka.TestKit;
 using Akka.TestKit.NUnit;
 
 using GarryDB.Platform.Actors;
-using GarryDB.Specs.Akka.Builders;
 
 namespace GarryDB.Specs.Platform.Actors.Builders
 {

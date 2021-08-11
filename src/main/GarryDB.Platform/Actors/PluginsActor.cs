@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using Akka.Actor;
 
 using GarryDB.Platform.Messaging;
-using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Platform.Actors

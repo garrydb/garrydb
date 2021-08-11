@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using GarryDB.Platform.Infrastructure;
@@ -9,6 +10,7 @@ namespace GarryDB.Platform.Persistence
     /// <summary>
     ///     Creates <see cref="SQLiteConnection" />s where the database is stored on disk.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class PersistentSqLiteConnectionFactory : ConnectionFactory
     {
         private readonly FileSystem fileSystem;

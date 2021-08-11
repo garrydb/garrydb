@@ -4,7 +4,6 @@ using Akka.TestKit.NUnit;
 
 using GarryDB.Platform.Actors;
 using GarryDB.Plugins;
-using GarryDB.Specs.Akka.Builders;
 using GarryDB.Specs.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Actors.Builders

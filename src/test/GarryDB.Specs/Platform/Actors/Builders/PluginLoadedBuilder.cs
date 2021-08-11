@@ -1,10 +1,10 @@
-using GarryDB.Platform.Messaging.Messages;
+using GarryDB.Platform.Actors;
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 using GarryDB.Specs.Platform.Plugins.Builders;
 using GarryDB.Specs.Plugins.Builders;
 
-namespace GarryDB.Specs.Platform.Messaging.Messages.Builders
+namespace GarryDB.Specs.Platform.Actors.Builders
 {
     internal sealed class PluginLoadedBuilder : TestDataBuilder<PluginLoaded>
     {

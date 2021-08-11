@@ -2,9 +2,9 @@ using Akka.Actor;
 
 using GarryDB.Platform.Actors;
 using GarryDB.Platform.Plugins;
-using GarryDB.Specs.Platform.Actors.Builders;
+using GarryDB.Specs.Platform.Plugins.Builders;
 
-namespace GarryDB.Specs.Platform.Plugins.Builders
+namespace GarryDB.Specs.Platform.Actors.Builders
 {
     internal sealed class AkkaPluginContextBuilder : TestDataBuilder<AkkaPluginContext>
     {

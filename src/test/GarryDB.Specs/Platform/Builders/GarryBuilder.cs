@@ -1,8 +1,10 @@
 using GarryDB.Platform;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Persistence;
+using GarryDB.Platform.Plugins;
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 using GarryDB.Specs.Platform.Persistence.Builders;
+using GarryDB.Specs.Platform.Plugins.Builders;
 
 namespace GarryDB.Specs.Platform.Builders
 {
@@ -10,6 +12,7 @@ namespace GarryDB.Specs.Platform.Builders
     {
         private FileSystem fileSystem;
         private ConnectionFactory connectionFactory;
+        private PluginContextFactory pluginContextFactory;
 
         protected override void OnPreBuild()
         {
@@ -22,11 +25,16 @@ namespace GarryDB.Specs.Platform.Builders
             {
                 Using(new ConnectionFactoryBuilder().Build());
             }
+
+            if (pluginContextFactory == null)
+            {
+                Using(new PluginContextFactoryBuilder().Build());
+            }
         }
 
         protected override Garry OnBuild()
         {
-            return new Garry(config => config.Replace(_ => fileSystem).Replace(_ => connectionFactory));
+            return new Garry(config => config.Use(fileSystem).Use(connectionFactory).Use(pluginContextFactory));
         }
 
         public GarryBuilder Using(FileSystem fileSystem)
@@ -39,6 +47,13 @@ namespace GarryDB.Specs.Platform.Builders
         public GarryBuilder Using(ConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
+
+            return this;
+        }
+
+        public GarryBuilder Using(PluginContextFactory pluginContextFactory)
+        {
+            this.pluginContextFactory = pluginContextFactory;
 
             return this;
         }

@@ -3,7 +3,6 @@ using Akka.Event;
 
 using GarryDB.Platform.Actors;
 using GarryDB.Platform.Messaging;
-using GarryDB.Platform.Messaging.Messages;
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 
@@ -16,59 +15,63 @@ namespace GarryDB.Platform.Bootstrapping
         public static Bootstrapper Modify(Bootstrapper bootstrapper)
         {
             var actorSystem = ActorSystem.Create("garry");
-            IActorRef? pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
+            IActorRef pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
 
             MonitorDeadletters(actorSystem);
 
-            return
-                bootstrapper
-                    .Loader(inner => pluginIdentity =>
-                    {
-                        Plugin? plugin = inner(pluginIdentity);
+            return Modify(bootstrapper, actorSystem, pluginsActor);
+        }
 
-                        if (plugin != null)
-                        {
-                            pluginsActor.Tell(new PluginLoaded(pluginIdentity, plugin));
-                        }
+        public static Bootstrapper Modify(Bootstrapper bootstrapper, ActorSystem actorSystem, IActorRef pluginsActor)
+        {
+            return bootstrapper
+                .Loader(inner => pluginIdentity =>
+                {
+                    Plugin? plugin = inner(pluginIdentity);
 
-                        return plugin;
-                    })
-                    .Configurer(inner => (pluginIdentity, configuration) =>
+                    if (plugin != null)
                     {
-                        inner(pluginIdentity, configuration);
-                        if (configuration != null)
-                        {
-                            var destination = new Address(pluginIdentity, "configure");
-                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
-                            pluginsActor.Tell(messageEnvelope);
-                        }
-                    })
-                    .Starter(inner => pluginIdentities =>
-                    {
-                        inner(pluginIdentities);
+                        pluginsActor.Tell(new PluginLoaded(pluginIdentity, plugin));
+                    }
 
-                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
-                        {
-                            var destination = new Address(pluginIdentity, "start");
-                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
-                            pluginsActor.Tell(messageEnvelope);
-                        }
-                    })
-                    .Stopper(inner => pluginIdentities =>
+                    return plugin;
+                })
+                .Configurer(inner => (pluginIdentity, configuration) =>
+                {
+                    inner(pluginIdentity, configuration);
+                    if (configuration != null)
                     {
-                        inner(pluginIdentities);
+                        var destination = new Address(pluginIdentity, "configure");
+                        var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
+                        pluginsActor.Tell(messageEnvelope);
+                    }
+                })
+                .Starter(inner => pluginIdentities =>
+                {
+                    inner(pluginIdentities);
 
-                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
-                        {
-                            var destination = new Address(pluginIdentity, "stop");
-                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                    foreach (PluginIdentity pluginIdentity in pluginIdentities)
+                    {
+                        var destination = new Address(pluginIdentity, "start");
+                        var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                        pluginsActor.Tell(messageEnvelope);
+                    }
+                })
+                .Stopper(inner => pluginIdentities =>
+                {
+                    inner(pluginIdentities);
+
+                    foreach (PluginIdentity pluginIdentity in pluginIdentities)
+                    {
+                        var destination = new Address(pluginIdentity, "stop");
+                        var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
                             
-                            pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
-                        }
+                        pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
+                    }
 
-                        actorSystem.Dispose();
-                    })
-                    .Replace(_ => new AkkaPluginContextFactory(pluginsActor));
+                    actorSystem.Dispose();
+                })
+                .Use(new AkkaPluginContextFactory(pluginsActor));
         }
 
         private static void MonitorDeadletters(ActorSystem actorSystem)
