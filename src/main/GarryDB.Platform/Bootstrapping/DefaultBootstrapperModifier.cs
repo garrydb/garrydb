@@ -19,6 +19,7 @@ namespace GarryDB.Platform.Bootstrapping
         private static readonly ContainerBuilder ContainerBuilder = new ContainerBuilder();
         private static readonly Lazy<IContainer> Container = new Lazy<IContainer>(() => ContainerBuilder.Build());
         private static readonly IDictionary<PluginIdentity, int> StartupOrders = new Dictionary<PluginIdentity, int>();
+        private static readonly IDictionary<PluginIdentity, Plugin> Plugins = new Dictionary<PluginIdentity, Plugin>();
 
         public static Bootstrapper Modify(Bootstrapper bootstrapper)
         {
@@ -27,12 +28,11 @@ namespace GarryDB.Platform.Bootstrapping
                     .Finder(_ => pluginsDirectory => FindPlugins(bootstrapper.FileSystem, pluginsDirectory))
                     .Preparer(_ => pluginDirectories => PreparePlugins(pluginDirectories))
                     .Registrar(_ => pluginLoadContexts => RegisterPlugins(bootstrapper.PluginContextFactory, pluginLoadContexts).Concat(GarryPlugin.PluginIdentity))
-                    .Loader(_ => pluginIdentities => LoadPlugins(bootstrapper.PluginRegistry, pluginIdentities))
+                    .Loader(_ => pluginIdentities => LoadPlugins(pluginIdentities))
                     .Configurer(inner => (pluginIdentity, _) =>
                     {
-                        var configurationStorage =
-                            new ConfigurationStorage(bootstrapper.ConnectionFactory, bootstrapper.PluginRegistry);
-                        object? configuration = configurationStorage.FindConfiguration(pluginIdentity);
+                        var configurationStorage = new ConfigurationStorage(bootstrapper.ConnectionFactory);
+                        object? configuration = configurationStorage.FindConfiguration(pluginIdentity, Plugins[pluginIdentity]);
 
                         if (configuration == null)
                         {
@@ -103,13 +103,13 @@ namespace GarryDB.Platform.Bootstrapping
             }
         }
 
-        private static Plugin? LoadPlugins(PluginRegistry pluginRegistry, PluginIdentity pluginIdentity)
+        private static Plugin? LoadPlugins(PluginIdentity pluginIdentity)
         {
             Plugin? plugin = Container.Value.ResolveOptionalKeyed<Plugin>(pluginIdentity);
 
             if (plugin != null)
             {
-                pluginRegistry.Register(pluginIdentity, plugin);
+                Plugins[pluginIdentity] = plugin;
             }
 
             return plugin;

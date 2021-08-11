@@ -73,8 +73,6 @@ namespace GarryDB.Platform.Bootstrapping
             Configure =  (_, _) => { };
             Start = _ => { };
             Stop = _ => { };
-
-            PluginRegistry = new PluginRegistry();
         }
 
         /// <summary>
@@ -197,6 +195,5 @@ namespace GarryDB.Platform.Bootstrapping
         internal PluginContextFactory PluginContextFactory { get; private set; } = null!;
         internal FileSystem FileSystem { get; private set; } = null!;
         internal ConnectionFactory ConnectionFactory { get; private set; } = null!;
-        internal PluginRegistry PluginRegistry { get; }
     }
 }

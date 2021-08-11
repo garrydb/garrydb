@@ -37,17 +37,21 @@ namespace GarryDB.Platform
             IReadOnlyList<PluginDirectory> pluginDirectories = bootstrapper.Find(pluginsDirectory).ToList();
             IReadOnlyList<PluginLoadContext> pluginLoadContexts = bootstrapper.Prepare(pluginDirectories).ToList();
             IReadOnlyList<PluginIdentity> pluginIdentities = bootstrapper.Register(pluginLoadContexts).ToList();
-            IReadOnlyList<Plugin?> plugins = pluginIdentities.Select(pluginIdentity => bootstrapper.Load(pluginIdentity)).ToList();
+            IDictionary<PluginIdentity, Plugin> plugins =
+                pluginIdentities
+                    .Select(pluginIdentity => new { Plugin = bootstrapper.Load(pluginIdentity), PluginIdentity = pluginIdentity })
+                    .Where(x => x.Plugin != null)
+                    .ToDictionary(x => x.PluginIdentity, x => x.Plugin!);
 
-            foreach (PluginIdentity pluginIdentity in pluginIdentities)
+            foreach (PluginIdentity pluginIdentity in plugins.Keys)
             {
                 bootstrapper.Configure(pluginIdentity, null!);
             }
 
-            bootstrapper.Start(pluginIdentities);
+            bootstrapper.Start(plugins.Keys.ToList());
 
-            var garryPlugin = (GarryPlugin?)bootstrapper.PluginRegistry[GarryPlugin.PluginIdentity];
-            garryPlugin?.WaitUntilShutdownRequested();
+            var garryPlugin = (GarryPlugin)plugins[GarryPlugin.PluginIdentity];
+            garryPlugin.WaitUntilShutdownRequested();
 
             bootstrapper.Stop(pluginIdentities);
         }

@@ -25,15 +25,11 @@ namespace GarryDB.Plugins
             handlers = new Dictionary<string, Func<object, Task<object?>>>();
 
             Register("start", (object _) => StartAsync());
-            Register("stop", (object _) => StopAsync());
-        }
-
-        /// <summary>
-        ///     Gets the name of the plugin.
-        /// </summary>
-        public string Name
-        {
-            get { return pluginContext.Name; }
+            Register("stop", async (object _) =>
+            {
+                await StopAsync();
+                return new object();
+            });
         }
 
         /// <summary>

@@ -22,32 +22,6 @@ namespace GarryDB.Platform.Bootstrapping
 
             return
                 bootstrapper
-                    .Configurer(inner => (pluginIdentity, configuration) =>
-                    {
-                        inner(pluginIdentity, configuration);
-                        if (configuration != null)
-                        {
-                            SendMessage(pluginsActor, pluginIdentity, "configure", configuration);
-                        }
-                    })
-                    .Starter(inner => pluginIdentities =>
-                    {
-                        inner(pluginIdentities);
-
-                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
-                        {
-                            SendMessage(pluginsActor, pluginIdentity, "start");
-                        }
-                    })
-                    .Stopper(inner => pluginIdentities =>
-                    {
-                        inner(pluginIdentities);
-
-                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
-                        {
-                            SendMessage(pluginsActor, pluginIdentity, "stop");
-                        }
-                    })
                     .Loader(inner => pluginIdentity =>
                     {
                         Plugin? plugin = inner(pluginIdentity);
@@ -59,14 +33,42 @@ namespace GarryDB.Platform.Bootstrapping
 
                         return plugin;
                     })
-                    .Replace(_ => new AkkaPluginContextFactory(pluginsActor));
-        }
+                    .Configurer(inner => (pluginIdentity, configuration) =>
+                    {
+                        inner(pluginIdentity, configuration);
+                        if (configuration != null)
+                        {
+                            var destination = new Address(pluginIdentity, "configure");
+                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
+                            pluginsActor.Tell(messageEnvelope);
+                        }
+                    })
+                    .Starter(inner => pluginIdentities =>
+                    {
+                        inner(pluginIdentities);
 
-        private static void SendMessage(IActorRef pluginsActor, PluginIdentity pluginIdentity, string handler, object? message = null)
-        {
-            var destination = new Address(pluginIdentity, handler);
-            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, message ?? new object());
-            pluginsActor.Tell(messageEnvelope);
+                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
+                        {
+                            var destination = new Address(pluginIdentity, "start");
+                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                            pluginsActor.Tell(messageEnvelope);
+                        }
+                    })
+                    .Stopper(inner => pluginIdentities =>
+                    {
+                        inner(pluginIdentities);
+
+                        foreach (PluginIdentity pluginIdentity in pluginIdentities)
+                        {
+                            var destination = new Address(pluginIdentity, "stop");
+                            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                            
+                            pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
+                        }
+
+                        actorSystem.Dispose();
+                    })
+                    .Replace(_ => new AkkaPluginContextFactory(pluginsActor));
         }
 
         private static void MonitorDeadletters(ActorSystem actorSystem)
