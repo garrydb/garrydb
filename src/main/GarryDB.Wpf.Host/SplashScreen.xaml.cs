@@ -1,7 +1,5 @@
 using System.Windows;
 
-using GarryDB.Platform.Plugins;
-
 namespace GarryDB.Wpf.Host
 {
     /// <summary>
@@ -10,8 +8,8 @@ namespace GarryDB.Wpf.Host
     public partial class SplashScreen
     {
         public static readonly DependencyProperty CurrentPluginProperty =
-            DependencyProperty.Register("CurrentPlugin", typeof(PluginIdentity), typeof(SplashScreen),
-                                        new PropertyMetadata(default(PluginIdentity)));
+            DependencyProperty.Register("CurrentPlugin", typeof(string), typeof(SplashScreen),
+                                        new PropertyMetadata(default(string)));
 
         public static readonly DependencyProperty CurrentProperty =
             DependencyProperty.Register("Current", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int), OnProgressChanged));
@@ -41,9 +39,9 @@ namespace GarryDB.Wpf.Host
             InitializeComponent();
         }
 
-        public PluginIdentity CurrentPlugin
+        public string CurrentPlugin
         {
-            get { return (PluginIdentity)GetValue(CurrentPluginProperty); }
+            get { return (string)GetValue(CurrentPluginProperty); }
             set { SetValue(CurrentPluginProperty, value); }
         }
 

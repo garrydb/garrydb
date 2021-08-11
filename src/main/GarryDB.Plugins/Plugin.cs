@@ -29,6 +29,14 @@ namespace GarryDB.Plugins
         }
 
         /// <summary>
+        ///     Gets the name of the plugin.
+        /// </summary>
+        public string Name
+        {
+            get { return pluginContext.Name; }
+        }
+
+        /// <summary>
         ///     Register a handler for a named route.
         /// </summary>
         /// <param name="name">The name of the route.</param>

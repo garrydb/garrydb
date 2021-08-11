@@ -1,3 +1,5 @@
+using System;
+
 using GarryDB.Platform.Persistence;
 
 using SQLite;
@@ -11,7 +13,7 @@ namespace GarryDB.Specs.Platform.Persistence.Builders
             return new ConnectionFactoryStub();
         }
 
-        private sealed class ConnectionFactoryStub : ConnectionFactory
+        private sealed class ConnectionFactoryStub : ConnectionFactory, IDisposable
         {
             private int connectionCount;
             private SQLiteConnection connection;
@@ -36,6 +38,11 @@ namespace GarryDB.Specs.Platform.Persistence.Builders
                 {
                     connection.Close();
                 }
+            }
+
+            public void Dispose()
+            {
+                connection.Dispose();
             }
         }
     }

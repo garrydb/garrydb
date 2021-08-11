@@ -6,7 +6,7 @@ namespace GarryDB.Platform.Actors
     /// <summary>
     ///     Creates a <see cref="PluginContext" /> for a <see cref="Plugin" />.
     /// </summary>
-    internal interface PluginContextFactory
+    public interface PluginContextFactory
     {
         /// <summary>
         ///     Create the <see cref="PluginContext" /> for <paramref name="pluginIdentity" />.

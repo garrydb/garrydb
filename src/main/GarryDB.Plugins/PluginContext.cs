@@ -8,6 +8,11 @@ namespace GarryDB.Plugins
     public interface PluginContext
     {
         /// <summary>
+        ///     Gets the name of the plugin.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         ///     Sends <paramref name="message" /> to <paramref name="destination" />.
         /// </summary>
         /// <param name="destination">The destination plugin.</param>

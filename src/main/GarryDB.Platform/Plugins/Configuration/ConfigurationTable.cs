@@ -9,17 +9,10 @@ namespace GarryDB.Platform.Plugins.Configuration
     public class ConfigurationTable
     {
         /// <summary>
-        ///     Gets and sets the id of the record.
-        /// </summary>
-        [PrimaryKey]
-        [AutoIncrement]
-        public int Id { get; set; }
-
-        /// <summary>
         ///     Gets and sets the name of the plugin.
         /// </summary>
         [Column("plugin")]
-        [NotNull]
+        [PrimaryKey]
         public string Plugin { get; set; } = null!;
 
         /// <summary>

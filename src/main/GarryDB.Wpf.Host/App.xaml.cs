@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
 using GarryDB.Platform;
 using GarryDB.Platform.Persistence;
+using GarryDB.Platform.Plugins;
 
 namespace GarryDB.Wpf.Host
 {
@@ -28,24 +31,43 @@ namespace GarryDB.Wpf.Host
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
             var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-            using (var garry = new Garry(fileSystem, connectionFactory))
+            using (var garry = new Garry(config =>
             {
-                garry.PluginLoading += (_, loaded) =>
-                                       {
-                                           Dispatcher.Invoke(() =>
-                                                             {
-                                                                 splashScreen.Current++;
-                                                                 splashScreen.CurrentPlugin = loaded.PluginIdentity;
-                                                                 splashScreen.Total = loaded.TotalNumberOfPlugins + 1;
-                                                             });
-                                       };
+                return
+                    config
+                        .Replace(_ => fileSystem)
+                        .Replace(_ => connectionFactory)
+                        .Finder(inner => pluginsDirectory =>
+                        {
+                            IEnumerable<PluginDirectory> result = inner(pluginsDirectory).ToList();
 
-                garry.Starting += (_, _) => Dispatcher.Invoke(() =>
-                                                              {
-                                                                  splashScreen.Current++;
-                                                                  splashScreen.CurrentPlugin = null;
-                                                              });
+                            Dispatcher.Invoke(() => splashScreen.Total = result.Count() + 1);
 
+                            return result;
+                        })
+                        .Loader(inner => pluginIdentity =>
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                splashScreen.Current++;
+
+                                splashScreen.CurrentPlugin = pluginIdentity.Name;
+                            });
+
+                            return inner(pluginIdentity);
+                        })
+                        .Starter(inner => pluginIdentities =>
+                        {
+                            inner(pluginIdentities);
+
+                            Dispatcher.Invoke(() =>
+                            {
+                                splashScreen.Current++;
+                                splashScreen.CurrentPlugin = null;
+                            });
+                        });
+            }))
+            {
                 garry.Start("C:\\Projects\\GarryDB\\Plugins");
 
                 Dispatcher.Invoke(() => Shutdown());

@@ -28,6 +28,12 @@ namespace GarryDB.Platform.Actors
             this.pluginsActor = pluginsActor;
             this.pluginIdentity = pluginIdentity;
         }
+        
+        /// <inheritdoc />
+        public string Name
+        {
+            get { return pluginIdentity.Name; }
+        }
 
         /// <inheritdoc />
         public Task SendAsync(string destination, string handler, object message)

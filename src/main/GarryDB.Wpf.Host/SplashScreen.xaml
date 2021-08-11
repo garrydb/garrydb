@@ -23,7 +23,7 @@
         Canvas.Top="232"
         Canvas.Left="325"
         TextAlignment="Center"
-        Text="{Binding CurrentPlugin.Name}"
+        Text="{Binding CurrentPlugin}"
         Width="451"
         Foreground="White" />
       <Border

@@ -29,8 +29,12 @@ namespace GarryDB.Platform.Actors
 
             Receive((MessageEnvelope envelope) =>
             {
-                IActorRef pluginActorRef = plugins[envelope.Destination.PluginIdentity];
-                pluginActorRef.Forward(envelope);
+                PluginIdentity pluginIdentity = envelope.Destination.PluginIdentity;
+
+                if (plugins.TryGetValue(pluginIdentity, out IActorRef? pluginActorRef))
+                {
+                    pluginActorRef.Forward(envelope);
+                }
             });
         }
 

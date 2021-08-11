@@ -13,7 +13,7 @@ namespace GarryDB.Platform.Plugins
     /// <summary>
     ///     Contains information about the directory where a <see cref="Plugin" /> is stored.
     /// </summary>
-    internal sealed class PluginDirectory : IComparable<PluginDirectory>
+    public sealed class PluginDirectory : IComparable<PluginDirectory>
     {
         private readonly FileSystem fileSystem;
 
@@ -69,11 +69,8 @@ namespace GarryDB.Platform.Plugins
             {
                 return fileSystem.GetFiles(Directory)
                     .Select(path => Path.GetFileName(path))
-                    .Where(filename =>
-                    {
-                        return filename.Equals($"{PluginName}.Contract.dll", StringComparison.OrdinalIgnoreCase) ||
-                               filename.Equals($"{PluginName}.Shared.dll", StringComparison.OrdinalIgnoreCase);
-                    });
+                    .Where(filename => filename.Equals($"{PluginName}.Contract.dll", StringComparison.OrdinalIgnoreCase) ||
+                                       filename.Equals($"{PluginName}.Shared.dll", StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -83,11 +80,8 @@ namespace GarryDB.Platform.Plugins
             {
                 return fileSystem.GetFiles(Directory)
                     .Select(path => Path.GetFileName(path))
-                    .Where(filename =>
-                    {
-                        return filename.EndsWith(".Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
-                               filename.EndsWith(".Shared.dll", StringComparison.InvariantCultureIgnoreCase);
-                    })
+                    .Where(filename => filename.EndsWith(".Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
+                                       filename.EndsWith(".Shared.dll", StringComparison.InvariantCultureIgnoreCase))
                     .Except(ProvidedAssemblies);
             }
         }

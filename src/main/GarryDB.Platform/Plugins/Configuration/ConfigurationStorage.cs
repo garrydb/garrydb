@@ -14,10 +14,10 @@ namespace GarryDB.Platform.Plugins.Configuration
     /// <summary>
     ///     Handles the loading and saving of the configuration for plugins.
     /// </summary>
-    internal sealed class PluginConfigurationStorage
+    internal sealed class ConfigurationStorage
     {
         private static readonly MethodInfo GetConfigurationMethod =
-            typeof(PluginConfigurationStorage)
+            typeof(ConfigurationStorage)
                 .GetMethod(nameof(GetConfiguration),
                     BindingFlags.Instance | BindingFlags.NonPublic,
                     null,
@@ -31,11 +31,11 @@ namespace GarryDB.Platform.Plugins.Configuration
         private readonly PluginRegistry pluginRegistry;
 
         /// <summary>
-        ///     Initializes a new <see cref="PluginConfigurationStorage" />.
+        ///     Initializes a new <see cref="ConfigurationStorage" />.
         /// </summary>
         /// <param name="connectionFactory">The connection factory for creating database connections.</param>
         /// <param name="pluginRegistry">The registry of plugins.</param>
-        public PluginConfigurationStorage(ConnectionFactory connectionFactory, PluginRegistry pluginRegistry)
+        public ConfigurationStorage(ConnectionFactory connectionFactory, PluginRegistry pluginRegistry)
         {
             this.connectionFactory = connectionFactory;
             this.pluginRegistry = pluginRegistry;
@@ -51,7 +51,6 @@ namespace GarryDB.Platform.Plugins.Configuration
         public object? FindConfiguration(PluginIdentity pluginIdentity)
         {
             Plugin? plugin = pluginRegistry[pluginIdentity];
-
             Type? configurationType = plugin?.FindConfigurationType();
 
             return configurationType == null

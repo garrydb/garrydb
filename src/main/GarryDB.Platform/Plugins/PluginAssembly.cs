@@ -10,7 +10,7 @@ namespace GarryDB.Platform.Plugins
     /// <summary>
     ///     The assembly containing the <see cref="Plugin" />.
     /// </summary>
-    internal sealed class PluginAssembly
+    public sealed class PluginAssembly
     {
         private readonly Assembly assembly;
 

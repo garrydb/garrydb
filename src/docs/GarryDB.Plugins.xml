@@ -63,6 +63,11 @@
             </summary>
             <param name="pluginContext">The plugin context.</param>
         </member>
+        <member name="P:GarryDB.Plugins.Plugin.Name">
+            <summary>
+                Gets the name of the plugin.
+            </summary>
+        </member>
         <member name="M:GarryDB.Plugins.Plugin.Register``1(System.String,System.Func{``0,System.Threading.Tasks.Task})">
             <summary>
                 Register a handler for a named route.
@@ -119,6 +124,11 @@
         <member name="T:GarryDB.Plugins.PluginContext">
             <summary>
                 Sends messages to other plugins.
+            </summary>
+        </member>
+        <member name="P:GarryDB.Plugins.PluginContext.Name">
+            <summary>
+                Gets the name of the plugin.
             </summary>
         </member>
         <member name="M:GarryDB.Plugins.PluginContext.SendAsync(System.String,System.String,System.Object)">

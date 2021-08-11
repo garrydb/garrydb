@@ -26,7 +26,7 @@ namespace GarryDB.Specs.Platform.Builders
 
         protected override Garry OnBuild()
         {
-            return new Garry(fileSystem, connectionFactory);
+            return new Garry(config => config.Replace(_ => fileSystem).Replace(_ => connectionFactory));
         }
 
         public GarryBuilder Using(FileSystem fileSystem)
