@@ -63,6 +63,11 @@ namespace GarryDB.Specs.Platform.Infrastructure.Builders
             {
                 throw new NotImplementedException();
             }
+
+            public Stream LoadFile(string path)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

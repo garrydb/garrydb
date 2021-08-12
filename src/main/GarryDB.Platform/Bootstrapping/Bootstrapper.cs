@@ -22,12 +22,12 @@ namespace GarryDB.Platform.Bootstrapping
         /// <summary>
         /// 
         /// </summary>
-        public delegate IEnumerable<PluginDirectory> FindPlugins(string pluginsDirectory);
+        public delegate IEnumerable<PluginPackage> FindPlugins(string pluginsDirectory);
 
         /// <summary>
         /// 
         /// </summary>
-        public delegate IEnumerable<PluginLoadContext> PreparePlugins(IReadOnlyList<PluginDirectory> pluginDirectories);
+        public delegate IEnumerable<PluginLoadContext> PreparePlugins(IReadOnlyList<PluginPackage> pluginPackages);
 
         /// <summary>
         /// 
@@ -65,7 +65,7 @@ namespace GarryDB.Platform.Bootstrapping
         /// </summary>
         public Bootstrapper()
         {
-            Find = _ => Enumerable.Empty<PluginDirectory>();
+            Find = _ => Enumerable.Empty<PluginPackage>();
             Prepare = _ => Enumerable.Empty<PluginLoadContext>();
             Register = _ => Enumerable.Empty<PluginIdentity>();
             Load = _ => null;

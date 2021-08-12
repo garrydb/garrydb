@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
@@ -18,26 +17,19 @@ namespace GarryDB.Platform.Plugins
     public sealed class PluginLoadContext : AssemblyLoadContext
     {
         private readonly IEnumerable<AssemblyLoadContext> providers;
-        private readonly AssemblyDependencyResolver resolver;
+        private readonly PluginPackage pluginPackage;
 
         /// <summary>
         ///     Initializes a new <see cref="PluginLoadContext" />.
         /// </summary>
-        /// <param name="pluginDirectory">The directory containing the .dlls.</param>
+        /// <param name="pluginPackage">The package containing the plugin.</param>
         /// <param name="providers">The <see cref="AssemblyLoadContext" />s to use for referenced assemblies.</param>
-        public PluginLoadContext(PluginDirectory pluginDirectory, IEnumerable<AssemblyLoadContext> providers)
-            : base(pluginDirectory.PluginName)
+        public PluginLoadContext(PluginPackage pluginPackage, IEnumerable<AssemblyLoadContext> providers)
+            : base(pluginPackage.Name)
         {
-            PluginDirectory = pluginDirectory;
+            this.pluginPackage = pluginPackage;
             this.providers = providers;
-            resolver = new AssemblyDependencyResolver(
-                Path.Combine(pluginDirectory.Directory, $"{pluginDirectory.PluginName}.dll"));
         }
-
-        /// <summary>
-        ///     Gets the plugin directory.
-        /// </summary>
-        public PluginDirectory PluginDirectory { get; }
 
         /// <summary>
         ///     Loads the assembly that contains a <see cref="Plugin" />.
@@ -45,9 +37,12 @@ namespace GarryDB.Platform.Plugins
         /// <returns>The <see cref="PluginAssembly" />.</returns>
         public PluginAssembly? Load()
         {
-            PluginDirectory.LoadInto(this);
+            foreach (AssemblyName assemblyName in pluginPackage.Assemblies)
+            {
+                LoadFromAssemblyName(assemblyName);
+            }
 
-            Assembly? assembly = Assemblies.SingleOrDefault(x => x.GetName().Name == PluginDirectory.PluginName);
+            Assembly? assembly = Assemblies.SingleOrDefault(x => x.GetName().Name == pluginPackage.Name);
 
             return assembly != null ? new PluginAssembly(assembly) : null;
         }
@@ -73,52 +68,24 @@ namespace GarryDB.Platform.Plugins
                 return Assemblies.Single(x => x.GetName().IsCompatibleWith(assemblyName));
             }
 
-            Assembly? result = null;
-            string? assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
-            if (assemblyPath != null)
+            Stream? assemblyStream = pluginPackage.ResolveAssembly(assemblyName);
+            if (assemblyStream == null)
             {
-                result = LoadFromAssemblyPath(assemblyPath);
+                return null;
             }
 
-            return result;
+            using (assemblyStream)
+            {
+                return LoadFromStream(assemblyStream);
+            }
         }
 
         /// <inheritdoc />
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
-            string fullPath = DetermineFullPath(unmanagedDllName, PluginDirectory.Directory);
+            string? fullPath = pluginPackage.ResolveUnmanagedDllPath(unmanagedDllName);
 
-            return File.Exists(fullPath) ? LoadUnmanagedDllFromPath(fullPath) : base.LoadUnmanagedDll(unmanagedDllName);
-        }
-
-        private static string DetermineFullPath(string unmanagedDllName, string assemblyPath)
-        {
-            string arch = Environment.Is64BitProcess ? "-x64" : "-x86";
-
-            string fullPath;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                fullPath = Path.Combine(assemblyPath, "runtimes", "osx" + arch, "native", $"lib{unmanagedDllName}.dylib");
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                fullPath = Path.Combine(assemblyPath, "runtimes", "linux" + arch, "native", $"lib{unmanagedDllName}.so");
-            }
-            else
-            {
-                if (unmanagedDllName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    unmanagedDllName = Path.GetFileNameWithoutExtension(unmanagedDllName);
-                }
-
-                fullPath = Path.Combine(assemblyPath, "runtimes", "win" + arch, "native", $"{unmanagedDllName}.dll");
-                if (!File.Exists(fullPath))
-                {
-                    fullPath = Path.Combine(assemblyPath, "runtimes", "win7" + arch, "native", $"{unmanagedDllName}.dll");
-                }
-            }
-
-            return fullPath;
+            return fullPath != null ? LoadUnmanagedDllFromPath(fullPath) : base.LoadUnmanagedDll(unmanagedDllName);
         }
     }
 }

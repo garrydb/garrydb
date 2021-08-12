@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Loader;
 
-using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Plugins;
 
@@ -13,9 +14,11 @@ namespace GarryDB.Platform.Plugins
     /// <summary>
     ///     Contains information about the directory where a <see cref="Plugin" /> is stored.
     /// </summary>
-    public sealed class PluginDirectory : IComparable<PluginDirectory>
+    public sealed class PluginDirectory : PluginPackage
     {
         private readonly FileSystem fileSystem;
+        private readonly AssemblyDependencyResolver resolver;
+        private readonly string directory;
 
         /// <summary>
         ///     Initializes a new <see cref="PluginDirectory" />.
@@ -23,99 +26,65 @@ namespace GarryDB.Platform.Plugins
         /// <param name="fileSystem">The file system.</param>
         /// <param name="directory">The directory containing the plugin.</param>
         public PluginDirectory(FileSystem fileSystem, string directory)
+            : base(Path.GetFileNameWithoutExtension(directory))
         {
             this.fileSystem = fileSystem;
-            Directory = directory;
-            PluginName = Path.GetFileNameWithoutExtension(Directory);
+            this.directory = directory;
+            resolver = new AssemblyDependencyResolver(Path.Combine(directory, $"{Name}.dll"));
         }
 
-        /// <summary>
-        ///     Gets the name of the plugin.
-        /// </summary>
-        public string PluginName { get; }
-
-        /// <summary>
-        ///     Gets the directory where the plugin is stored.
-        /// </summary>
-        public string Directory { get; }
-
-        /// <summary>
-        ///     Determins whether this <see cref="PluginDirectory" /> is dependent on <paramref name="pluginDirectory" />.
-        /// </summary>
-        /// <param name="pluginDirectory">The <see cref="PluginDirectory" /> to check.</param>
-        /// <returns>
-        ///     <c>true</c> if this plugin depends on assemblies provided by <paramref name="pluginDirectory" />,
-        ///     otherwise <c>false</c>.
-        /// </returns>
-        public bool IsDependentOn(PluginDirectory pluginDirectory)
-        {
-            return DependentAssemblies.Any(assembly => pluginDirectory.ProvidedAssemblies.Contains(assembly));
-        }
-
-        /// <summary>
-        ///     Load the plugin into <paramref name="pluginLoadContext" />.
-        /// </summary>
-        /// <param name="pluginLoadContext">The plugin load context to load the assemblies into.</param>
-        public void LoadInto(PluginLoadContext pluginLoadContext)
-        {
-            fileSystem.GetFiles(Directory, "*.dll")
-                .Select(file => Path.GetFileNameWithoutExtension(file))
-                .ForEach(file => pluginLoadContext.LoadFromAssemblyName(new AssemblyName(file)));
-        }
-
-        private IEnumerable<string> ProvidedAssemblies
+        /// <inheritdoc />
+        public override IEnumerable<AssemblyName> Assemblies
         {
             get
             {
-                return fileSystem.GetFiles(Directory)
-                    .Select(path => Path.GetFileName(path))
-                    .Where(filename => filename.Equals($"{PluginName}.Contract.dll", StringComparison.OrdinalIgnoreCase) ||
-                                       filename.Equals($"{PluginName}.Shared.dll", StringComparison.OrdinalIgnoreCase));
-            }
-        }
-
-        private IEnumerable<string> DependentAssemblies
-        {
-            get
-            {
-                return fileSystem.GetFiles(Directory)
-                    .Select(path => Path.GetFileName(path))
-                    .Where(filename => filename.EndsWith(".Contract.dll", StringComparison.InvariantCultureIgnoreCase) ||
-                                       filename.EndsWith(".Shared.dll", StringComparison.InvariantCultureIgnoreCase))
-                    .Except(ProvidedAssemblies);
+                return
+                    fileSystem.GetFiles(directory, "*.dll")
+                        .Select(file => new AssemblyName(Path.GetFileNameWithoutExtension(file)));
             }
         }
 
         /// <inheritdoc />
-        public int CompareTo(PluginDirectory? other)
+        public override Stream? ResolveAssembly(AssemblyName assemblyName)
         {
-            if (ReferenceEquals(this, other))
+            string? assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
+            if (assemblyPath != null)
             {
-                return 0;
+                return fileSystem.LoadFile(assemblyPath);
             }
 
-            if (ReferenceEquals(null, other))
-            {
-                return 1;
-            }
-
-            if (DependentAssemblies.Any(assembly => other.ProvidedAssemblies.Contains(assembly)))
-            {
-                return 1;
-            }
-
-            if (other.DependentAssemblies.Any(assembly => ProvidedAssemblies.Contains(assembly)))
-            {
-                return -1;
-            }
-
-            return 0;
+            return null;
         }
 
         /// <inheritdoc />
-        public override string ToString()
+        public override string? ResolveUnmanagedDllPath(string unmanagedDllName)
         {
-            return PluginName;
+            string arch = Environment.Is64BitProcess ? "-x64" : "-x86";
+
+            string fullPath;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                fullPath = Path.Combine(directory, "runtimes", "osx" + arch, "native", $"lib{unmanagedDllName}.dylib");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                fullPath = Path.Combine(directory, "runtimes", "linux" + arch, "native", $"lib{unmanagedDllName}.so");
+            }
+            else
+            {
+                if (unmanagedDllName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    unmanagedDllName = Path.GetFileNameWithoutExtension(unmanagedDllName);
+                }
+
+                fullPath = Path.Combine(directory, "runtimes", "win" + arch, "native", $"{unmanagedDllName}.dll");
+                if (!File.Exists(fullPath))
+                {
+                    fullPath = Path.Combine(directory, "runtimes", "win7" + arch, "native", $"{unmanagedDllName}.dll");
+                }
+            }
+
+            return File.Exists(fullPath) ? fullPath : null;
         }
     }
 }

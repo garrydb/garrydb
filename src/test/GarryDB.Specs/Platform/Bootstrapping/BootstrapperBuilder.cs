@@ -16,7 +16,7 @@ namespace GarryDB.Specs.Platform.Bootstrapping
 {
     internal sealed class BootstrapperBuilder : TestDataBuilder<Bootstrapper>
     {
-        private Modifier.FindPlugins finder = _ => Enumerable.Empty<PluginDirectory>();
+        private Modifier.FindPlugins finder = _ => Enumerable.Empty<PluginPackage>();
         private Modifier.PreparePlugins preparer = _ => Enumerable.Empty<PluginLoadContext>();
         private Modifier.RegisterPlugins registrar = _ => Enumerable.Empty<PluginIdentity>();
         private Modifier.LoadPlugin loader = _ => null;

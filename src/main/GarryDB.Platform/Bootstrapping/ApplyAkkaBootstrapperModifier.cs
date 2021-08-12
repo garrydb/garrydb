@@ -39,12 +39,14 @@ namespace GarryDB.Platform.Bootstrapping
                 .Configurer(inner => (pluginIdentity, configuration) =>
                 {
                     inner(pluginIdentity, configuration);
-                    if (configuration != null)
+                    if (configuration == null)
                     {
-                        var destination = new Address(pluginIdentity, "configure");
-                        var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
-                        pluginsActor.Tell(messageEnvelope);
+                        return;
                     }
+
+                    var destination = new Address(pluginIdentity, "configure");
+                    var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
+                    pluginsActor.Tell(messageEnvelope);
                 })
                 .Starter(inner => pluginIdentities =>
                 {

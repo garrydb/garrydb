@@ -33,7 +33,7 @@ namespace GarryDB.Platform
         /// <param name="pluginsDirectory">The directory containing the plugins.</param>
         public void Start(string pluginsDirectory)
         {
-            IReadOnlyList<PluginDirectory> pluginDirectories = bootstrapper.Find(pluginsDirectory).ToList();
+            IReadOnlyList<PluginPackage> pluginDirectories = bootstrapper.Find(pluginsDirectory).ToList();
             IReadOnlyList<PluginLoadContext> pluginLoadContexts = bootstrapper.Prepare(pluginDirectories).ToList();
             IReadOnlyList<PluginIdentity> pluginIdentities = bootstrapper.Register(pluginLoadContexts).ToList();
             IDictionary<PluginIdentity, Plugin> plugins =

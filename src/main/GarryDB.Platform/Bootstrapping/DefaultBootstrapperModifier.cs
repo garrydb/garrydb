@@ -17,7 +17,6 @@ namespace GarryDB.Platform.Bootstrapping
     {
         private static readonly ContainerBuilder ContainerBuilder = new ContainerBuilder();
         private static readonly Lazy<IContainer> Container = new Lazy<IContainer>(() => ContainerBuilder.Build());
-        private static readonly IDictionary<PluginIdentity, int> StartupOrders = new Dictionary<PluginIdentity, int>();
         private static readonly IDictionary<PluginIdentity, Plugin> Plugins = new Dictionary<PluginIdentity, Plugin>();
 
         public static Bootstrapper Modify(Bootstrapper bootstrapper)
@@ -26,7 +25,7 @@ namespace GarryDB.Platform.Bootstrapping
                 bootstrapper
                     .Finder(_ => pluginsDirectory => FindPlugins(bootstrapper.FileSystem, pluginsDirectory))
                     .Preparer(_ => pluginDirectories => PreparePlugins(pluginDirectories))
-                    .Registrar(_ => pluginLoadContexts => RegisterPlugins(bootstrapper.PluginContextFactory, pluginLoadContexts).Concat(GarryPlugin.PluginIdentity))
+                    .Registrar(_ => pluginLoadContexts => RegisterPlugins(bootstrapper.PluginContextFactory, pluginLoadContexts))
                     .Loader(_ => pluginIdentities => LoadPlugins(pluginIdentities))
                     .Configurer(inner => (pluginIdentity, _) =>
                     {
@@ -39,14 +38,10 @@ namespace GarryDB.Platform.Bootstrapping
                         }
 
                         inner(pluginIdentity, configuration);
-                    })
-                    .Starter(inner => pluginIdentities =>
-                    {
-                        inner(pluginIdentities.OrderBy(p => StartupOrders[p]).ToList());
                     });
         }
 
-        private static IEnumerable<PluginDirectory> FindPlugins(FileSystem fileSystem, string pluginsDirectory)
+        private static IEnumerable<PluginPackage> FindPlugins(FileSystem fileSystem, string pluginsDirectory)
         {
             return fileSystem.GetTopLevelDirectories(pluginsDirectory)
                 .Select(directory => new PluginDirectory(fileSystem, directory))
@@ -54,21 +49,21 @@ namespace GarryDB.Platform.Bootstrapping
                 .ToList();
         }
 
-        private static IEnumerable<PluginLoadContext> PreparePlugins(IEnumerable<PluginDirectory> pluginDirectories)
+        private static IEnumerable<PluginLoadContext> PreparePlugins(IEnumerable<PluginPackage> pluginPackages)
         {
-            var pluginLoadContexts = new List<PluginLoadContext>();
-            foreach (PluginDirectory pluginDirectory in pluginDirectories)
+            var pluginLoadContexts = new Dictionary<PluginPackage, PluginLoadContext>();
+            foreach (PluginPackage pluginPackage in pluginPackages)
             {
-                IEnumerable<PluginLoadContext> providers = pluginLoadContexts.Where(x => pluginDirectory.IsDependentOn(x.PluginDirectory));
+                IEnumerable<PluginLoadContext> providers = pluginLoadContexts.Where(x => pluginPackage.IsDependentOn(x.Key)).Select(x => x.Value);
 
-                var loadContext = new PluginLoadContext(pluginDirectory, AssemblyLoadContext.Default.AsEnumerable()
+                var loadContext = new PluginLoadContext(pluginPackage, AssemblyLoadContext.Default.AsEnumerable()
                     .Concat(providers)
                     .ToList());
 
-                pluginLoadContexts.Add(loadContext);
+                pluginLoadContexts[pluginPackage] = loadContext;
             }
 
-            return pluginLoadContexts;
+            return pluginLoadContexts.Values;
         }
 
         private static IEnumerable<PluginIdentity> RegisterPlugins(PluginContextFactory pluginContextFactory, IEnumerable<PluginLoadContext> pluginLoadContexts)
@@ -78,14 +73,17 @@ namespace GarryDB.Platform.Bootstrapping
                 .WithParameter(TypedParameter.From(pluginContextFactory.Create(GarryPlugin.PluginIdentity)))
                 .SingleInstance();
 
-            StartupOrders[GarryPlugin.PluginIdentity] = int.MinValue;
+            var startupOrders = new Dictionary<PluginIdentity, int>
+            {
+                [GarryPlugin.PluginIdentity] = int.MinValue
+            };
 
             foreach (PluginLoadContext pluginLoadContext in pluginLoadContexts)
             {
                 PluginAssembly? pluginAssembly = pluginLoadContext.Load();
                 if (pluginAssembly == null)
                 {
-                    yield break;
+                    continue;
                 }
 
                 PluginIdentity pluginIdentity = pluginAssembly.PluginIdentity;
@@ -96,10 +94,10 @@ namespace GarryDB.Platform.Bootstrapping
 
                 ContainerBuilder.RegisterAssemblyModules(pluginLoadContext.Assemblies.ToArray());
 
-                StartupOrders[pluginIdentity] = pluginAssembly.StartupOrder;
-
-                yield return pluginIdentity;
+                startupOrders[pluginIdentity] = pluginAssembly.StartupOrder;
             }
+
+            return startupOrders.OrderBy(x => x.Value).Select(x => x.Key);
         }
 
         private static Plugin? LoadPlugins(PluginIdentity pluginIdentity)

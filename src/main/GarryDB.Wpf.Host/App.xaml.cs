@@ -39,7 +39,7 @@ namespace GarryDB.Wpf.Host
                         .Use(connectionFactory)
                         .Finder(inner => pluginsDirectory =>
                         {
-                            IEnumerable<PluginDirectory> result = inner(pluginsDirectory).ToList();
+                            IEnumerable<PluginPackage> result = inner(pluginsDirectory).ToList();
 
                             Dispatcher.Invoke(() => splashScreen.Total = result.Count() + 1);
 

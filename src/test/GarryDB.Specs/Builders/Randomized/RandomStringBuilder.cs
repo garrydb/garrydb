@@ -7,9 +7,9 @@ namespace GarryDB.Specs.Builders.Randomized
     {
         private const string Characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         private bool lettersOnly;
-        private int maximumLength;
 
         private int minimumLength;
+        private int maximumLength;
         private bool startsWithLetter;
 
         public RandomStringBuilder()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace GarryDB.Platform.Infrastructure
 {
@@ -34,5 +35,12 @@ namespace GarryDB.Platform.Infrastructure
         /// </summary>
         /// <param name="directory">The directory to create.</param>
         void CreateDirectory(string directory);
+
+        /// <summary>
+        ///     Load the file into a <see cref="Stream" />.
+        /// </summary>
+        /// <param name="path">The path to the file.</param>
+        /// <returns>A <see cref="Stream" /> containing the file.</returns>
+        Stream LoadFile(string path);
     }
 }

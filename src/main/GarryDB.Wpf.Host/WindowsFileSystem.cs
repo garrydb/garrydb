@@ -35,5 +35,11 @@ namespace GarryDB.Wpf.Host
         {
             Directory.CreateDirectory(directory);
         }
+
+        /// <inheritdoc />
+        public Stream LoadFile(string path)
+        {
+            return File.OpenRead(path);
+        }
     }
 }
