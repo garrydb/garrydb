@@ -96,148 +96,6 @@
             </summary>
             <returns>The configuration object for creating <see cref="T:GarryDB.Platform.Actors.PluginsActor" />.</returns>
         </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.BootstrapperModifier">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.FindPlugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.PreparePlugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.RegisterPlugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.LoadPlugin">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.ConfigurePlugin">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.StartPlugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Modifier.StopPlugins">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Bootstrapper">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Finder(System.Func{GarryDB.Platform.Bootstrapping.Modifier.FindPlugins,GarryDB.Platform.Bootstrapping.Modifier.FindPlugins})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Preparer(System.Func{GarryDB.Platform.Bootstrapping.Modifier.PreparePlugins,GarryDB.Platform.Bootstrapping.Modifier.PreparePlugins})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Loader(System.Func{GarryDB.Platform.Bootstrapping.Modifier.LoadPlugin,GarryDB.Platform.Bootstrapping.Modifier.LoadPlugin})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Registrar(System.Func{GarryDB.Platform.Bootstrapping.Modifier.RegisterPlugins,GarryDB.Platform.Bootstrapping.Modifier.RegisterPlugins})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Configurer(System.Func{GarryDB.Platform.Bootstrapping.Modifier.ConfigurePlugin,GarryDB.Platform.Bootstrapping.Modifier.ConfigurePlugin})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Starter(System.Func{GarryDB.Platform.Bootstrapping.Modifier.StartPlugins,GarryDB.Platform.Bootstrapping.Modifier.StartPlugins})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Stopper(System.Func{GarryDB.Platform.Bootstrapping.Modifier.StopPlugins,GarryDB.Platform.Bootstrapping.Modifier.StopPlugins})">
-            <summary>
-            
-            </summary>
-            <param name="replacer"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Use(GarryDB.Platform.Plugins.PluginContextFactory)">
-            <summary>
-            
-            </summary>
-            <param name="pluginContextFactory"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Use(GarryDB.Platform.Infrastructure.FileSystem)">
-            <summary>
-            
-            </summary>
-            <param name="fileSystem"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Bootstrapper.Use(GarryDB.Platform.Persistence.ConnectionFactory)">
-            <summary>
-            
-            </summary>
-            <param name="connectionFactory"></param>
-            <returns></returns>
-        </member>
-        <member name="T:GarryDB.Platform.Bootstrapping.Extensions.BootstrapperExtensions">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Extensions.BootstrapperExtensions.ApplyDefault(GarryDB.Platform.Bootstrapping.Bootstrapper)">
-            <summary>
-            
-            </summary>
-            <param name="bootstrapper"></param>
-        </member>
-        <member name="M:GarryDB.Platform.Bootstrapping.Extensions.BootstrapperExtensions.ApplyAkka(GarryDB.Platform.Bootstrapping.Bootstrapper)">
-            <summary>
-            
-            </summary>
-            <param name="bootstrapper"></param>
-        </member>
         <member name="T:GarryDB.Platform.Extensions.AssemblyNameExtensions">
             <summary>
                 Extends <see cref="T:System.Reflection.AssemblyName" />.
@@ -330,11 +188,11 @@
                 The Garry.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Garry.#ctor(GarryDB.Platform.Bootstrapping.Modifier.BootstrapperModifier[])">
+        <member name="M:GarryDB.Platform.Garry.#ctor(GarryDB.Platform.Plugins.PluginLifecycle)">
             <summary>
                 Initializes <see cref="T:GarryDB.Platform.Garry" />.
             </summary>
-            <param name="modifiers"></param>
+            <param name="pluginLifecycle">The lifecycle of the plugins.</param>
         </member>
         <member name="M:GarryDB.Platform.Garry.Start(System.String)">
             <summary>
@@ -522,22 +380,6 @@
                 Gets and sets the configuration as JSON.
             </summary>
         </member>
-        <member name="T:GarryDB.Platform.Plugins.Extensions.AssemblyLoadContextExtensions">
-            <summary>
-                Extends <see cref="T:System.Runtime.Loader.AssemblyLoadContext" />.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Extensions.AssemblyLoadContextExtensions.TryLoad(System.Runtime.Loader.AssemblyLoadContext,System.Reflection.AssemblyName,System.Reflection.Assembly@)">
-            <summary>
-                Tries to load <paramref name="name" /> from the specified <paramref name="assemblyLoadContext" />.
-            </summary>
-            <param name="assemblyLoadContext">The assembly load context.</param>
-            <param name="name">The <see cref="T:System.Reflection.AssemblyName" /> of the assembly to load.</param>
-            <param name="assembly">
-                The loaded <see cref="T:System.Reflection.Assembly" />, or <c>null</c> if the <paramref name="assemblyLoadContext" /> can't load it.
-            </param>
-            <returns><c>true</c> if the loading has been successful, otherwise <c>false</c>.</returns>
-        </member>
         <member name="T:GarryDB.Platform.Plugins.Extensions.PluginExtensions">
             <summary>
                 Extends <see cref="T:GarryDB.Plugins.Plugin" />.
@@ -591,31 +433,26 @@
             <param name="pluginIdentity">The identity of the plugin.</param>
             <returns>A <see cref="T:GarryDB.Plugins.PluginContext" />.</returns>
         </member>
-        <member name="T:GarryDB.Platform.Plugins.PluginDirectory123">
+        <member name="T:GarryDB.Platform.Plugins.PluginDirectory">
             <summary>
                 Contains information about the directory where a <see cref="T:GarryDB.Plugins.Plugin" /> is stored.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginDirectory123.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
+        <member name="M:GarryDB.Platform.Plugins.PluginDirectory.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
             <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PluginDirectory123" />.
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PluginDirectory" />.
             </summary>
             <param name="fileSystem">The file system.</param>
             <param name="directory">The directory containing the plugin.</param>
         </member>
-        <member name="P:GarryDB.Platform.Plugins.PluginDirectory123.Assemblies">
+        <member name="P:GarryDB.Platform.Plugins.PluginDirectory.Assemblies">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginDirectory123.ResolveAssembly(System.Reflection.AssemblyName)">
+        <member name="M:GarryDB.Platform.Plugins.PluginDirectory.ResolveAssembly(System.Reflection.AssemblyName)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginDirectory123.ResolveUnmanagedDllPath(System.String)">
+        <member name="M:GarryDB.Platform.Plugins.PluginDirectory.ResolveUnmanagedDllPath(System.String)">
             <inheritdoc />
-        </member>
-        <member name="P:GarryDB.Platform.Plugins.PluginDirectory123.Directory">
-            <summary>
-                Gets the directory where the plugin is stored.
-            </summary>
         </member>
         <member name="T:GarryDB.Platform.Plugins.PluginIdentity">
             <summary>
@@ -677,7 +514,7 @@
                 A dedicated <see cref="T:System.Runtime.Loader.AssemblyLoadContext" /> for loading assemblies for a <see cref="T:GarryDB.Plugins.Plugin" />.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginLoadContext.#ctor(GarryDB.Platform.Plugins.PluginPackage,System.Collections.Generic.IEnumerable{System.Runtime.Loader.AssemblyLoadContext})">
+        <member name="M:GarryDB.Platform.Plugins.PluginLoadContext.#ctor(GarryDB.Platform.Plugins.PluginPackage,System.Collections.Generic.IEnumerable{GarryDB.Platform.Plugins.AssemblyProvider})">
             <summary>
                 Initializes a new <see cref="T:GarryDB.Platform.Plugins.PluginLoadContext" />.
             </summary>
@@ -712,6 +549,12 @@
             </returns>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginPackage.CompareTo(GarryDB.Platform.Plugins.PluginPackage)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.GetHashCode">
             <inheritdoc />
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginPackage.ToString">

@@ -8,9 +8,60 @@ using System.Windows;
 using GarryDB.Platform;
 using GarryDB.Platform.Persistence;
 using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins.Configuration;
+using GarryDB.Platform.Plugins.Lifecycles;
+using GarryDB.Plugins;
+
+using Dispatcher = System.Windows.Threading.Dispatcher;
 
 namespace GarryDB.Wpf.Host
 {
+    public sealed class UiPluginLifecycle : PluginLifecycle
+    {
+        private readonly Dispatcher dispatcher;
+        private readonly SplashScreen splashScreen;
+
+        public UiPluginLifecycle(PluginLifecycle next, Dispatcher dispatcher, SplashScreen splashScreen) 
+            : base(next)
+        {
+            this.dispatcher = dispatcher;
+            this.splashScreen = splashScreen;
+        }
+
+        public override IEnumerable<PluginPackage> Find(string pluginsDirectory)
+        {
+            IEnumerable<PluginPackage> result = Next.Find(pluginsDirectory).ToList();
+
+            dispatcher.Invoke(() => splashScreen.Total = result.Count() + 1);
+
+            return result;
+        }
+
+        public override PluginIdentity Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        {
+            dispatcher.Invoke(() =>
+            {
+                splashScreen.Current++;
+
+                splashScreen.CurrentPlugin = pluginPackage.Name;
+            });
+
+            return Next.Register(pluginContextFactory, pluginPackage);
+        }
+
+        public override void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        {
+            Next.Start(pluginIdentities);
+
+            dispatcher.Invoke(() =>
+            {
+                splashScreen.Current++;
+                splashScreen.CurrentPlugin = null;
+            });
+        }
+    }
+
+
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
@@ -31,42 +82,11 @@ namespace GarryDB.Wpf.Host
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
             var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-            var garry = new Garry(config =>
-            {
-                return
-                    config
-                        .Use(fileSystem)
-                        .Use(connectionFactory)
-                        .Finder(inner => pluginsDirectory =>
-                        {
-                            IEnumerable<PluginPackage> result = inner(pluginsDirectory).ToList();
+            var defaultLifecycle = new DefaultPluginLifecycle(fileSystem, new ConfigurationStorage(connectionFactory));
+            var akkaLifecycle = new ApplyAkkaPluginLifecycle(defaultLifecycle);
+            var uiLifecycle = new UiPluginLifecycle(akkaLifecycle, Dispatcher, splashScreen);
 
-                            Dispatcher.Invoke(() => splashScreen.Total = result.Count() + 1);
-
-                            return result;
-                        })
-                        .Loader(inner => pluginIdentity =>
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
-                                splashScreen.Current++;
-
-                                splashScreen.CurrentPlugin = pluginIdentity.Name;
-                            });
-
-                            return inner(pluginIdentity);
-                        })
-                        .Starter(inner => pluginIdentities =>
-                        {
-                            inner(pluginIdentities);
-
-                            Dispatcher.Invoke(() =>
-                            {
-                                splashScreen.Current++;
-                                splashScreen.CurrentPlugin = null;
-                            });
-                        });
-            });
+            var garry = new Garry(uiLifecycle);
 
             garry.Start("C:\\Projects\\GarryDB\\Plugins");
 

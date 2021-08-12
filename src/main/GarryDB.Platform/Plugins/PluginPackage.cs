@@ -79,12 +79,19 @@ namespace GarryDB.Platform.Plugins
                 return 1;
             }
 
-            if (other.IsDependentOn(this))
-            {
-                return -1;
-            }
+            return -1;
+        }
 
-            return 0;
+        /// <inheritdoc />
+        public override bool Equals(object? obj)
+        {
+            return obj is PluginPackage that && Name == that.Name;
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
 
         /// <inheritdoc />

@@ -2,6 +2,8 @@ using GarryDB.Platform;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Persistence;
 using GarryDB.Platform.Plugins;
+using GarryDB.Platform.Plugins.Configuration;
+using GarryDB.Platform.Plugins.Lifecycles;
 using GarryDB.Specs.Platform.Infrastructure.Builders;
 using GarryDB.Specs.Platform.Persistence.Builders;
 using GarryDB.Specs.Platform.Plugins.Builders;
@@ -34,7 +36,7 @@ namespace GarryDB.Specs.Platform.Builders
 
         protected override Garry OnBuild()
         {
-            return new Garry(config => config.Use(fileSystem).Use(connectionFactory).Use(pluginContextFactory));
+            return new Garry(new DefaultPluginLifecycle(fileSystem, new ConfigurationStorage(connectionFactory)));
         }
 
         public GarryBuilder Using(FileSystem fileSystem)

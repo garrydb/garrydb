@@ -19,6 +19,7 @@ namespace GarryDB.Platform.Plugins
         private readonly FileSystem fileSystem;
         private readonly AssemblyDependencyResolver resolver;
         private readonly string directory;
+        private readonly Lazy<IEnumerable<AssemblyName>> assemblyNames;
 
         /// <summary>
         ///     Initializes a new <see cref="PluginDirectory" />.
@@ -31,17 +32,17 @@ namespace GarryDB.Platform.Plugins
             this.fileSystem = fileSystem;
             this.directory = directory;
             resolver = new AssemblyDependencyResolver(Path.Combine(directory, $"{Name}.dll"));
+            assemblyNames = new Lazy<IEnumerable<AssemblyName>>(() =>
+                fileSystem.GetFiles(directory, "*.dll")
+                    .Select(file => AssemblyName.GetAssemblyName(file))
+                    .ToList()
+            );
         }
 
         /// <inheritdoc />
         public override IEnumerable<AssemblyName> Assemblies
         {
-            get
-            {
-                return
-                    fileSystem.GetFiles(directory, "*.dll")
-                        .Select(file => new AssemblyName(Path.GetFileNameWithoutExtension(file)));
-            }
+            get { return assemblyNames.Value; }
         }
 
         /// <inheritdoc />

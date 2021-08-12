@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
-using GarryDB.Platform.Plugins.Extensions;
 using GarryDB.Plugins;
+#pragma warning disable 1591
 
 namespace GarryDB.Platform.Plugins
 {
@@ -16,7 +16,7 @@ namespace GarryDB.Platform.Plugins
     /// </summary>
     public sealed class PluginLoadContext : AssemblyLoadContext
     {
-        private readonly IEnumerable<AssemblyLoadContext> providers;
+        private readonly IEnumerable<AssemblyProvider> providers;
         private readonly PluginPackage pluginPackage;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace GarryDB.Platform.Plugins
         /// </summary>
         /// <param name="pluginPackage">The package containing the plugin.</param>
         /// <param name="providers">The <see cref="AssemblyLoadContext" />s to use for referenced assemblies.</param>
-        public PluginLoadContext(PluginPackage pluginPackage, IEnumerable<AssemblyLoadContext> providers)
+        public PluginLoadContext(PluginPackage pluginPackage, IEnumerable<AssemblyProvider> providers)
             : base(pluginPackage.Name)
         {
             this.pluginPackage = pluginPackage;
@@ -37,30 +37,23 @@ namespace GarryDB.Platform.Plugins
         /// <returns>The <see cref="PluginAssembly" />.</returns>
         public PluginAssembly? Load()
         {
-            foreach (AssemblyName assemblyName in pluginPackage.Assemblies)
-            {
-                LoadFromAssemblyName(assemblyName);
-            }
-
-            Assembly? assembly = Assemblies.SingleOrDefault(x => x.GetName().Name == pluginPackage.Name);
-
+            IEnumerable<Assembly> assemblies = pluginPackage.Assemblies.Select(assembly => LoadFromAssemblyName(assembly)).ToList();
+            
+            Assembly? assembly = assemblies.SingleOrDefault(a => a.DefinedTypes.Any(type => type.IsPluginType()));
             return assembly != null ? new PluginAssembly(assembly) : null;
         }
 
         /// <inheritdoc />
         protected override Assembly? Load(AssemblyName assemblyName)
         {
-            var assemblyFromParent = providers.Select(x => new
-                {
-                    Success = x.TryLoad(assemblyName, out Assembly? assembly),
-                    Assembly = assembly,
-                    Provider = x.Name
-                })
-                .FirstOrDefault(x => x.Success);
+            Assembly? assemblyFromParent =
+                providers
+                    .Select(x => x.Provide(assemblyName))
+                    .FirstOrDefault(x => x != null);
 
             if (assemblyFromParent != null)
             {
-                return assemblyFromParent.Assembly;
+                return assemblyFromParent;
             }
 
             if (Assemblies.Any(x => x.GetName().IsCompatibleWith(assemblyName)))

@@ -24,7 +24,7 @@ namespace UIPlugin
 
             var mainThread = new Thread(_ =>
                                         {
-                                            AppBuilder.Configure(() => appBuilder(() => SendAsync("Garry", "shutdown")))
+                                            AppBuilder.Configure(() => appBuilder(() => SendAsync("GarryPlugin", "shutdown")))
                                                       .UsePlatformDetect()
                                                       .LogToTrace()
                                                       .AfterSetup(_ => configured.Set())

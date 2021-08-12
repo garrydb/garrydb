@@ -14,7 +14,7 @@ namespace GarryDB.Platform.Plugins.Configuration
     /// <summary>
     ///     Handles the loading and saving of the configuration for plugins.
     /// </summary>
-    internal sealed class ConfigurationStorage
+    public sealed class ConfigurationStorage
     {
         private static readonly MethodInfo GetConfigurationMethod =
             typeof(ConfigurationStorage)

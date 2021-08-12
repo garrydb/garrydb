@@ -21,9 +21,8 @@ namespace GarryDB.Platform.Plugins
         public PluginAssembly(Assembly assembly)
         {
             this.assembly = assembly;
-            TypeInfo? singleOrDefault = assembly.DefinedTypes.SingleOrDefault(type => type.IsPluginType());
 
-            PluginType = singleOrDefault!;
+            PluginType = assembly.DefinedTypes.Single(type => type.IsPluginType());
             StartupOrder = assembly.GetCustomAttribute<StartupOrderAttribute>()?.Order ?? 0;
         }
 
@@ -46,7 +45,7 @@ namespace GarryDB.Platform.Plugins
             {
                 AssemblyName assemblyName = assembly.GetName();
 
-                return PluginIdentity.Parse($"{assemblyName.Name}:{assemblyName.Version}");
+                return PluginIdentity.Parse($"{PluginType.Name}:{assemblyName.Version}");
             }
         }
     }

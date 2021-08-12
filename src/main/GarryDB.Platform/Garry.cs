@@ -1,30 +1,34 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using GarryDB.Platform.Bootstrapping;
-using GarryDB.Platform.Bootstrapping.Extensions;
-using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
 
 namespace GarryDB.Platform
 {
+    internal sealed class DummyPluginContextFactory : PluginContextFactory
+    {
+        public PluginContext Create(PluginIdentity pluginIdentity)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+
     /// <summary>
     ///     The Garry.
     /// </summary>
     public sealed class Garry
     {
-        private readonly Bootstrapper bootstrapper;
+        private readonly PluginLifecycle pluginLifecycle;
 
         /// <summary>
         ///     Initializes <see cref="Garry" />.
         /// </summary>
-        /// <param name="modifiers"></param>
-        public Garry(params Modifier.BootstrapperModifier[] modifiers)
+        /// <param name="pluginLifecycle">The lifecycle of the plugins.</param>
+        public Garry(PluginLifecycle pluginLifecycle)
         {
-            bootstrapper = new Bootstrapper().ApplyDefault().ApplyAkka();
-
-            modifiers.ForEach(modifier => modifier(bootstrapper));
+            this.pluginLifecycle = pluginLifecycle;
         }
 
         /// <summary>
@@ -33,26 +37,33 @@ namespace GarryDB.Platform
         /// <param name="pluginsDirectory">The directory containing the plugins.</param>
         public void Start(string pluginsDirectory)
         {
-            IReadOnlyList<PluginPackage> pluginDirectories = bootstrapper.Find(pluginsDirectory).ToList();
-            IReadOnlyList<PluginLoadContext> pluginLoadContexts = bootstrapper.Prepare(pluginDirectories).ToList();
-            IReadOnlyList<PluginIdentity> pluginIdentities = bootstrapper.Register(pluginLoadContexts).ToList();
+            IReadOnlyList<PluginPackage> pluginPackages = pluginLifecycle.Find(pluginsDirectory).ToList();
+            pluginLifecycle.Prepare(pluginPackages);
+
+            IReadOnlyList<PluginIdentity> pluginIdentities =
+                pluginPackages
+                    .Select(pluginPackage => pluginLifecycle.Register(new DummyPluginContextFactory(), pluginPackage))
+                    .Where(x => x != null)
+                    .Select(x => x!)
+                    .ToList();
+
             IDictionary<PluginIdentity, Plugin> plugins =
                 pluginIdentities
-                    .Select(pluginIdentity => new { Plugin = bootstrapper.Load(pluginIdentity), PluginIdentity = pluginIdentity })
+                    .Select(pluginIdentity => new { Plugin = pluginLifecycle.Load(pluginIdentity), PluginIdentity = pluginIdentity })
                     .Where(x => x.Plugin != null)
                     .ToDictionary(x => x.PluginIdentity, x => x.Plugin!);
 
             foreach (PluginIdentity pluginIdentity in plugins.Keys)
             {
-                bootstrapper.Configure(pluginIdentity, null!);
+                pluginLifecycle.Configure(pluginIdentity);
             }
 
-            bootstrapper.Start(plugins.Keys.ToList());
+            pluginLifecycle.Start(plugins.Keys.ToList());
 
             GarryPlugin garryPlugin = plugins.Values.OfType<GarryPlugin>().Single();
             garryPlugin.WaitUntilShutdownRequested();
 
-            bootstrapper.Stop(plugins.Keys.ToList());
+            pluginLifecycle.Stop(plugins.Keys.ToList());
         }
     }
 }

@@ -8,7 +8,7 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
     internal sealed class PluginLoadContextBuilder : TestDataBuilder<PluginLoadContext>
     {
         private PluginDirectory pluginDirectory;
-        private readonly IList<AssemblyLoadContext> providers = new List<AssemblyLoadContext>();
+        private readonly IList<AssemblyProvider> providers = new List<AssemblyProvider>();
 
         protected override void OnPreBuild()
         {
@@ -36,7 +36,7 @@ namespace GarryDB.Specs.Platform.Plugins.Builders
 
         public PluginLoadContextBuilder WithProvider(AssemblyLoadContext provider)
         {
-            providers.Add(provider);
+            providers.Add(new AssemblyProvider(provider));
             return this;
         }
 

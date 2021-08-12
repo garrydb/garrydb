@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Loader;
+﻿using System.Collections.Generic;
 
-using Autofac;
-
-using GarryDB.Platform.Extensions;
-using GarryDB.Platform.Infrastructure;
 using GarryDB.Plugins;
 
 #pragma warning disable 1591
@@ -22,121 +15,39 @@ namespace GarryDB.Platform.Plugins
 
         protected PluginLifecycle Next { get; }
 
-        public abstract IEnumerable<PluginPackage> Find(string pluginsDirectory);
-        public abstract IEnumerable<PluginLoadContext> Prepare(IEnumerable<PluginPackage> pluginPackages);
-        public abstract IEnumerable<PluginIdentity> Register(IEnumerable<PluginLoadContext> pluginLoadContexts);
-        public abstract IDictionary<PluginIdentity, Plugin> Load(IEnumerable<PluginIdentity> pluginIdentities);
-        public abstract void Configure(IEnumerable<PluginIdentity> pluginIdentities);
-        public abstract void Start(IEnumerable<PluginIdentity> pluginIdentities);
-        public abstract void Stop(IEnumerable<PluginIdentity> pluginIdentities);
-    }
-
-    internal sealed class DefaultPluginLifecycle : PluginLifecycle
-    {
-        private readonly Lazy<IContainer> Container;
-        private readonly ContainerBuilder containerBuilder;
-
-        private readonly FileSystem fileSystem;
-        private readonly IDictionary<PluginIdentity, int> startupOrders;
-        private readonly PluginContextFactory pluginContextFactory;
-
-        public DefaultPluginLifecycle(PluginLifecycle next, FileSystem fileSystem, PluginContextFactory pluginContextFactory)
-            : base(next)
+        public virtual IEnumerable<PluginPackage> Find(string pluginsDirectory)
         {
-            this.fileSystem = fileSystem;
-            this.pluginContextFactory = pluginContextFactory;
-
-            containerBuilder = new ContainerBuilder();
-            Container = new Lazy<IContainer>(() => containerBuilder.Build());
-            startupOrders = new Dictionary<PluginIdentity, int>();
+            return Next.Find(pluginsDirectory);
         }
 
-        public override IEnumerable<PluginPackage> Find(string pluginsDirectory)
+        public virtual void Prepare(IEnumerable<PluginPackage> pluginPackages)
         {
-            return fileSystem.GetTopLevelDirectories(pluginsDirectory)
-                .Select(directory => new PluginDirectory(fileSystem, directory))
-                .OrderBy(pluginPackage => pluginPackage)
-                .ToList();
+            Next.Prepare(pluginPackages);
         }
 
-        public override IEnumerable<PluginLoadContext> Prepare(IEnumerable<PluginPackage> pluginPackages)
+        public virtual PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
         {
-            var pluginLoadContexts = new Dictionary<PluginPackage, PluginLoadContext>();
-            foreach (PluginPackage pluginPackage in pluginPackages)
-            {
-                IEnumerable<PluginLoadContext> providers = pluginLoadContexts.Where(x => pluginPackage.IsDependentOn(x.Key)).Select(x => x.Value);
-
-                var loadContext = new PluginLoadContext(pluginPackage, AssemblyLoadContext.Default.AsEnumerable()
-                    .Concat(providers)
-                    .ToList());
-
-                pluginLoadContexts[pluginPackage] = loadContext;
-            }
-
-            return pluginLoadContexts.Values;
+            return Next.Register(pluginContextFactory, pluginPackage);
         }
 
-        public override IEnumerable<PluginIdentity> Register(IEnumerable<PluginLoadContext> pluginLoadContexts)
+        public virtual Plugin? Load(PluginIdentity pluginIdentity)
         {
-            containerBuilder.RegisterType<GarryPlugin>()
-                .Keyed<Plugin>(GarryPlugin.PluginIdentity)
-                .WithParameter(TypedParameter.From(pluginContextFactory.Create(GarryPlugin.PluginIdentity)))
-                .SingleInstance();
-
-            startupOrders[GarryPlugin.PluginIdentity] = int.MinValue;
-
-            foreach (PluginLoadContext pluginLoadContext in pluginLoadContexts)
-            {
-                PluginAssembly? pluginAssembly = pluginLoadContext.Load();
-                if (pluginAssembly == null)
-                {
-                    yield break;
-                }
-
-                PluginIdentity pluginIdentity = pluginAssembly.PluginIdentity;
-                containerBuilder.RegisterType(pluginAssembly.PluginType)
-                    .Keyed<Plugin>(pluginIdentity)
-                    .WithParameter(TypedParameter.From(pluginContextFactory.Create(pluginIdentity)))
-                    .SingleInstance();
-
-                containerBuilder.RegisterAssemblyModules(pluginLoadContext.Assemblies.ToArray());
-
-                startupOrders[pluginIdentity] = pluginAssembly.StartupOrder;
-
-                yield return pluginIdentity;
-            }
+            return Next.Load(pluginIdentity);
         }
 
-        public override IDictionary<PluginIdentity, Plugin> Load(IEnumerable<PluginIdentity> pluginIdentities)
+        public virtual object? Configure(PluginIdentity pluginIdentity)
         {
-            var plugins = new Dictionary<PluginIdentity, Plugin>();
-
-            foreach (PluginIdentity pluginIdentity in pluginIdentities)
-            {
-                Plugin? plugin = Container.Value.ResolveOptionalKeyed<Plugin>(pluginIdentity);
-
-                if (plugin != null)
-                {
-                    plugins[pluginIdentity] = plugin;
-                }
-            }
-
-            return plugins;
+            return Next.Configure(pluginIdentity);
         }
 
-        public override void Configure(IEnumerable<PluginIdentity> pluginIdentities)
+        public virtual void Start(IEnumerable<PluginIdentity> pluginIdentities)
         {
-            throw new System.NotImplementedException();
+            Next.Start(pluginIdentities);
         }
 
-        public override void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        public virtual void Stop(IEnumerable<PluginIdentity> pluginIdentities)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Stop(IEnumerable<PluginIdentity> pluginIdentities)
-        {
-            throw new System.NotImplementedException();
+            Next.Stop(pluginIdentities);
         }
     }
 }

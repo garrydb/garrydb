@@ -21,6 +21,7 @@
       <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
       <PackageReference Include="System.Reactive" Version="5.0.0" />
       <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
+      <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
     </ItemGroup>
 
 </Project>
