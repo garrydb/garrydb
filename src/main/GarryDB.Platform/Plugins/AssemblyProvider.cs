@@ -8,28 +8,39 @@ using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Plugins.Extensions;
-#pragma warning disable 1591
 
 namespace GarryDB.Platform.Plugins
 {
+    /// <summary>
+    ///     Provides an <see cref="Assembly" /> to a different <see cref="AssemblyLoadContext" />.
+    /// </summary>
     public sealed class AssemblyProvider : IDisposable
     {
         private readonly MemoryCache cache;
-        private readonly AssemblyLoadContext inner;
+        private readonly AssemblyLoadContext assemblyLoadContext;
 
-        public AssemblyProvider(AssemblyLoadContext inner)
+        /// <summary>
+        ///     Initializes a new <see cref="AssemblyProvider" />.
+        /// </summary>
+        /// <param name="assemblyLoadContext">The assembly load context for loading assemblies.</param>
+        public AssemblyProvider(AssemblyLoadContext assemblyLoadContext)
         {
-            this.inner = inner;
+            this.assemblyLoadContext = assemblyLoadContext;
             cache = new MemoryCache(Guid.NewGuid().ToString());
         }
 
+        /// <summary>
+        ///     Provide the <see cref="Assembly" />.
+        /// </summary>
+        /// <param name="assemblyName">The assembly name.</param>
+        /// <returns>The <see cref="Assembly" />, or <c>null</c> if this provider can't provide it.</returns>
         public Assembly? Provide(AssemblyName assemblyName)
         {
-            string cacheKey = $"{inner.Name}+{assemblyName.Name}.{assemblyName.Version?.Major ?? 0}";
+            string cacheKey = $"{assemblyLoadContext.Name}+{assemblyName.Name}.{assemblyName.Version?.Major ?? 0}";
 
             return cache.GetOrAdd(cacheKey, () =>
             {
-                Assembly? assembly = inner.Assemblies.SingleOrDefault(x => assemblyName.IsCompatibleWith(x.GetName()));
+                Assembly? assembly = assemblyLoadContext.Assemblies.SingleOrDefault(x => assemblyName.IsCompatibleWith(x.GetName()));
 
                 if (assembly != null)
                 {
@@ -38,19 +49,20 @@ namespace GarryDB.Platform.Plugins
 
                 try
                 {
-                    assembly = inner.LoadFromAssemblyName(assemblyName);
+                    assembly = assemblyLoadContext.LoadFromAssemblyName(assemblyName);
 
                     return assembly;
                 }
                 catch (FileNotFoundException)
                 {
-                    Debug.WriteLine($"*** NOT FOUND *** - {inner.Name} / {assemblyName}");
+                    Debug.WriteLine($"*** NOT FOUND *** - {assemblyLoadContext.Name} / {assemblyName}");
 
                     return null;
                 }
             });
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             cache.Dispose();

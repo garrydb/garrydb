@@ -18,26 +18,27 @@ namespace GarryDB.Wpf.Host
 {
     public sealed class UiPluginLifecycle : PluginLifecycle
     {
+        private readonly PluginLifecycle next;
         private readonly Dispatcher dispatcher;
         private readonly SplashScreen splashScreen;
 
         public UiPluginLifecycle(PluginLifecycle next, Dispatcher dispatcher, SplashScreen splashScreen) 
-            : base(next)
         {
+            this.next = next;
             this.dispatcher = dispatcher;
             this.splashScreen = splashScreen;
         }
 
-        public override IEnumerable<PluginPackage> Find(string pluginsDirectory)
+        public IEnumerable<PluginPackage> Find(string pluginsDirectory)
         {
-            IEnumerable<PluginPackage> result = Next.Find(pluginsDirectory).ToList();
+            IEnumerable<PluginPackage> result = next.Find(pluginsDirectory).ToList();
 
             dispatcher.Invoke(() => splashScreen.Total = result.Count() + 1);
 
             return result;
         }
 
-        public override PluginIdentity Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        public PluginIdentity Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
         {
             dispatcher.Invoke(() =>
             {
@@ -46,18 +47,38 @@ namespace GarryDB.Wpf.Host
                 splashScreen.CurrentPlugin = pluginPackage.Name;
             });
 
-            return Next.Register(pluginContextFactory, pluginPackage);
+            return next.Register(pluginContextFactory, pluginPackage);
         }
 
-        public override void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        public void Start(IEnumerable<PluginIdentity> pluginIdentities)
         {
-            Next.Start(pluginIdentities);
+            next.Start(pluginIdentities);
 
             dispatcher.Invoke(() =>
             {
                 splashScreen.Current++;
                 splashScreen.CurrentPlugin = null;
             });
+        }
+
+        public void DetermineDependencies(IEnumerable<PluginPackage> pluginPackages)
+        {
+            next.DetermineDependencies(pluginPackages);
+        }
+
+        public Plugin Load(PluginIdentity pluginIdentity)
+        {
+            return next.Load(pluginIdentity);
+        }
+
+        public object Configure(PluginIdentity pluginIdentity)
+        {
+            return next.Configure(pluginIdentity);
+        }
+
+        public void Stop(IEnumerable<PluginIdentity> pluginIdentities)
+        {
+            next.Stop(pluginIdentities);
         }
     }
 
@@ -83,7 +104,7 @@ namespace GarryDB.Wpf.Host
             var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
             var defaultLifecycle = new DefaultPluginLifecycle(fileSystem, new ConfigurationStorage(connectionFactory));
-            var akkaLifecycle = new ApplyAkkaPluginLifecycle(defaultLifecycle);
+            var akkaLifecycle = new AkkaPluginLifecycle(defaultLifecycle);
             var uiLifecycle = new UiPluginLifecycle(akkaLifecycle, Dispatcher, splashScreen);
 
             var garry = new Garry(uiLifecycle);

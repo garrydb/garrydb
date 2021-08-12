@@ -7,7 +7,6 @@ using System.Runtime.Loader;
 
 using GarryDB.Platform.Extensions;
 using GarryDB.Plugins;
-#pragma warning disable 1591
 
 namespace GarryDB.Platform.Plugins
 {

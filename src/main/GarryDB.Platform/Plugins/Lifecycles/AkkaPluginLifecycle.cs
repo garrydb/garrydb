@@ -8,19 +8,26 @@ using GarryDB.Platform.Messaging;
 using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
-#pragma warning disable 1591
 
 namespace GarryDB.Platform.Plugins.Lifecycles
 {
-    public sealed class ApplyAkkaPluginLifecycle : PluginLifecycle
+    /// <summary>
+    ///     Adds Akka to the <see cref="PluginLifecycle" />.
+    /// </summary>
+    public sealed class AkkaPluginLifecycle : PluginLifecycle
     {
+        private readonly PluginLifecycle next;
         private readonly ActorSystem actorSystem;
         private readonly IActorRef pluginsActor;
         private readonly PluginContextFactory pluginContextFactory;
 
-        public ApplyAkkaPluginLifecycle(PluginLifecycle next)
-            : base(next)
+        /// <summary>
+        ///     Initializes a new <see cref="AkkaPluginLifecycle" />.
+        /// </summary>
+        /// <param name="next"></param>
+        public AkkaPluginLifecycle(PluginLifecycle next)
         {
+            this.next = next;
             actorSystem = ActorSystem.Create("garry");
             pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
             pluginContextFactory = new AkkaPluginContextFactory(pluginsActor);
@@ -28,14 +35,16 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             MonitorDeadletters();
         }
 
-        public override PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        /// <inheritdoc />
+        public PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
         {
-            return Next.Register(this.pluginContextFactory, pluginPackage);
+            return next.Register(this.pluginContextFactory, pluginPackage);
         }
 
-        public override Plugin? Load(PluginIdentity pluginIdentity)
+        /// <inheritdoc />
+        public Plugin? Load(PluginIdentity pluginIdentity)
         {
-            Plugin? plugin = Next.Load(pluginIdentity);
+            Plugin? plugin = next.Load(pluginIdentity);
 
             if (plugin != null)
             {
@@ -45,9 +54,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             return plugin;
         }
 
-        public override object? Configure(PluginIdentity pluginIdentity)
+        /// <inheritdoc />
+        public object? Configure(PluginIdentity pluginIdentity)
         {
-            object? configuration = Next.Configure(pluginIdentity);
+            object? configuration = next.Configure(pluginIdentity);
 
             if (configuration == null)
             {
@@ -61,9 +71,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             return configuration;
         }
 
-        public override void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        /// <inheritdoc />
+        public void Start(IEnumerable<PluginIdentity> pluginIdentities)
         {
-            Next.Start(pluginIdentities);
+            next.Start(pluginIdentities);
             
             foreach (PluginIdentity pluginIdentity in pluginIdentities)
             {
@@ -73,9 +84,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             }
         }
 
-        public override void Stop(IEnumerable<PluginIdentity> pluginIdentities)
+        /// <inheritdoc />
+        public void Stop(IEnumerable<PluginIdentity> pluginIdentities)
         {
-            Next.Stop(pluginIdentities);
+            next.Stop(pluginIdentities);
             
             foreach (PluginIdentity pluginIdentity in pluginIdentities)
             {
@@ -85,6 +97,18 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             }
 
             actorSystem.Dispose();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<PluginPackage> Find(string pluginsDirectory)
+        {
+            return next.Find(pluginsDirectory);
+        }
+
+        /// <inheritdoc />
+        public void DetermineDependencies(IEnumerable<PluginPackage> pluginPackages)
+        {
+            next.DetermineDependencies(pluginPackages);
         }
 
         private void MonitorDeadletters()

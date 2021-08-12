@@ -2,52 +2,60 @@
 
 using GarryDB.Plugins;
 
-#pragma warning disable 1591
-
 namespace GarryDB.Platform.Plugins
 {
-    public abstract class PluginLifecycle
+    /// <summary>
+    ///     The lifecycle of the plugins.
+    /// </summary>
+    public interface PluginLifecycle
     {
-        protected PluginLifecycle(PluginLifecycle next)
-        {
-            Next = next;
-        }
+        /// <summary>
+        ///     Finds all the <see cref="PluginPackage" />s in <paramref name="pluginsDirectory" />.
+        /// </summary>
+        /// <param name="pluginsDirectory">The directory containing the plugins.</param>
+        /// <returns>The <see cref="PluginPackage" /> for every plugin.</returns>
+        IEnumerable<PluginPackage> Find(string pluginsDirectory);
 
-        protected PluginLifecycle Next { get; }
+        /// <summary>
+        ///     Determines the dependencies between the <see cref="PluginPackage" />s.
+        /// </summary>
+        /// <param name="pluginPackages">The plugin packages.</param>
+        void DetermineDependencies(IEnumerable<PluginPackage> pluginPackages);
 
-        public virtual IEnumerable<PluginPackage> Find(string pluginsDirectory)
-        {
-            return Next.Find(pluginsDirectory);
-        }
+        /// <summary>
+        ///     Register the plugins in an IoC-container.
+        /// </summary>
+        /// <param name="pluginContextFactory">
+        ///     The <see cref="PluginContextFactory"/> for creating <see cref="PluginContext" />.
+        /// </param>
+        /// <param name="pluginPackage">The package to register.</param>
+        /// <returns>The identity of the plugin, or <c>null</c> if the package doesn't contain a plugin.</returns>
+        PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage);
 
-        public virtual void Prepare(IEnumerable<PluginPackage> pluginPackages)
-        {
-            Next.Prepare(pluginPackages);
-        }
+        /// <summary>
+        ///     Load the plugin.
+        /// </summary>
+        /// <param name="pluginIdentity">The identity of the plugin.</param>
+        /// <returns>The plugin, or <c>null</c> if the plugin is not found.</returns>
+        Plugin? Load(PluginIdentity pluginIdentity);
 
-        public virtual PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
-        {
-            return Next.Register(pluginContextFactory, pluginPackage);
-        }
+        /// <summary>
+        ///     Configure the plugin.
+        /// </summary>
+        /// <param name="pluginIdentity">The identity of the plugin.</param>
+        /// <returns>The configuration of the plugin.</returns>
+        object? Configure(PluginIdentity pluginIdentity);
 
-        public virtual Plugin? Load(PluginIdentity pluginIdentity)
-        {
-            return Next.Load(pluginIdentity);
-        }
+        /// <summary>
+        ///     Start the plugins.
+        /// </summary>
+        /// <param name="pluginIdentities">The identities of the plugin.</param>
+        void Start(IEnumerable<PluginIdentity> pluginIdentities);
 
-        public virtual object? Configure(PluginIdentity pluginIdentity)
-        {
-            return Next.Configure(pluginIdentity);
-        }
-
-        public virtual void Start(IEnumerable<PluginIdentity> pluginIdentities)
-        {
-            Next.Start(pluginIdentities);
-        }
-
-        public virtual void Stop(IEnumerable<PluginIdentity> pluginIdentities)
-        {
-            Next.Stop(pluginIdentities);
-        }
+        /// <summary>
+        ///     Stop the plugins.
+        /// </summary>
+        /// <param name="pluginIdentities">The identities of the plugin.</param>
+        void Stop(IEnumerable<PluginIdentity> pluginIdentities);
     }
 }

@@ -5,12 +5,19 @@ using System.Linq;
 using System.Reflection;
 
 using GarryDB.Platform.Extensions;
+using GarryDB.Plugins;
 
-#pragma warning disable 1591
 namespace GarryDB.Platform.Plugins
 {
+    /// <summary>
+    ///     A package containing a <see cref="Plugin" /> and other related files.
+    /// </summary>
     public abstract class PluginPackage : IComparable<PluginPackage>
     {
+        /// <summary>
+        ///     Initializes a new <see cref="PluginPackage" />.
+        /// </summary>
+        /// <param name="name">The name of the package.</param>
         protected PluginPackage(string name)
         {
             Name = name;
@@ -21,9 +28,23 @@ namespace GarryDB.Platform.Plugins
         /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        ///     Gets the assemblies of this plugin.
+        /// </summary>
         public abstract IEnumerable<AssemblyName> Assemblies { get; }
 
+        /// <summary>
+        ///     Resolve the specified <see cref="AssemblyName" /> to a <see cref="Stream" />.
+        /// </summary>
+        /// <param name="assemblyName">The assembly name.</param>
+        /// <returns>A stream containing the assembly.</returns>
         public abstract Stream? ResolveAssembly(AssemblyName assemblyName);
+        
+        /// <summary>
+        ///     Resolve the full path of an unmanaged .dll.
+        /// </summary>
+        /// <param name="unmanagedDllName">The name of the .dll.</param>
+        /// <returns>The full path to the unmanaged .dll.</returns>
         public abstract string? ResolveUnmanagedDllPath(string unmanagedDllName);
         
         /// <summary>

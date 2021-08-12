@@ -9,10 +9,12 @@ using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Plugins;
-#pragma warning disable 1591
 
 namespace GarryDB.Platform.Plugins.Lifecycles
 {
+    /// <summary>
+    ///     The default lifecycle of the plugins.
+    /// </summary>
     public sealed class DefaultPluginLifecycle : PluginLifecycle
     {
         private readonly Lazy<IContainer> container;
@@ -23,8 +25,12 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         private readonly IDictionary<PluginPackage, PluginLoadContext> pluginLoadContexts;
         private readonly IDictionary<PluginIdentity, int> startupOrders;
 
+        /// <summary>
+        ///     Initializes a new <see cref="DefaultPluginLifecycle" />.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="configurationStorage">The configuration storage.</param>
         public DefaultPluginLifecycle(FileSystem fileSystem, ConfigurationStorage configurationStorage)
-            : base(null!)
         {
             this.fileSystem = fileSystem;
             this.configurationStorage = configurationStorage;
@@ -36,25 +42,18 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             container = new Lazy<IContainer>(() => containerBuilder.Build());
         }
 
-        public override IEnumerable<PluginPackage> Find(string pluginsDirectory)
+        /// <inheritdoc />
+        public IEnumerable<PluginPackage> Find(string pluginsDirectory)
         {
-            // var x = 
-            // new SortedSet<PluginPackage>(fileSystem.GetTopLevelDirectories(pluginsDirectory)
-            //     .Select(directory => (PluginPackage)new PluginDirectory(fileSystem, directory))
-            //     .Concat(new GarryPluginPackage()));
-
-
-            var x = 
-                fileSystem.GetTopLevelDirectories(pluginsDirectory)
-                    .Select(directory => (PluginPackage)new PluginDirectory(fileSystem, directory))
-                    .Concat(new GarryPluginPackage())
-                    .OrderBy(x => x)
-                    .ToList();
-
-            return x;
+            return fileSystem.GetTopLevelDirectories(pluginsDirectory)
+                .Select(directory => (PluginPackage)new PluginDirectory(fileSystem, directory))
+                .Concat(new GarryPluginPackage())
+                .OrderBy(x => x)
+                .ToList();
         }
 
-        public override void Prepare(IEnumerable<PluginPackage> pluginPackages)
+        /// <inheritdoc />
+        public void DetermineDependencies(IEnumerable<PluginPackage> pluginPackages)
         {
             IDictionary<AssemblyLoadContext, AssemblyProvider> assemblyProviders =
                 new Dictionary<AssemblyLoadContext, AssemblyProvider>
@@ -80,7 +79,8 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             }
         }
 
-        public override PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        /// <inheritdoc />
+        public PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
         {
             PluginLoadContext pluginLoadContext = pluginLoadContexts[pluginPackage];
 
@@ -104,14 +104,16 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             return pluginIdentity;
         }
 
-        public override Plugin? Load(PluginIdentity pluginIdentity)
+        /// <inheritdoc />
+        public Plugin? Load(PluginIdentity pluginIdentity)
         {
             Plugin? plugin = container.Value.ResolveOptionalKeyed<Plugin>(pluginIdentity);
 
             return plugin;
         }
 
-        public override object? Configure(PluginIdentity pluginIdentity)
+        /// <inheritdoc />
+        public object? Configure(PluginIdentity pluginIdentity)
         {
             Plugin? plugin = Load(pluginIdentity);
             if (plugin == null)
@@ -124,11 +126,13 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             return configuration;
         }
 
-        public override void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        /// <inheritdoc />
+        public void Start(IEnumerable<PluginIdentity> pluginIdentities)
         {
         }
 
-        public override void Stop(IEnumerable<PluginIdentity> pluginIdentities)
+        /// <inheritdoc />
+        public void Stop(IEnumerable<PluginIdentity> pluginIdentities)
         {
         }
     }

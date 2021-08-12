@@ -14,7 +14,6 @@ namespace GarryDB.Platform
         }
     }
 
-
     /// <summary>
     ///     The Garry.
     /// </summary>
@@ -38,7 +37,7 @@ namespace GarryDB.Platform
         public void Start(string pluginsDirectory)
         {
             IReadOnlyList<PluginPackage> pluginPackages = pluginLifecycle.Find(pluginsDirectory).ToList();
-            pluginLifecycle.Prepare(pluginPackages);
+            pluginLifecycle.DetermineDependencies(pluginPackages);
 
             IReadOnlyList<PluginIdentity> pluginIdentities =
                 pluginPackages
