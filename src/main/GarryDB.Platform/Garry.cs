@@ -6,14 +6,6 @@ using GarryDB.Plugins;
 
 namespace GarryDB.Platform
 {
-    internal sealed class DummyPluginContextFactory : PluginContextFactory
-    {
-        public PluginContext Create(PluginIdentity pluginIdentity)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
     /// <summary>
     ///     The Garry.
     /// </summary>
@@ -40,7 +32,7 @@ namespace GarryDB.Platform
 
             IReadOnlyList<PluginIdentity> pluginIdentities =
                 pluginPackages
-                    .Select(pluginPackage => pluginLifecycle.Load(new DummyPluginContextFactory(), pluginPackage))
+                    .Select(pluginPackage => pluginLifecycle.Load(pluginPackage))
                     .Where(x => x != null)
                     .Select(x => x!)
                     .ToList();

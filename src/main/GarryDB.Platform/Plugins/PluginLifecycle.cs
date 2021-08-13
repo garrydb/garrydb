@@ -19,12 +19,9 @@ namespace GarryDB.Platform.Plugins
         /// <summary>
         ///     Load the plugin.
         /// </summary>
-        /// <param name="pluginContextFactory">
-        ///     The <see cref="PluginContextFactory"/> for creating <see cref="PluginContext" />.
-        /// </param>
         /// <param name="pluginPackage">The package to register.</param>
         /// <returns>The identity of the plugin, or <c>null</c> if the package doesn't contain a plugin.</returns>
-        PluginIdentity? Load(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage);
+        PluginIdentity? Load(PluginPackage pluginPackage);
 
         /// <summary>
         ///     Instantiate the plugin.

@@ -30,9 +30,8 @@ namespace GarryDB.Wpf.Host
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
             var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-            var defaultLifecycle = new DefaultPluginLifecycle(fileSystem);
-            var akkaLifecycle = new AkkaPluginLifecycle(defaultLifecycle, new ConfigurationStorage(connectionFactory));
-            var uiLifecycle = new UiPluginLifecycle(akkaLifecycle, Dispatcher, splashScreen);
+            var defaultLifecycle = new DefaultPluginLifecycle(fileSystem, new ConfigurationStorage(connectionFactory));
+            var uiLifecycle = new UiPluginLifecycle(defaultLifecycle, Dispatcher, splashScreen);
 
             var garry = new Garry(uiLifecycle);
 

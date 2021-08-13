@@ -416,51 +416,22 @@
                 is not a <see cref="T:GarryDB.Plugins.ConfigurablePlugin`1" />.
             </returns>
         </member>
-        <member name="T:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle">
-            <summary>
-                Adds Akka to the <see cref="T:GarryDB.Platform.Plugins.PluginLifecycle" />.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.#ctor(GarryDB.Platform.Plugins.PluginLifecycle,GarryDB.Platform.Plugins.Configuration.ConfigurationStorage)">
-            <summary>
-                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle" />.
-            </summary>
-            <param name="next"></param>
-            <param name="configurationStorage">The configuration storage.</param>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Find(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Instantiate(GarryDB.Platform.Plugins.PluginIdentity)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Configure(GarryDB.Platform.Plugins.PluginIdentity)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
-            <inheritdoc />
-        </member>
         <member name="T:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle">
             <summary>
                 The default lifecycle of the plugins.
             </summary>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.#ctor(GarryDB.Platform.Infrastructure.FileSystem)">
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.#ctor(GarryDB.Platform.Infrastructure.FileSystem,GarryDB.Platform.Plugins.Configuration.ConfigurationStorage)">
             <summary>
                 Initializes a new <see cref="T:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle" />.
             </summary>
             <param name="fileSystem">The file system.</param>
+            <param name="configurationStorage">The configuration storage.</param>
         </member>
         <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Find(System.String)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Load(GarryDB.Platform.Plugins.PluginPackage)">
             <inheritdoc />
         </member>
         <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Instantiate(GarryDB.Platform.Plugins.PluginIdentity)">
@@ -604,13 +575,10 @@
             <param name="pluginsDirectory">The directory containing the plugins.</param>
             <returns>The <see cref="T:GarryDB.Platform.Plugins.PluginPackage" /> for every plugin.</returns>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Load(GarryDB.Platform.Plugins.PluginPackage)">
             <summary>
                 Load the plugin.
             </summary>
-            <param name="pluginContextFactory">
-                The <see cref="T:GarryDB.Platform.Plugins.PluginContextFactory"/> for creating <see cref="T:GarryDB.Plugins.PluginContext" />.
-            </param>
             <param name="pluginPackage">The package to register.</param>
             <returns>The identity of the plugin, or <c>null</c> if the package doesn't contain a plugin.</returns>
         </member>

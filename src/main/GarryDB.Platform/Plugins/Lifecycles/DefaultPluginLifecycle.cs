@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Loader;
 
+using Akka.Actor;
+using Akka.Event;
+
+using GarryDB.Platform.Actors;
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
+using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Plugins;
+
+using Address = GarryDB.Platform.Messaging.Address;
 
 namespace GarryDB.Platform.Plugins.Lifecycles
 {
@@ -15,18 +23,30 @@ namespace GarryDB.Platform.Plugins.Lifecycles
     public sealed class DefaultPluginLifecycle : PluginLifecycle
     {
         private readonly FileSystem fileSystem;
+        private readonly ActorSystem actorSystem;
+        private readonly IActorRef pluginsActor;
+        private readonly ConfigurationStorage configurationStorage;
+
         private readonly IDictionary<PluginPackage, PluginLoadContext> pluginLoadContexts;
         private readonly IDictionary<PluginIdentity, Func<Plugin>> pluginFactories;
         private readonly IDictionary<PluginIdentity, int> startupOrders;
+        private readonly PluginContextFactory pluginContextFactory;
 
         /// <summary>
         ///     Initializes a new <see cref="DefaultPluginLifecycle" />.
         /// </summary>
         /// <param name="fileSystem">The file system.</param>
-        public DefaultPluginLifecycle(FileSystem fileSystem)
+        /// <param name="configurationStorage">The configuration storage.</param>
+        public DefaultPluginLifecycle(FileSystem fileSystem, ConfigurationStorage configurationStorage)
         {
             this.fileSystem = fileSystem;
+            this.configurationStorage = configurationStorage;
+            actorSystem = ActorSystem.Create("garry");
+            pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
 
+            MonitorDeadletters();
+
+            pluginContextFactory = new AkkaPluginContextFactory(pluginsActor);
             pluginLoadContexts = new Dictionary<PluginPackage, PluginLoadContext>();
             startupOrders = new Dictionary<PluginIdentity, int>();
             pluginFactories = new Dictionary<PluginIdentity, Func<Plugin>>();
@@ -74,7 +94,7 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         }
 
         /// <inheritdoc />
-        public PluginIdentity? Load(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        public PluginIdentity? Load(PluginPackage pluginPackage)
         {
             PluginLoadContext pluginLoadContext = pluginLoadContexts[pluginPackage];
 
@@ -94,24 +114,61 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         }
 
         /// <inheritdoc />
-        public Plugin? Instantiate(PluginIdentity pluginIdentity)
+        public Plugin Instantiate(PluginIdentity pluginIdentity)
         {
-            return pluginFactories[pluginIdentity]();
+            Plugin plugin = pluginFactories[pluginIdentity]();
+
+            pluginsActor.Tell(new PluginLoaded(pluginIdentity, plugin));
+
+            return plugin;
         }
 
         /// <inheritdoc />
         public void Configure(PluginIdentity pluginIdentity)
         {
+            Plugin plugin = pluginFactories[pluginIdentity]();
+
+            object? configuration = configurationStorage.FindConfiguration(pluginIdentity, plugin);
+
+            if (configuration == null)
+            {
+                return;
+            }
+
+            var destination = new Address(pluginIdentity, "configure");
+            var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
+            pluginsActor.Tell(messageEnvelope);
         }
 
         /// <inheritdoc />
         public void Start(IReadOnlyList<PluginIdentity> pluginIdentities)
         {
+            foreach (PluginIdentity pluginIdentity in startupOrders.OrderBy(x => x.Value).Select(x => x.Key))
+            {
+                var destination = new Address(pluginIdentity, "start");
+                var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                pluginsActor.Tell(messageEnvelope);
+            }
         }
 
         /// <inheritdoc />
         public void Stop(IReadOnlyList<PluginIdentity> pluginIdentities)
         {
+            foreach (PluginIdentity pluginIdentity in pluginIdentities)
+            {
+                var destination = new Address(pluginIdentity, "stop");
+                var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
+                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
+            }
+
+            actorSystem.Dispose();
+        }
+   
+        private void MonitorDeadletters()
+        {
+            var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
+            IActorRef deadletterWatchActorRef = actorSystem.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
+            actorSystem.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
         }
     }
 }

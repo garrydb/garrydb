@@ -29,7 +29,7 @@ namespace GarryDB.Wpf.Host
             return result;
         }
 
-        public PluginIdentity Load(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        public PluginIdentity Load(PluginPackage pluginPackage)
         {
             dispatcher.Invoke(() =>
             {
@@ -37,7 +37,7 @@ namespace GarryDB.Wpf.Host
                 splashScreen.CurrentPlugin = pluginPackage.Name;
             });
 
-            PluginIdentity result = next.Load(pluginContextFactory, pluginPackage);
+            PluginIdentity result = next.Load(pluginPackage);
 
             dispatcher.Invoke(() =>
             {
