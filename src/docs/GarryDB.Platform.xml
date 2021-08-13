@@ -681,7 +681,7 @@
         </member>
         <member name="P:GarryDB.Platform.Plugins.PluginPackage.Assemblies">
             <summary>
-                Gets the assemblies of this plugin.
+                Gets the assembly containing the plugin and the contract.
             </summary>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginPackage.ResolveAssembly(System.Reflection.AssemblyName)">

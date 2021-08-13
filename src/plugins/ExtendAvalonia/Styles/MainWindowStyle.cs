@@ -1,7 +1,8 @@
-using System;
-
-using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using Avalonia.Styling;
+
+using UIPlugin.Shared;
 
 namespace ExtendAvalonia.Styles
 {
@@ -9,13 +10,8 @@ namespace ExtendAvalonia.Styles
     {
         public MainWindowStyle()
         {
-            Selector = default(Selector).Is<Window>(); // Garry("UIPlugin.Views.MainWindow");
-            // Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#00146E")));
-        }
-
-        public static Selector Garry(string type)
-        {
-            return default(Selector).Is(Type.GetType($"{type}, UIPlugin"));
+            Selector = new TypeSelector("UIPlugin.Views.MainWindow");
+            Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#C7D1FF")));
         }
     }
 }

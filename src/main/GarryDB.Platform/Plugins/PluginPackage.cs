@@ -29,7 +29,7 @@ namespace GarryDB.Platform.Plugins
         public string Name { get; }
 
         /// <summary>
-        ///     Gets the assemblies of this plugin.
+        ///     Gets the assembly containing the plugin and the contract.
         /// </summary>
         public abstract IEnumerable<AssemblyName> Assemblies { get; }
 
