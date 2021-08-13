@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
@@ -26,7 +27,7 @@ namespace GarryDB.Platform
         ///     Start <see cref="Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
         /// </summary>
         /// <param name="pluginsDirectory">The directory containing the plugins.</param>
-        public void Start(string pluginsDirectory)
+        public async Task StartAsync(string pluginsDirectory)
         {
             IReadOnlyList<PluginPackage> pluginPackages = pluginLifecycle.Find(pluginsDirectory).ToList();
 
@@ -48,12 +49,12 @@ namespace GarryDB.Platform
                 pluginLifecycle.Configure(pluginIdentity);
             }
 
-            pluginLifecycle.Start(plugins.Keys.ToList());
+            await pluginLifecycle.StartAsync().ConfigureAwait(false);
 
             GarryPlugin garryPlugin = plugins.Values.OfType<GarryPlugin>().Single();
             garryPlugin.WaitUntilShutdownRequested();
 
-            pluginLifecycle.Stop(plugins.Keys.ToList());
+            await pluginLifecycle.StopAsync().ConfigureAwait(false);
         }
     }
 }

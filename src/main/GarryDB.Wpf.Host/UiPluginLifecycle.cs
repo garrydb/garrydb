@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 using GarryDB.Platform.Plugins;
@@ -57,9 +58,9 @@ namespace GarryDB.Wpf.Host
             next.Configure(pluginIdentity);
         }
 
-        public void Start(IReadOnlyList<PluginIdentity> pluginIdentities)
+        public async Task StartAsync()
         {
-            next.Start(pluginIdentities);
+            await next.StartAsync().ConfigureAwait(false);
 
             dispatcher.Invoke(() =>
             {
@@ -67,9 +68,9 @@ namespace GarryDB.Wpf.Host
             });
         }
 
-        public void Stop(IReadOnlyList<PluginIdentity> pluginIdentities)
+        public Task StopAsync()
         {
-            next.Stop(pluginIdentities);
+            return next.StopAsync();
         }
     }
 }

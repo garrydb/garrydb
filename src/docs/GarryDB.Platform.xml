@@ -194,7 +194,7 @@
             </summary>
             <param name="pluginLifecycle">The lifecycle of the plugins.</param>
         </member>
-        <member name="M:GarryDB.Platform.Garry.Start(System.String)">
+        <member name="M:GarryDB.Platform.Garry.StartAsync(System.String)">
             <summary>
                 Start <see cref="T:GarryDB.Platform.Garry" /> and load the plugins from the <paramref name="pluginsDirectory" />.
             </summary>
@@ -440,10 +440,10 @@
         <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Configure(GarryDB.Platform.Plugins.PluginIdentity)">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.StartAsync">
             <inheritdoc />
         </member>
-        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.StopAsync">
             <inheritdoc />
         </member>
         <member name="T:GarryDB.Platform.Plugins.PluginAssembly">
@@ -595,17 +595,15 @@
             </summary>
             <param name="pluginIdentity">The identity of the plugin.</param>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.StartAsync">
             <summary>
-                Start the plugins.
+                Starts the plugins.
             </summary>
-            <param name="pluginIdentities">The identities of the plugin.</param>
         </member>
-        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.StopAsync">
             <summary>
-                Stop the plugins.
+                Stops the plugins.
             </summary>
-            <param name="pluginIdentities">The identities of the plugin.</param>
         </member>
         <member name="T:GarryDB.Platform.Plugins.PluginLoadContext">
             <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using GarryDB.Plugins;
 
@@ -37,15 +38,13 @@ namespace GarryDB.Platform.Plugins
         void Configure(PluginIdentity pluginIdentity);
 
         /// <summary>
-        ///     Start the plugins.
+        ///     Starts the plugins.
         /// </summary>
-        /// <param name="pluginIdentities">The identities of the plugin.</param>
-        void Start(IReadOnlyList<PluginIdentity> pluginIdentities);
+        Task StartAsync();
 
         /// <summary>
-        ///     Stop the plugins.
+        ///     Stops the plugins.
         /// </summary>
-        /// <param name="pluginIdentities">The identities of the plugin.</param>
-        void Stop(IReadOnlyList<PluginIdentity> pluginIdentities);
+        Task StopAsync();
     }
 }

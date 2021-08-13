@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 
 using Akka.Actor;
 using Akka.Event;
@@ -138,29 +139,45 @@ namespace GarryDB.Platform.Plugins.Lifecycles
 
             var destination = new Address(pluginIdentity, "configure");
             var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
+
             pluginsActor.Tell(messageEnvelope);
         }
 
         /// <inheritdoc />
-        public void Start(IReadOnlyList<PluginIdentity> pluginIdentities)
+        public async Task StartAsync()
         {
-            foreach (PluginIdentity pluginIdentity in startupOrders.OrderBy(x => x.Value).Select(x => x.Key))
+            IEnumerable<PluginIdentity> startupOrder =
+                startupOrders
+                    .OrderBy(x => x.Value)
+                    .Select(x => x.Key)
+                    .ToList();
+
+            foreach (PluginIdentity pluginIdentity in startupOrder)
             {
                 Debug.WriteLine("**** Starting " + pluginIdentity);
                 var destination = new Address(pluginIdentity, "start");
                 var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
-                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
+
+                if (pluginIdentity == startupOrder.Last())
+                {
+                    await pluginsActor.Ask(messageEnvelope).ConfigureAwait(false);
+                }
+                else
+                {
+                    pluginsActor.Tell(messageEnvelope);
+                }
             }
         }
 
         /// <inheritdoc />
-        public void Stop(IReadOnlyList<PluginIdentity> pluginIdentities)
+        public async Task StopAsync()
         {
-            foreach (PluginIdentity pluginIdentity in pluginIdentities)
+            foreach (PluginIdentity pluginIdentity in startupOrders.Keys)
             {
                 var destination = new Address(pluginIdentity, "stop");
                 var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
-                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
+
+                await pluginsActor.Ask(messageEnvelope).ConfigureAwait(false);
             }
 
             actorSystem.Dispose();

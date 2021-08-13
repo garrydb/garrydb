@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,18 +12,17 @@ using UIPlugin.Shared;
 
 namespace UIPlugin
 {
-    public sealed class UIPlugin : Plugin
+    public sealed class UIPlugin : Plugin, IDisposable
     {
-        private readonly Queue<Extension> extensions;
+        private readonly ReplaySubject<Extension> extensions;
 
         public UIPlugin(PluginContext pluginContext)
             : base(pluginContext)
         {
-            extensions = new Queue<Extension>();
-
+            extensions = new ReplaySubject<Extension>();
             Register<Extension>("extend", extension =>
             {
-                extensions.Enqueue(extension);
+                extensions.OnNext(extension);
                 return Task.CompletedTask;
             });
         }
@@ -34,7 +33,7 @@ namespace UIPlugin
 
             var mainThread = new Thread(_ =>
             {
-                AppBuilder.Configure(() => new App(() => SendAsync("GarryPlugin", "shutdown"), () => configured.Set()))
+                AppBuilder.Configure(() => CreateApplication(configured))
                     .UsePlatformDetect()
                     .UseReactiveUI()
                     .LogToTrace()
@@ -48,16 +47,29 @@ namespace UIPlugin
 
             mainThread.Start();
             configured.WaitOne();
+        }
 
-            while (extensions.TryDequeue(out Extension extension))
-            {
-                ((App)Application.Current).Extend(extension);
-            }
+        private App CreateApplication(AutoResetEvent configured)
+        {
+            var application = new App(
+                () => SendAsync("GarryPlugin", "shutdown"),
+                () =>
+                {
+                    extensions.Subscribe(extension => ((App)Application.Current).Extend(extension));
+                    configured.Set();
+                });
+
+            return application;
         }
 
         protected override void Start()
         {
             CreateApplication();
+        }
+
+        public void Dispose()
+        {
+            extensions.Dispose();
         }
     }
 }

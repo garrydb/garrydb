@@ -35,7 +35,7 @@ namespace GarryDB.Wpf.Host
 
             var garry = new Garry(uiLifecycle);
 
-            garry.Start("C:\\Projects\\GarryDB\\Plugins");
+            garry.StartAsync("C:\\Projects\\GarryDB\\Plugins").GetAwaiter().GetResult();
 
             Dispatcher.Invoke(() => Shutdown());
         }
