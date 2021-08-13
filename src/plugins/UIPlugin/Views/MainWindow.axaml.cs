@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -22,17 +23,19 @@ namespace UIPlugin.Views
             this.AttachDevTools();
 #endif
             this.WhenActivated(disposables =>
-                               {
-                                   this.WhenAnyValue(window => window.IsVisible)
-                                       .Where(x => x)
-                                       .Do(_ =>
-                                           {
-                                               Topmost = true;
-                                               Topmost = false;
-                                           })
-                                       .Subscribe()
-                                       .DisposeWith(disposables);
-                               });
+            {
+                this.WhenAnyValue(window => window.IsVisible)
+                    .Where(x => x)
+                    .Do(_ =>
+                    {
+                        Topmost = true;
+                        Topmost = false;
+
+                        Debug.WriteLine("**** WINDOW SHOWN ****");
+                    })
+                    .Subscribe()
+                    .DisposeWith(disposables);
+            });
         }
     }
 }

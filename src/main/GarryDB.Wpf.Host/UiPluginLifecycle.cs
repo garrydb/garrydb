@@ -42,7 +42,6 @@ namespace GarryDB.Wpf.Host
             dispatcher.Invoke(() =>
             {
                 splashScreen.PluginsLoaded++;
-                splashScreen.CurrentPlugin = pluginPackage.Name;
             });
 
             return result;
@@ -64,7 +63,7 @@ namespace GarryDB.Wpf.Host
 
             dispatcher.Invoke(() =>
             {
-                splashScreen.CurrentPlugin = null;
+                splashScreen.Close();
             });
         }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -18,15 +20,17 @@ namespace UIPlugin
     internal sealed class App : Application
     {
         private readonly Func<Task> shutdown;
+        private readonly Action whenWindowIsShown;
 
         public App()
-            : this(() => Task.CompletedTask)
+            : this(() => Task.CompletedTask, () => { })
         {
         }
 
-        public App(Func<Task> shutdown)
+        public App(Func<Task> shutdown, Action whenWindowIsShown)
         {
             this.shutdown = shutdown;
+            this.whenWindowIsShown = whenWindowIsShown;
         }
 
         public override void Initialize()
@@ -53,10 +57,21 @@ namespace UIPlugin
             {
                 desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
-                desktop.MainWindow = new MainWindow
-                                     {
-                                         DataContext = new MainWindowViewModel()
-                                     };
+                var mainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel()
+                };
+
+                mainWindow.WhenActivated(disposables =>
+                {
+                    mainWindow.WhenAnyValue(x => x.IsVisible)
+                        .Where(x => x)
+                        .Do(_ => whenWindowIsShown())
+                        .Subscribe()
+                        .DisposeWith(disposables);
+                });
+
+                desktop.MainWindow = mainWindow;
 
                 desktop.Events()
                        .Exit.InvokeCommand(ReactiveCommand.CreateFromTask((ControlledApplicationLifetimeExitEventArgs _) =>

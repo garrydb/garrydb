@@ -14,7 +14,11 @@ namespace GarryDB.Plugins
         protected ConfigurablePlugin(PluginContext pluginContext)
             : base(pluginContext)
         {
-            Register("configure", (TConfiguration configuration) => ConfigureAsync(configuration));
+            Register("configure", async (TConfiguration configuration) =>
+            {
+                await ConfigureAsync(configuration).ConfigureAwait(false);
+                return new object();
+            });
         }
 
         /// <summary>

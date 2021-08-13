@@ -24,10 +24,14 @@ namespace GarryDB.Plugins
             this.pluginContext = pluginContext;
             handlers = new Dictionary<string, Func<object, Task<object?>>>();
 
-            Register("start", (object _) => StartAsync());
+            Register("start", async (object _) =>
+            {
+                await StartAsync().ConfigureAwait(false);
+                return new object();
+            });
             Register("stop", async (object _) =>
             {
-                await StopAsync();
+                await StopAsync().ConfigureAwait(false);
                 return new object();
             });
         }

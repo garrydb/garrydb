@@ -1,6 +1,4 @@
-using System;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace GarryDB.Wpf.Host
 {
@@ -31,20 +29,8 @@ namespace GarryDB.Wpf.Host
 
             if (splashScreen.PluginsLoaded == splashScreen.Total)
             {
+                splashScreen.CurrentPlugin = null;
                 splashScreen.Phase = "Starting...";
-
-                var timer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromSeconds(1)
-                };
-
-                timer.Tick += (_, _) =>
-                {
-                    splashScreen.Close();
-                    timer.Stop();
-                };
-
-                timer.Start();
             }
         }
 

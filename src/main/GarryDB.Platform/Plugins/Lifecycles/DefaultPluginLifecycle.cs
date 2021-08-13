@@ -14,6 +14,7 @@ using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
+using Debug = System.Diagnostics.Debug;
 
 namespace GarryDB.Platform.Plugins.Lifecycles
 {
@@ -145,9 +146,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         {
             foreach (PluginIdentity pluginIdentity in startupOrders.OrderBy(x => x.Value).Select(x => x.Key))
             {
+                Debug.WriteLine("**** Starting " + pluginIdentity);
                 var destination = new Address(pluginIdentity, "start");
                 var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
-                pluginsActor.Tell(messageEnvelope);
+                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
             }
         }
 

@@ -65,34 +65,39 @@ class Build : NukeBuild
 
     Target CopyPlugins =>
         _ => _
-             .DependsOn(Compile)
-             .Executes(() =>
-                       {
-                           AbsolutePath pluginsOutputDirectory = RootDirectory / "plugins";
-                           AbsolutePath pluginsSourceDirectory = RootDirectory / "src" / "plugins";
+            .DependsOn(Compile)
+            .Executes(() =>
+            {
+                AbsolutePath pluginsDir = RootDirectory / "plugins";
+                AbsolutePath pluginsSourceDir = RootDirectory / "src" / "plugins";
 
-                           IEnumerable<Project> pluginProjects =
-                               Solution.AllProjects
-                                       .Where(x => pluginsSourceDirectory.Contains(x.Path) &&
-                                                   !x.Name.EndsWith(".contract", StringComparison.InvariantCultureIgnoreCase) &&
-                                                   !x.Name.EndsWith(".shared", StringComparison.InvariantCultureIgnoreCase));
+                IEnumerable<Project> pluginProjects =
+                    Solution.AllProjects
+                        .Where(x => pluginsSourceDir.Contains(x.Path) &&
+                                    !x.Name.EndsWith(".contract", StringComparison.InvariantCultureIgnoreCase) &&
+                                    !x.Name.EndsWith(".shared", StringComparison.InvariantCultureIgnoreCase));
 
-                           foreach (Project pluginProject in pluginProjects)
-                           {
-                               DotNetLogger(OutputType.Std, $"Building plugin {pluginProject.Name}...");
+                foreach (Project pluginProject in pluginProjects)
+                {
+                    DotNetLogger(OutputType.Std, $"Building plugin {pluginProject.Name}...");
 
-                               DotNetBuild(_ => _
-                                                .SetProjectFile(pluginProject)
-                                                .SetConfiguration(Configuration));
+                    DotNetBuild(_ => _
+                        .SetProjectFile(pluginProject)
+                        .SetConfiguration(Configuration)
+                    );
 
-                               DotNetLogger(OutputType.Std, $"Copying plugin {pluginProject.Name} to {pluginsOutputDirectory}...");
-                               string targetFramework = pluginProject.GetTargetFrameworks()!.First();
+                    DotNetLogger(OutputType.Std, $"Copying plugin {pluginProject.Name} to {pluginsDir}...");
+                    string targetFramework = pluginProject.GetTargetFrameworks()!.First();
 
-                               AbsolutePath pluginOutputDirectory = pluginProject.Directory / "bin" / Configuration / targetFramework;
-                               DeleteDirectory(pluginsOutputDirectory / pluginProject.Name);
+                    AbsolutePath pluginBuildDir = pluginProject.Directory / "bin" / Configuration / targetFramework;
+                    DeleteDirectory(pluginsDir / pluginProject.Name);
 
-                               CopyDirectoryRecursively(pluginOutputDirectory, pluginsOutputDirectory / pluginProject.Name,
-                                                        excludeDirectory: info => info.Name == "ref", excludeFile: file => file.Name.StartsWith("GarryDB.", StringComparison.InvariantCultureIgnoreCase));
-                           }
-                       });
+                    CopyDirectoryRecursively(
+                        pluginBuildDir,
+                        pluginsDir / pluginProject.Name,
+                        excludeDirectory: info => info.Name == "ref",
+                        excludeFile: file => file.Name.StartsWith("GarryDB.", StringComparison.InvariantCultureIgnoreCase)
+                    );
+                }
+            });
 }
