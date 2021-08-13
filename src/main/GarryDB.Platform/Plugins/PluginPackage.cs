@@ -39,6 +39,13 @@ namespace GarryDB.Platform.Plugins
         /// <param name="assemblyName">The assembly name.</param>
         /// <returns>A stream containing the assembly.</returns>
         public abstract Stream? ResolveAssembly(AssemblyName assemblyName);
+
+        /// <summary>
+        ///     Resolve the symbols of the specified <see cref="AssemblyName" /> to a <see cref="Stream" />.
+        /// </summary>
+        /// <param name="assemblyName">The assembly name.</param>
+        /// <returns>A stream containing the symbols.</returns>
+        public abstract Stream? ResolveAssemblySymbols(AssemblyName assemblyName);
         
         /// <summary>
         ///     Resolve the full path of an unmanaged .dll.

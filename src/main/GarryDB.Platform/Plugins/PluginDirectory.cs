@@ -58,6 +58,25 @@ namespace GarryDB.Platform.Plugins
         }
 
         /// <inheritdoc />
+        public override Stream? ResolveAssemblySymbols(AssemblyName assemblyName)
+        {
+            string? assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
+            if (assemblyPath == null)
+            {
+                return null;
+            }
+
+            string pdb = Path.ChangeExtension(assemblyPath, "pdb");
+
+            if (fileSystem.Exists(pdb))
+            {
+                return fileSystem.LoadFile(assemblyPath);
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
         public override string? ResolveUnmanagedDllPath(string unmanagedDllName)
         {
             string arch = Environment.Is64BitProcess ? "-x64" : "-x86";

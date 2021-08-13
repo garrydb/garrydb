@@ -1,21 +1,27 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Avalonia;
+using Avalonia.ReactiveUI;
 
 using GarryDB.Plugins;
+
+using UIPlugin.Shared;
 
 namespace UIPlugin
 {
     public sealed class UIPlugin : Plugin
     {
-        private readonly Func<Func<Task>, Application> appBuilder;
-
-        public UIPlugin(PluginContext pluginContext, Func<Func<Task>, Application> appBuilder)
+        public UIPlugin(PluginContext pluginContext)
             : base(pluginContext)
         {
-            this.appBuilder = appBuilder;
+            Register<Extension>("extend", extension =>
+            {
+                ((App)Application.Current).Extend(extension);
+                return Task.CompletedTask;
+            });
         }
 
         private void CreateApplication()
@@ -24,8 +30,9 @@ namespace UIPlugin
 
             var mainThread = new Thread(_ =>
                                         {
-                                            AppBuilder.Configure(() => appBuilder(() => SendAsync("GarryPlugin", "shutdown")))
+                                            AppBuilder.Configure(() => new App(() => SendAsync("GarryPlugin", "shutdown")))
                                                       .UsePlatformDetect()
+                                                      .UseReactiveUI()
                                                       .LogToTrace()
                                                       .AfterSetup(_ => configured.Set())
                                                       .StartWithClassicDesktopLifetime(Array.Empty<string>());

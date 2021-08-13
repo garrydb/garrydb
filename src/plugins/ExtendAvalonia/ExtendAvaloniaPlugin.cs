@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 using GarryDB.Plugins;
 
 namespace ExtendAvalonia
@@ -7,6 +9,11 @@ namespace ExtendAvalonia
         public ExtendAvaloniaPlugin(PluginContext pluginContext)
             : base(pluginContext)
         {
+        }
+
+        protected override Task StartAsync()
+        {
+            return SendAsync("UIPlugin", "extend", new UIExtension());
         }
     }
 }

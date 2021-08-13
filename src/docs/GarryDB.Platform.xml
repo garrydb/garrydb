@@ -531,6 +531,9 @@
         <member name="M:GarryDB.Platform.Plugins.PluginDirectory.ResolveAssembly(System.Reflection.AssemblyName)">
             <inheritdoc />
         </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginDirectory.ResolveAssemblySymbols(System.Reflection.AssemblyName)">
+            <inheritdoc />
+        </member>
         <member name="M:GarryDB.Platform.Plugins.PluginDirectory.ResolveUnmanagedDllPath(System.String)">
             <inheritdoc />
         </member>
@@ -687,6 +690,13 @@
             </summary>
             <param name="assemblyName">The assembly name.</param>
             <returns>A stream containing the assembly.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.ResolveAssemblySymbols(System.Reflection.AssemblyName)">
+            <summary>
+                Resolve the symbols of the specified <see cref="T:System.Reflection.AssemblyName" /> to a <see cref="T:System.IO.Stream" />.
+            </summary>
+            <param name="assemblyName">The assembly name.</param>
+            <returns>A stream containing the symbols.</returns>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginPackage.ResolveUnmanagedDllPath(System.String)">
             <summary>

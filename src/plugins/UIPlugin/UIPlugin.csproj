@@ -22,7 +22,6 @@
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
         <PackageReference Include="Avalonia.ReactiveUI.Events" Version="0.10.6" />
         <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
-        <PackageReference Include="Splat.Autofac" Version="11.1.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\main\GarryDB.Plugins\GarryDB.Plugins.csproj" />

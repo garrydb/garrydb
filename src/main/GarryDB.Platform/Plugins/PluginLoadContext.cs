@@ -66,9 +66,16 @@ namespace GarryDB.Platform.Plugins
                 return null;
             }
 
-            using (assemblyStream)
+            Stream? assemblySymbols = pluginPackage.ResolveAssemblySymbols(assemblyName);
+
+            try
             {
-                return LoadFromStream(assemblyStream);
+                return LoadFromStream(assemblyStream, assemblySymbols);
+            }
+            finally
+            {
+                assemblyStream.Dispose();
+                assemblySymbols?.Dispose();
             }
         }
 

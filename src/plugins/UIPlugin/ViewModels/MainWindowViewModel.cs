@@ -2,12 +2,20 @@ using System.Reactive;
 
 using ReactiveUI;
 
+using Splat;
+
+using UIPlugin.Views;
+
 namespace UIPlugin.ViewModels
 {
     public sealed class MainWindowViewModel : ReactiveObject, IScreen
     {
         public MainWindowViewModel()
         {
+            Router = new RoutingState();
+            Locator.CurrentMutable.Register(() => new FirstView(), typeof(IViewFor<FirstViewModel>));
+            Locator.CurrentMutable.Register(() => new ChessboardView(), typeof(IViewFor<ChessboardViewModel>));
+
             // Manage the routing state. Use the Router.Navigate.Execute
             // command to navigate to different view models. 
             //
@@ -29,6 +37,6 @@ namespace UIPlugin.ViewModels
 
         // The Router associated with this Screen.
         // Required by the IScreen interface.
-        public RoutingState Router { get; } = new();
+        public RoutingState Router { get; }
     }
 }

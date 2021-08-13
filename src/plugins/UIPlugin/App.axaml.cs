@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 using ReactiveUI;
 
@@ -18,29 +17,34 @@ namespace UIPlugin
 {
     internal sealed class App : Application
     {
-        private readonly IEnumerable<Extension> extensions;
         private readonly Func<Task> shutdown;
 
         public App()
-            : this(() => Task.CompletedTask, Enumerable.Empty<Extension>())
+            : this(() => Task.CompletedTask)
         {
         }
 
-        public App(Func<Task> shutdown, IEnumerable<Extension> extensions)
+        public App(Func<Task> shutdown)
         {
             this.shutdown = shutdown;
-            this.extensions = extensions;
         }
 
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            Styles.AddRange(extensions.SelectMany(extension => extension.Styles));
+        }
 
-            foreach (IResourceProvider resource in extensions.SelectMany(extension => extension.Resources))
+        public void Extend(Extension extension)
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
             {
-                Resources.MergedDictionaries.Add(resource);
-            }
+                Styles.AddRange(extension.Styles);
+
+                foreach (IResourceProvider resource in extension.Resources)
+                {
+                    Resources.MergedDictionaries.Add(resource);
+                }
+            });
         }
 
         public override void OnFrameworkInitializationCompleted()

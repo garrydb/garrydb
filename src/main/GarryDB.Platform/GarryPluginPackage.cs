@@ -29,6 +29,11 @@ namespace GarryDB.Platform
             return null;
         }
 
+        public override Stream? ResolveAssemblySymbols(AssemblyName assemblyName)
+        {
+            return null;
+        }
+
         public override string? ResolveUnmanagedDllPath(string unmanagedDllName)
         {
             return null;

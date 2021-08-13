@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Loader;
 
-using Autofac;
-
 using GarryDB.Platform.Extensions;
 using GarryDB.Platform.Infrastructure;
 using GarryDB.Plugins;
@@ -16,11 +14,9 @@ namespace GarryDB.Platform.Plugins.Lifecycles
     /// </summary>
     public sealed class DefaultPluginLifecycle : PluginLifecycle
     {
-        private readonly Lazy<IContainer> container;
-        private readonly ContainerBuilder containerBuilder;
-
         private readonly FileSystem fileSystem;
         private readonly IDictionary<PluginPackage, PluginLoadContext> pluginLoadContexts;
+        private readonly IDictionary<PluginIdentity, Func<Plugin>> pluginFactories;
         private readonly IDictionary<PluginIdentity, int> startupOrders;
 
         /// <summary>
@@ -33,9 +29,7 @@ namespace GarryDB.Platform.Plugins.Lifecycles
 
             pluginLoadContexts = new Dictionary<PluginPackage, PluginLoadContext>();
             startupOrders = new Dictionary<PluginIdentity, int>();
-
-            containerBuilder = new ContainerBuilder();
-            container = new Lazy<IContainer>(() => containerBuilder.Build());
+            pluginFactories = new Dictionary<PluginIdentity, Func<Plugin>>();
         }
 
         /// <inheritdoc />
@@ -91,15 +85,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             }
 
             PluginIdentity pluginIdentity = pluginAssembly.PluginIdentity;
-
-            containerBuilder.RegisterType(pluginAssembly.PluginType)
-                .Keyed<Plugin>(pluginIdentity)
-                .WithParameter(TypedParameter.From(pluginContextFactory.Create(pluginIdentity)))
-                .SingleInstance();
-
-            containerBuilder.RegisterAssemblyModules(pluginLoadContext.Assemblies.ToArray());
+            PluginContext pluginContext = pluginContextFactory.Create(pluginIdentity);
 
             startupOrders[pluginIdentity] = pluginAssembly.StartupOrder;
+            pluginFactories[pluginIdentity] = () => (Plugin)Activator.CreateInstance(pluginAssembly.PluginType, pluginContext)!;
 
             return pluginIdentity;
         }
@@ -107,9 +96,7 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         /// <inheritdoc />
         public Plugin? Instantiate(PluginIdentity pluginIdentity)
         {
-            Plugin? plugin = container.Value.ResolveOptionalKeyed<Plugin>(pluginIdentity);
-
-            return plugin;
+            return pluginFactories[pluginIdentity]();
         }
 
         /// <inheritdoc />
