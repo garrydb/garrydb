@@ -1,4 +1,6 @@
+using System;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace GarryDB.Wpf.Host
 {
@@ -11,8 +13,11 @@ namespace GarryDB.Wpf.Host
             DependencyProperty.Register("CurrentPlugin", typeof(string), typeof(SplashScreen),
                                         new PropertyMetadata(default(string)));
 
-        public static readonly DependencyProperty CurrentProperty =
-            DependencyProperty.Register("Current", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int), OnProgressChanged));
+        public static readonly DependencyProperty LoadingProperty =
+            DependencyProperty.Register("Loading", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int), OnProgressChanged));
+        
+        public static readonly DependencyProperty PluginsLoadedProperty = DependencyProperty.Register(
+            "PluginsLoaded", typeof(int), typeof(SplashScreen), new PropertyMetadata(default(int), OnProgressChanged));
 
         public static readonly DependencyProperty TotalProperty =
             DependencyProperty.Register("Total", typeof(int), typeof(SplashScreen), new PropertyMetadata(int.MaxValue));
@@ -24,13 +29,22 @@ namespace GarryDB.Wpf.Host
         {
             var splashScreen = (SplashScreen)d;
 
-            if (splashScreen.Current == splashScreen.Total - 1)
+            if (splashScreen.PluginsLoaded == splashScreen.Total)
             {
                 splashScreen.Phase = "Starting...";
-            }
-            else if (splashScreen.Current == splashScreen.Total)
-            {
-                splashScreen.Close();
+
+                var timer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(1)
+                };
+
+                timer.Tick += (_, _) =>
+                {
+                    splashScreen.Close();
+                    timer.Stop();
+                };
+
+                timer.Start();
             }
         }
 
@@ -45,10 +59,16 @@ namespace GarryDB.Wpf.Host
             set { SetValue(CurrentPluginProperty, value); }
         }
 
-        public int Current
+        public int Loading
         {
-            get { return (int)GetValue(CurrentProperty); }
-            set { SetValue(CurrentProperty, value); }
+            get { return (int)GetValue(LoadingProperty); }
+            set { SetValue(LoadingProperty, value); }
+        }
+
+        public int PluginsLoaded
+        {
+            get { return (int)GetValue(PluginsLoadedProperty); }
+            set { SetValue(PluginsLoadedProperty, value); }
         }
 
         public int Total

@@ -5,6 +5,7 @@ using Akka.Event;
 
 using GarryDB.Platform.Actors;
 using GarryDB.Platform.Messaging;
+using GarryDB.Platform.Plugins.Configuration;
 using GarryDB.Plugins;
 
 using Address = GarryDB.Platform.Messaging.Address;
@@ -20,14 +21,17 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         private readonly ActorSystem actorSystem;
         private readonly IActorRef pluginsActor;
         private readonly PluginContextFactory pluginContextFactory;
+        private readonly ConfigurationStorage configurationStorage;
 
         /// <summary>
         ///     Initializes a new <see cref="AkkaPluginLifecycle" />.
         /// </summary>
         /// <param name="next"></param>
-        public AkkaPluginLifecycle(PluginLifecycle next)
+        /// <param name="configurationStorage">The configuration storage.</param>
+        public AkkaPluginLifecycle(PluginLifecycle next, ConfigurationStorage configurationStorage)
         {
             this.next = next;
+            this.configurationStorage = configurationStorage;
             actorSystem = ActorSystem.Create("garry");
             pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
             pluginContextFactory = new AkkaPluginContextFactory(pluginsActor);
@@ -36,15 +40,21 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         }
 
         /// <inheritdoc />
-        public PluginIdentity? Register(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
+        public IEnumerable<PluginPackage> Find(string pluginsDirectory)
         {
-            return next.Register(this.pluginContextFactory, pluginPackage);
+            return next.Find(pluginsDirectory);
         }
 
         /// <inheritdoc />
-        public Plugin? Load(PluginIdentity pluginIdentity)
+        public PluginIdentity? Load(PluginContextFactory pluginContextFactory, PluginPackage pluginPackage)
         {
-            Plugin? plugin = next.Load(pluginIdentity);
+            return next.Load(this.pluginContextFactory, pluginPackage);
+        }
+
+        /// <inheritdoc />
+        public Plugin? Instantiate(PluginIdentity pluginIdentity)
+        {
+            Plugin? plugin = next.Instantiate(pluginIdentity);
 
             if (plugin != null)
             {
@@ -55,24 +65,28 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         }
 
         /// <inheritdoc />
-        public object? Configure(PluginIdentity pluginIdentity)
+        public void Configure(PluginIdentity pluginIdentity)
         {
-            object? configuration = next.Configure(pluginIdentity);
+            Plugin? plugin =  next.Instantiate(pluginIdentity);
+            if (plugin == null)
+            {
+                return;
+            }
+
+            object? configuration = configurationStorage.FindConfiguration(pluginIdentity, plugin);
 
             if (configuration == null)
             {
-                return configuration;
+                return;
             }
 
             var destination = new Address(pluginIdentity, "configure");
             var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination, configuration);
             pluginsActor.Tell(messageEnvelope);
-
-            return configuration;
         }
 
         /// <inheritdoc />
-        public void Start(IEnumerable<PluginIdentity> pluginIdentities)
+        public void Start(IReadOnlyList<PluginIdentity> pluginIdentities)
         {
             next.Start(pluginIdentities);
             
@@ -85,7 +99,7 @@ namespace GarryDB.Platform.Plugins.Lifecycles
         }
 
         /// <inheritdoc />
-        public void Stop(IEnumerable<PluginIdentity> pluginIdentities)
+        public void Stop(IReadOnlyList<PluginIdentity> pluginIdentities)
         {
             next.Stop(pluginIdentities);
             
@@ -93,22 +107,10 @@ namespace GarryDB.Platform.Plugins.Lifecycles
             {
                 var destination = new Address(pluginIdentity, "stop");
                 var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
-                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();;
+                pluginsActor.Ask(messageEnvelope).GetAwaiter().GetResult();
             }
 
             actorSystem.Dispose();
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<PluginPackage> Find(string pluginsDirectory)
-        {
-            return next.Find(pluginsDirectory);
-        }
-
-        /// <inheritdoc />
-        public void DetermineDependencies(IEnumerable<PluginPackage> pluginPackages)
-        {
-            next.DetermineDependencies(pluginPackages);
         }
 
         private void MonitorDeadletters()

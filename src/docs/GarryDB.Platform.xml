@@ -344,6 +344,27 @@
         <member name="M:GarryDB.Platform.Persistence.PersistentSqLiteConnectionFactory.Close(SQLite.SQLiteConnection)">
             <inheritdoc />
         </member>
+        <member name="T:GarryDB.Platform.Plugins.AssemblyProvider">
+            <summary>
+                Provides an <see cref="T:System.Reflection.Assembly" /> to a different <see cref="T:System.Runtime.Loader.AssemblyLoadContext" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AssemblyProvider.#ctor(System.Runtime.Loader.AssemblyLoadContext)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.AssemblyProvider" />.
+            </summary>
+            <param name="assemblyLoadContext">The assembly load context for loading assemblies.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AssemblyProvider.Provide(System.Reflection.AssemblyName)">
+            <summary>
+                Provide the <see cref="T:System.Reflection.Assembly" />.
+            </summary>
+            <param name="assemblyName">The assembly name.</param>
+            <returns>The <see cref="T:System.Reflection.Assembly" />, or <c>null</c> if this provider can't provide it.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.AssemblyProvider.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:GarryDB.Platform.Plugins.Configuration.ConfigurationStorage">
             <summary>
                 Handles the loading and saving of the configuration for plugins.
@@ -394,6 +415,65 @@
                 The type of the configuration, or <c>null</c> if the plugin
                 is not a <see cref="T:GarryDB.Plugins.ConfigurablePlugin`1" />.
             </returns>
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle">
+            <summary>
+                Adds Akka to the <see cref="T:GarryDB.Platform.Plugins.PluginLifecycle" />.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.#ctor(GarryDB.Platform.Plugins.PluginLifecycle,GarryDB.Platform.Plugins.Configuration.ConfigurationStorage)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle" />.
+            </summary>
+            <param name="next"></param>
+            <param name="configurationStorage">The configuration storage.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Find(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Instantiate(GarryDB.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Configure(GarryDB.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle">
+            <summary>
+                The default lifecycle of the plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.#ctor(GarryDB.Platform.Infrastructure.FileSystem)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle" />.
+            </summary>
+            <param name="fileSystem">The file system.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Find(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Instantiate(GarryDB.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Configure(GarryDB.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <inheritdoc />
         </member>
         <member name="T:GarryDB.Platform.Plugins.PluginAssembly">
             <summary>
@@ -509,6 +589,53 @@
                 otherwise <c>false</c>.
             </returns>
         </member>
+        <member name="T:GarryDB.Platform.Plugins.PluginLifecycle">
+            <summary>
+                The lifecycle of the plugins.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Find(System.String)">
+            <summary>
+                Finds all the <see cref="T:GarryDB.Platform.Plugins.PluginPackage" />s in <paramref name="pluginsDirectory" />.
+            </summary>
+            <param name="pluginsDirectory">The directory containing the plugins.</param>
+            <returns>The <see cref="T:GarryDB.Platform.Plugins.PluginPackage" /> for every plugin.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Load(GarryDB.Platform.Plugins.PluginContextFactory,GarryDB.Platform.Plugins.PluginPackage)">
+            <summary>
+                Load the plugin.
+            </summary>
+            <param name="pluginContextFactory">
+                The <see cref="T:GarryDB.Platform.Plugins.PluginContextFactory"/> for creating <see cref="T:GarryDB.Plugins.PluginContext" />.
+            </param>
+            <param name="pluginPackage">The package to register.</param>
+            <returns>The identity of the plugin, or <c>null</c> if the package doesn't contain a plugin.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Instantiate(GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+                Instantiate the plugin.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+            <returns>The plugin, or <c>null</c> if the plugin is not found.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Configure(GarryDB.Platform.Plugins.PluginIdentity)">
+            <summary>
+                Configure the plugin.
+            </summary>
+            <param name="pluginIdentity">The identity of the plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Start(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <summary>
+                Start the plugins.
+            </summary>
+            <param name="pluginIdentities">The identities of the plugin.</param>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginLifecycle.Stop(System.Collections.Generic.IReadOnlyList{GarryDB.Platform.Plugins.PluginIdentity})">
+            <summary>
+                Stop the plugins.
+            </summary>
+            <param name="pluginIdentities">The identities of the plugin.</param>
+        </member>
         <member name="T:GarryDB.Platform.Plugins.PluginLoadContext">
             <summary>
                 A dedicated <see cref="T:System.Runtime.Loader.AssemblyLoadContext" /> for loading assemblies for a <see cref="T:GarryDB.Plugins.Plugin" />.
@@ -533,10 +660,40 @@
         <member name="M:GarryDB.Platform.Plugins.PluginLoadContext.LoadUnmanagedDll(System.String)">
             <inheritdoc />
         </member>
+        <member name="T:GarryDB.Platform.Plugins.PluginPackage">
+            <summary>
+                A package containing a <see cref="T:GarryDB.Plugins.Plugin" /> and other related files.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.#ctor(System.String)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PluginPackage" />.
+            </summary>
+            <param name="name">The name of the package.</param>
+        </member>
         <member name="P:GarryDB.Platform.Plugins.PluginPackage.Name">
             <summary>
                 Gets the name of the plugin.
             </summary>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.PluginPackage.Assemblies">
+            <summary>
+                Gets the assemblies of this plugin.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.ResolveAssembly(System.Reflection.AssemblyName)">
+            <summary>
+                Resolve the specified <see cref="T:System.Reflection.AssemblyName" /> to a <see cref="T:System.IO.Stream" />.
+            </summary>
+            <param name="assemblyName">The assembly name.</param>
+            <returns>A stream containing the assembly.</returns>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PluginPackage.ResolveUnmanagedDllPath(System.String)">
+            <summary>
+                Resolve the full path of an unmanaged .dll.
+            </summary>
+            <param name="unmanagedDllName">The name of the .dll.</param>
+            <returns>The full path to the unmanaged .dll.</returns>
         </member>
         <member name="M:GarryDB.Platform.Plugins.PluginPackage.IsDependentOn(GarryDB.Platform.Plugins.PluginPackage)">
             <summary>

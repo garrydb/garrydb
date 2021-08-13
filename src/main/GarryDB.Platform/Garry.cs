@@ -37,18 +37,17 @@ namespace GarryDB.Platform
         public void Start(string pluginsDirectory)
         {
             IReadOnlyList<PluginPackage> pluginPackages = pluginLifecycle.Find(pluginsDirectory).ToList();
-            pluginLifecycle.DetermineDependencies(pluginPackages);
 
             IReadOnlyList<PluginIdentity> pluginIdentities =
                 pluginPackages
-                    .Select(pluginPackage => pluginLifecycle.Register(new DummyPluginContextFactory(), pluginPackage))
+                    .Select(pluginPackage => pluginLifecycle.Load(new DummyPluginContextFactory(), pluginPackage))
                     .Where(x => x != null)
                     .Select(x => x!)
                     .ToList();
 
             IDictionary<PluginIdentity, Plugin> plugins =
                 pluginIdentities
-                    .Select(pluginIdentity => new { Plugin = pluginLifecycle.Load(pluginIdentity), PluginIdentity = pluginIdentity })
+                    .Select(pluginIdentity => new { Plugin = pluginLifecycle.Instantiate(pluginIdentity), PluginIdentity = pluginIdentity })
                     .Where(x => x.Plugin != null)
                     .ToDictionary(x => x.PluginIdentity, x => x.Plugin!);
 
