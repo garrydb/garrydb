@@ -29,9 +29,16 @@ namespace GarryDB.Plugins
                 await StartAsync().ConfigureAwait(false);
                 return new object();
             });
+
             Register("stop", async (object _) =>
             {
                 await StopAsync().ConfigureAwait(false);
+
+                if (this is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+
                 return new object();
             });
         }
