@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DocumentationFile>..\..\docs\GarryDB.Platform.xml</DocumentationFile>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsAsErrors />
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GarryDB.Plugins\GarryDB.Plugins.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Akka" Version="1.4.22" />
+      <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+      <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+      <PackageReference Include="System.Reactive" Version="5.0.0" />
+      <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
+      <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
+    </ItemGroup>
+
+</Project>

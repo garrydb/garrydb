@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="427"
+        x:Class="GarryDb.Avalonia.Host.Views.SplashScreen"
+        Title="Garry DB" Height="427" Width="640"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterScreen"
+        SystemDecorations="None"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+  <Window.Background>
+    <ImageBrush Source="/Assets/gr-stocks-Iq9SaJezkOE-unsplash.jpg" />
+  </Window.Background>
+  <Border Cursor="AppStarting" BorderThickness="2,2,2,2" BorderBrush="Black">
+    <Canvas Margin="10,10,10,10" Background="Transparent">
+      <TextBlock
+        Canvas.Top="206"
+        Canvas.Left="325"
+        TextAlignment="Center"
+        Text="{Binding Phase}"
+        Width="251"
+        Foreground="White" />
+      <TextBlock
+        Canvas.Top="232"
+        Canvas.Left="325"
+        TextAlignment="Center"
+        Text="{Binding CurrentPlugin}"
+        Width="251"
+        Foreground="White" />
+      <Border
+        Canvas.Top="258"
+        Canvas.Left="325"
+        BorderBrush="White"
+        Height="10"
+        Width="251"
+        BorderThickness="1">
+        <ProgressBar
+          Minimum="0"
+          Maximum="{Binding Total}"
+          Value="{Binding Loading}"
+          Foreground="White"
+          BorderBrush="Transparent"
+          Background="Transparent"
+          Margin="2" />
+      </Border>
+    </Canvas>
+  </Border>
+</Window>

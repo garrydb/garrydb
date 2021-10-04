@@ -1,0 +1,17 @@
+<ContentControl xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Canvas x:Name="Canvas">
+    <TextBlock Text="Header" TextAlignment="Center" Canvas.Right="300" Foreground="Yellow" FontWeight="Bold" />
+    <ContentPresenter
+      x:Name="PART_ExampleContentPresenter"
+      Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+      ContentTemplate="{Binding ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+      HorizontalContentAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+      VerticalContentAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+      Height="{Binding Bounds.Bottom, ElementName=Canvas}"
+      Width="{Binding Bounds.Width, ElementName=Canvas}"
+      Canvas.Top="0" Canvas.Left="0" Canvas.Bottom="{Binding Height, ElementName=Canvas}"
+      Canvas.Right="{Binding Width, ElementName=Canvas}" />
+  </Canvas>
+
+</ContentControl>
