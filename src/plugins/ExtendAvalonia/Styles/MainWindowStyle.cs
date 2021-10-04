@@ -10,7 +10,7 @@ namespace ExtendAvalonia.Styles
     {
         public MainWindowStyle()
         {
-            Selector = new TypeSelector("UIPlugin.Views.MainWindow");
+            Selector = new TypeSelector("GarryDb.Avalonia.Host.Views.MainWindow");
             Setters.Add(new Setter(TemplatedControl.BackgroundProperty, Brush.Parse("#C7D1FF")));
         }
     }

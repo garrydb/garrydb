@@ -445,6 +445,35 @@
         <member name="M:GarryDB.Platform.Plugins.Lifecycles.DefaultPluginLifecycle.StopAsync">
             <inheritdoc />
         </member>
+        <member name="T:GarryDB.Platform.Plugins.PackageSources.FromDirectoryPluginPackageSource">
+            <summary>
+                Finds the plugin packages in a directory on the file system.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PackageSources.FromDirectoryPluginPackageSource.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PackageSources.FromDirectoryPluginPackageSource" />.
+            </summary>
+            <param name="fileSystem">The file system.</param>
+            <param name="pluginsDirectory">The directory containing plugins.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.PackageSources.FromDirectoryPluginPackageSource.PluginPackages">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDB.Platform.Plugins.PackageSources.HardCodedPluginPackageSource">
+            <summary>
+                A <see cref="T:GarryDB.Platform.Plugins.PluginPackageSource" /> where the <see cref="T:GarryDB.Platform.Plugins.PluginPackage" /> is known at compile time.
+            </summary>
+        </member>
+        <member name="M:GarryDB.Platform.Plugins.PackageSources.HardCodedPluginPackageSource.#ctor(GarryDB.Platform.Plugins.PluginPackage)">
+            <summary>
+                Initializes a new <see cref="T:GarryDB.Platform.Plugins.PackageSources.HardCodedPluginPackageSource" />.
+            </summary>
+            <param name="pluginPackage">The plugin package.</param>
+        </member>
+        <member name="P:GarryDB.Platform.Plugins.PackageSources.HardCodedPluginPackageSource.PluginPackages">
+            <inheritdoc />
+        </member>
         <member name="T:GarryDB.Platform.Plugins.PluginAssembly">
             <summary>
                 The assembly containing the <see cref="T:GarryDB.Plugins.Plugin" />.
@@ -700,41 +729,6 @@
             <summary>
                 Gets the <see cref="T:GarryDB.Platform.Plugins.PluginPackage" />s that are found in this source.
             </summary>
-        </member>
-        <member name="T:GarryDB.Platform.Plugins.FileSystemPluginPackageSource">
-            <summary>
-                The source of <see cref="T:GarryDB.Platform.Plugins.PluginPackage" /> on the file system.
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.FileSystemPluginPackageSource.#ctor(GarryDB.Platform.Infrastructure.FileSystem,System.String)">
-            <summary>
-            
-            </summary>
-            <param name="fileSystem"></param>
-            <param name="pluginsDirectory"></param>
-        </member>
-        <member name="P:GarryDB.Platform.Plugins.FileSystemPluginPackageSource.PluginPackages">
-            <inheritdoc />
-        </member>
-        <member name="T:GarryDB.Platform.Plugins.HardCodedPluginPackageSource">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.HardCodedPluginPackageSource.#ctor(GarryDB.Platform.Plugins.PluginPackage)">
-            <summary>
-            
-            </summary>
-            <param name="pluginPackage"></param>
-        </member>
-        <member name="M:GarryDB.Platform.Plugins.HardCodedPluginPackageSource.#ctor(System.Collections.Generic.IEnumerable{GarryDB.Platform.Plugins.PluginPackage})">
-            <summary>
-            
-            </summary>
-            <param name="pluginPackages"></param>
-        </member>
-        <member name="P:GarryDB.Platform.Plugins.HardCodedPluginPackageSource.PluginPackages">
-            <inheritdoc />
         </member>
     </members>
 </doc>

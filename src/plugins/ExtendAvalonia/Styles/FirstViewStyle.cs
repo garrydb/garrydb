@@ -10,7 +10,7 @@ namespace ExtendAvalonia.Styles
     {
         public FirstViewStyle()
         {
-            Selector = new TypeSelector("UIPlugin.Views.FirstView");
+            Selector = new TypeSelector("GarryDb.Avalonia.Host.Views.FirstView");
             Setters.Add(new Setter(TemplatedControl.TemplateProperty, new DynamicResourceExtension("ForTheFirstView_Oud")));
         }
     }

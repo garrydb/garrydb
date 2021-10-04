@@ -34,19 +34,24 @@ namespace GarryDb.Avalonia.Host
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var splashScreen = new SplashScreen();
+                var splashScreenViewModel = new SplashScreenViewModel();
+                var splashScreen = new SplashScreen
+                {
+                    DataContext = splashScreenViewModel
+                };
+
                 splashScreen.Show();
                 splashScreen.Activate();
                 
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-                Task.Run(() => Test(splashScreen, desktop));
+                Task.Run(() => TestAsync(splashScreenViewModel, desktop));
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        private void Test(SplashScreen splashScreen, IClassicDesktopStyleApplicationLifetime desktop)
+        private async Task TestAsync(SplashScreenViewModel splashScreen, IClassicDesktopStyleApplicationLifetime desktop)
         {
             var fileSystem = new WindowsFileSystem();
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
@@ -65,14 +70,13 @@ namespace GarryDb.Avalonia.Host
                 desktop.MainWindow.Show();
                 desktop.MainWindow.Activate();
 
-                splashScreen.Close();
+                //splashScreen.Close();
             });
 
             var garry = new Garry(uiLifecycle);
 
-            garry.StartAsync().ConfigureAwait(true).GetAwaiter().GetResult();
-
-            desktop.Shutdown();
+            await garry.StartAsync().ConfigureAwait(false);
+            await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown());
         }
    
         public void Extend(Extension extension)

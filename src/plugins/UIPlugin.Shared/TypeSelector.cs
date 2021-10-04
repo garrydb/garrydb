@@ -13,15 +13,20 @@ namespace UIPlugin.Shared
 
         public TypeSelector(string typeName)
         {
-            type = new Lazy<Type>(() => Type.GetType($"{typeName}, UIPlugin"));
+            type = new Lazy<Type>(() => Type.GetType($"{typeName}, GarryDb.Avalonia.Host"));
         }
 
         protected override SelectorMatch Evaluate(IStyleable control, bool subscribe)
         {
+            if (TargetType == null)
+            {
+                return SelectorMatch.NeverThisType;
+            }
+
             Type controlType = control.StyleKey;
             return TargetType.IsAssignableFrom(controlType) || TargetType.IsInstanceOfType(control)
-                ? SelectorMatch.AlwaysThisType
-                : SelectorMatch.NeverThisType;
+                ? SelectorMatch.AlwaysThisInstance
+                : SelectorMatch.NeverThisInstance;
         }
 
         protected override Selector MovePrevious()

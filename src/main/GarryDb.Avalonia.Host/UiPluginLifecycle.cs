@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Avalonia.Threading;
 
-using GarryDb.Avalonia.Host.Views;
+using GarryDb.Avalonia.Host.ViewModels;
 
 using GarryDB.Platform.Plugins;
 using GarryDB.Plugins;
@@ -15,10 +15,10 @@ namespace GarryDb.Avalonia.Host
     public sealed class UIPluginLifecycle : PluginLifecycle
     {
         private readonly PluginLifecycle next;
-        private readonly SplashScreen splashScreen;
+        private readonly SplashScreenViewModel splashScreen;
         private readonly Action afterLoadingComplete;
 
-        public UIPluginLifecycle(PluginLifecycle next, SplashScreen splashScreen, Action afterLoadingComplete) 
+        public UIPluginLifecycle(PluginLifecycle next, SplashScreenViewModel splashScreen, Action afterLoadingComplete) 
         {
             this.next = next;
             this.splashScreen = splashScreen;

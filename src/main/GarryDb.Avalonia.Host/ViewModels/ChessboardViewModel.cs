@@ -2,7 +2,7 @@ using ReactiveUI;
 
 namespace GarryDb.Avalonia.Host.ViewModels
 {
-    public abstract class ViewModel : ReactiveObject
+    public sealed class ChessboardViewModel : ReactiveObject
     {
     }
 }
