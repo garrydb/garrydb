@@ -3,11 +3,8 @@ using System.Reactive.Subjects;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 
 using GarryDb.Avalonia.Host.Views;
-
-using ReactiveUI;
 
 using GarryDB.Plugins;
 
