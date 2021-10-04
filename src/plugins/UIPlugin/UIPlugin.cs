@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +9,10 @@ using Avalonia.ReactiveUI;
 
 using GarryDB.Plugins;
 
+using ReactiveUI;
+
 using UIPlugin.Shared;
+using UIPlugin.Views;
 
 namespace UIPlugin
 {
@@ -20,11 +24,7 @@ namespace UIPlugin
             : base(pluginContext)
         {
             extensions = new ReplaySubject<Extension>();
-            Register<Extension>("extend", extension =>
-            {
-                extensions.OnNext(extension);
-                return Task.CompletedTask;
-            });
+            Register<Extension>("extend", extension => extensions.OnNext(extension));
         }
 
         private void CreateApplication()
@@ -55,11 +55,16 @@ namespace UIPlugin
                 () => SendAsync("GarryPlugin", "shutdown"),
                 () =>
                 {
-                    extensions.Subscribe(extension => ((App)Application.Current).Extend(extension));
+                    extensions.Subscribe(extension => CurrentApp.Extend(extension));
                     configured.Set();
                 });
 
             return application;
+        }
+
+        private App CurrentApp
+        {
+            get { return (App)Application.Current; }
         }
 
         protected override void Start()

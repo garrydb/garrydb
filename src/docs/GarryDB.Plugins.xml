@@ -80,6 +80,23 @@
             <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
             <typeparam name="TResult">The type of the result.</typeparam>
         </member>
+        <member name="M:GarryDB.Plugins.Plugin.Register``1(System.String,System.Action{``0})">
+            <summary>
+                Register a handler for a named route.
+            </summary>
+            <param name="name">The name of the route.</param>
+            <param name="handler">The handler.</param>
+            <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
+        </member>
+        <member name="M:GarryDB.Plugins.Plugin.Register``2(System.String,System.Func{``0,``1})">
+            <summary>
+                Register a handler for a named route.
+            </summary>
+            <param name="name">The name of the route.</param>
+            <param name="handler">The handler.</param>
+            <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
         <member name="M:GarryDB.Plugins.Plugin.RouteAsync(System.String,System.Object)">
             <summary>
                 Route the message to the route.

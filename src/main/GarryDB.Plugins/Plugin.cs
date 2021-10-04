@@ -42,7 +42,7 @@ namespace GarryDB.Plugins
                 return new object();
             });
         }
-
+        
         /// <summary>
         ///     Register a handler for a named route.
         /// </summary>
@@ -52,11 +52,11 @@ namespace GarryDB.Plugins
         protected void Register<TMessage>(string name, Func<TMessage, Task> handler)
         {
             Register<TMessage, object?>(name, async message =>
-                                              {
-                                                  await handler(message).ConfigureAwait(false);
+            {
+                await handler(message).ConfigureAwait(false);
 
-                                                  return null;
-                                              });
+                return null;
+            });
         }
 
         /// <summary>
@@ -69,13 +69,45 @@ namespace GarryDB.Plugins
         protected void Register<TMessage, TResult>(string name, Func<TMessage, Task<TResult?>> handler)
         {
             Func<object, Task<object?>> handlerWrapper = async message =>
-                                                         {
-                                                             TResult? result = await handler((TMessage)message).ConfigureAwait(false);
+            {
+                TResult? result = await handler((TMessage)message).ConfigureAwait(false);
 
-                                                             return result;
-                                                         };
+                return result;
+            };
 
             handlers[name] = handlerWrapper;
+        }
+
+        /// <summary>
+        ///     Register a handler for a named route.
+        /// </summary>
+        /// <param name="name">The name of the route.</param>
+        /// <param name="handler">The handler.</param>
+        /// <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
+        protected void Register<TMessage>(string name, Action<TMessage> handler)
+        {
+            Register<TMessage>(name, message =>
+            {
+                handler(message);
+                return Task.CompletedTask;
+            });
+        }
+
+        /// <summary>
+        ///     Register a handler for a named route.
+        /// </summary>
+        /// <param name="name">The name of the route.</param>
+        /// <param name="handler">The handler.</param>
+        /// <typeparam name="TMessage">The type of messages the handler supports.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        protected void Register<TMessage, TResult>(string name, Func<TMessage, TResult?> handler)
+        {
+            Register<TMessage, TResult>(name, message =>
+            {
+                TResult? result = handler(message);
+
+                return Task.FromResult(result);
+            });
         }
 
         /// <summary>
