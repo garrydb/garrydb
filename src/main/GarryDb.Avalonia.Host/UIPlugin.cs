@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 
 using GarryDb.Avalonia.Host.Views;
-
 using GarryDb.Plugins;
 
 using UIPlugin.Shared;

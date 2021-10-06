@@ -30,7 +30,7 @@ namespace GarryDb.Avalonia.Host.ViewModels
         public ReactiveCommand<Unit, IRoutableViewModel> GoNext { get; }
 
         // The command that navigates a user back.
-        public ReactiveCommand<Unit, IRoutableViewModel> GoBack
+        public ReactiveCommand<Unit, IRoutableViewModel?> GoBack
         {
             get { return Router.NavigateBack; }
         }

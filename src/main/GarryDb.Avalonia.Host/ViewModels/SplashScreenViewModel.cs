@@ -1,36 +1,23 @@
-﻿using ReactiveUI;
+﻿using ReactiveUI.Fody.Helpers;
 
 namespace GarryDb.Avalonia.Host.ViewModels
 {
     public sealed class SplashScreenViewModel : ViewModel
     {
-        private string currentPlugin;
-        private int pluginsLoaded;
-        private int total;
-
         public SplashScreenViewModel()
         {
-            total = int.MaxValue;
-            pluginsLoaded = 0;
-            currentPlugin = string.Empty;
+            Total = int.MaxValue;
+            PluginsLoaded = 0;
+            CurrentPlugin = string.Empty;
         }
 
-        public string CurrentPlugin
-        {
-            get { return currentPlugin; }
-            set { this.RaiseAndSetIfChanged(ref currentPlugin, value); }
-        }
+        [Reactive]
+        public string CurrentPlugin { get; set; }
 
-        public int PluginsLoaded
-        {
-            get { return pluginsLoaded; }
-            set { this.RaiseAndSetIfChanged(ref pluginsLoaded, value); }
-        }
+        [Reactive]
+        public int PluginsLoaded { get; set; }
 
-        public int Total
-        {
-            get { return total; }
-            set { this.RaiseAndSetIfChanged(ref total, value); }
-        }
+        [Reactive]
+        public int Total { get; set; }
     }
 }

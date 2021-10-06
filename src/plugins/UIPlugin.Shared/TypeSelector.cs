@@ -11,11 +11,16 @@ namespace UIPlugin.Shared
     {
         private readonly Lazy<Type> type;
 
+        /// <summary>
+        ///     Initializes a new <see cref="TypeSelector" />.
+        /// </summary>
+        /// <param name="typeName">The name of the type to select.</param>
         public TypeSelector(string typeName)
         {
             type = new Lazy<Type>(() => Type.GetType($"{typeName}, GarryDb.Avalonia.Host"));
         }
 
+        /// <inheritdoc />
         protected override SelectorMatch Evaluate(IStyleable control, bool subscribe)
         {
             if (TargetType == null)
@@ -29,21 +34,25 @@ namespace UIPlugin.Shared
                 : SelectorMatch.NeverThisInstance;
         }
 
+        /// <inheritdoc />
         protected override Selector MovePrevious()
         {
             return null;
         }
 
+        /// <inheritdoc />
         public override bool InTemplate
         {
             get { return false; }
         }
 
+        /// <inheritdoc />
         public override bool IsCombinator
         {
             get { return false; }
         }
 
+        /// <inheritdoc />
         public override Type TargetType
         {
             get { return type.Value; }

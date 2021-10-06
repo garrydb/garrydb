@@ -1,20 +1,16 @@
-using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Caching;
 using System.Runtime.Loader;
 
 using GarryDb.Platform.Extensions;
-using GarryDb.Platform.Plugins.Extensions;
 
 namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     Provides an <see cref="Assembly" /> to a different <see cref="AssemblyLoadContext" />.
     /// </summary>
-    internal sealed class AssemblyProvider : IDisposable
+    internal sealed class AssemblyProvider
     {
-        private readonly MemoryCache cache;
         private readonly AssemblyLoadContext assemblyLoadContext;
 
         /// <summary>
@@ -24,7 +20,6 @@ namespace GarryDb.Platform.Plugins
         public AssemblyProvider(AssemblyLoadContext assemblyLoadContext)
         {
             this.assemblyLoadContext = assemblyLoadContext;
-            cache = new MemoryCache(Guid.NewGuid().ToString());
         }
 
         /// <summary>
@@ -34,20 +29,9 @@ namespace GarryDb.Platform.Plugins
         /// <returns>The <see cref="Assembly" />, or <c>null</c> if this provider can't provide it.</returns>
         public Assembly? Provide(AssemblyName assemblyName)
         {
-            string cacheKey = $"{assemblyLoadContext.Name}+{assemblyName.Name}.{assemblyName.Version?.Major ?? 0}";
+            Assembly? assembly = assemblyLoadContext.Assemblies.SingleOrDefault(x => assemblyName.IsCompatibleWith(x.GetName()));
 
-            return cache.GetOrAdd(cacheKey, () =>
-            {
-                Assembly? assembly = assemblyLoadContext.Assemblies.SingleOrDefault(x => assemblyName.IsCompatibleWith(x.GetName()));
-
-                return assembly;
-            });
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            cache.Dispose();
+            return assembly;
         }
     }
 }

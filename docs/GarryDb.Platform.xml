@@ -445,9 +445,6 @@
             <param name="assemblyName">The assembly name.</param>
             <returns>The <see cref="T:System.Reflection.Assembly" />, or <c>null</c> if this provider can't provide it.</returns>
         </member>
-        <member name="M:GarryDb.Platform.Plugins.AssemblyProvider.Dispose">
-            <inheritdoc />
-        </member>
         <member name="T:GarryDb.Platform.Plugins.Configuration.ConfigurationStorage">
             <summary>
                 Handles the loading and saving of the configuration for plugins.

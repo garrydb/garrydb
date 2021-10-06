@@ -71,8 +71,7 @@ namespace GarryDb.Platform.Plugins
                         .Concat(
                             pluginLoadContexts
                                 .Where(x => pluginPackage.IsDependentOn(x.Key))
-                                .Select(x => x.Value)
-                                .Select(provider => provider))
+                                .Select(x => x.Value))
                         .ToList();
 
                 var loadContext = new PluginLoadContext(pluginPackage, providers.Select(provider => assemblyProviders[provider]).ToList());

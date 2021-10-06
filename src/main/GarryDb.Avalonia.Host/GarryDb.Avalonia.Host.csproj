@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <AssemblyName>GarryDb.Avalonia.Host</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -19,5 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\plugins\UIPlugin.Shared\UIPlugin.Shared.csproj" />
     <ProjectReference Include="..\GarryDB.Platform\GarryDb.Platform.csproj" />
+    <ProjectReference Include="..\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+    <ProjectReference Include="..\GarryDb\GarryDb.csproj" />
   </ItemGroup>
 </Project>
