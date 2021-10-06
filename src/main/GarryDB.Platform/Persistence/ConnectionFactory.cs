@@ -1,6 +1,6 @@
 using SQLite;
 
-namespace GarryDB.Platform.Persistence
+namespace GarryDb.Platform.Persistence
 {
     /// <summary>
     ///     Opens and closes connections to a SQLite database.

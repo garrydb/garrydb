@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GarryDB.Platform.Extensions
+namespace GarryDb.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="IEnumerable{T}" />.

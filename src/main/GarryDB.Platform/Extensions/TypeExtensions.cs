@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 
-using GarryDB.Plugins;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Extensions
+namespace GarryDb.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="Type" />.

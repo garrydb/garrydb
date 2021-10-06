@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -12,12 +14,12 @@ using Avalonia.Threading;
 using GarryDb.Avalonia.Host.ViewModels;
 using GarryDb.Avalonia.Host.Views;
 
-using GarryDB.Platform;
-using GarryDB.Platform.Persistence;
-using GarryDB.Platform.Plugins;
-using GarryDB.Platform.Plugins.Configuration;
-using GarryDB.Platform.Plugins.Lifecycles;
-using GarryDB.Platform.Plugins.PackageSources;
+using GarryDb.Platform;
+using GarryDb.Platform.Persistence;
+using GarryDb.Platform.Plugins;
+using GarryDb.Platform.Plugins.Configuration;
+using GarryDb.Platform.Plugins.Lifecycles;
+using GarryDb.Platform.Plugins.PackageSources;
 
 using UIPlugin.Shared;
 
@@ -25,6 +27,8 @@ namespace GarryDb.Avalonia.Host
 {
     public class App : Application
     {
+        private SplashScreen? splashScreen;
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -35,7 +39,7 @@ namespace GarryDb.Avalonia.Host
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var splashScreenViewModel = new SplashScreenViewModel();
-                var splashScreen = new SplashScreen
+                splashScreen = new SplashScreen
                 {
                     DataContext = splashScreenViewModel
                 };
@@ -45,13 +49,13 @@ namespace GarryDb.Avalonia.Host
                 
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-                Task.Run(() => TestAsync(splashScreen, splashScreenViewModel, desktop));
+                Task.Run(() => TestAsync(splashScreenViewModel, desktop));
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        private async Task TestAsync(SplashScreen splashScreen, SplashScreenViewModel splashScreenViewModel, IClassicDesktopStyleApplicationLifetime desktop)
+        private async Task TestAsync(SplashScreenViewModel splashScreenViewModel, IClassicDesktopStyleApplicationLifetime desktop)
         {
             var fileSystem = new WindowsFileSystem();
             string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
@@ -60,28 +64,48 @@ namespace GarryDb.Avalonia.Host
             var pluginPackageSources = new List<PluginPackageSource>
             {
                 new FromDirectoryPluginPackageSource(fileSystem, "C:\\Projects\\GarryDB\\Plugins"),
-                new HardCodedPluginPackageSource(new UIPluginPackage())
+                new HardCodedPluginPackageSource(new UIPluginPackage()),
+                new HardCodedPluginPackageSource(new GarryPluginPackage())
             };
 
-            var defaultLifecycle = new DefaultPluginLifecycle(pluginPackageSources, new ConfigurationStorage(connectionFactory));
-            var uiLifecycle = new UIPluginLifecycle(defaultLifecycle, splashScreenViewModel, () =>
+            await Dispatcher.UIThread.InvokeAsync(() => splashScreenViewModel.Total = pluginPackageSources.SelectMany(x => x.PluginPackages).Count()).ConfigureAwait(false);
+
+            var lifeCycle = new AkkaPluginLifecycle(new ConfigurationStorage(connectionFactory));
+            PluginRegistry pluginRegistry = lifeCycle.PluginRegistry;
+            var pluginLoader = new PluginLoader(pluginPackageSources, pluginRegistry);
+
+            pluginRegistry.PluginLoaded += (sender, identity) =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    Debug.WriteLine($"Loaded {identity}");
+
+                    splashScreenViewModel.PluginsLoaded++;
+                    splashScreenViewModel.CurrentPlugin = identity.Name;
+                });
+            };
+
+            var garry = new Garry(pluginLoader, pluginRegistry, lifeCycle);
+
+            await garry.StartAsync().ConfigureAwait(false);
+            await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown()).ConfigureAwait(false);
+        }
+
+        public void OnStarted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
                 desktop.MainWindow.Show();
                 desktop.MainWindow.Activate();
 
-                splashScreen.Close();
-            });
-
-            var garry = new Garry(uiLifecycle);
-
-            await garry.StartAsync().ConfigureAwait(false);
-            await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown());
+                splashScreen!.Close();
+            }
         }
    
-        public void Extend(Extension extension)
+        public Task ExtendAsync(Extension extension)
         {
-            Dispatcher.UIThread.InvokeAsync(() =>
+            return Dispatcher.UIThread.InvokeAsync(() =>
             {
                 Styles.AddRange(extension.Styles);
 

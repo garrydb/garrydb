@@ -18,6 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\plugins\UIPlugin.Shared\UIPlugin.Shared.csproj" />
-    <ProjectReference Include="..\GarryDB.Platform\GarryDB.Platform.csproj" />
+    <ProjectReference Include="..\GarryDB.Platform\GarryDb.Platform.csproj" />
   </ItemGroup>
 </Project>

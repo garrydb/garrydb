@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace GarryDB.Plugins
+namespace GarryDb.Plugins
 {
     /// <summary>
     ///     Sends messages to other plugins.

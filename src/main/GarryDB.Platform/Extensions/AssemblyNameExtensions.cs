@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace GarryDB.Platform.Extensions
+namespace GarryDb.Platform.Extensions
 {
     /// <summary>
     ///     Extends <see cref="AssemblyName" />.

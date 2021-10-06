@@ -2,13 +2,13 @@ using System.Threading.Tasks;
 
 using Akka.Actor;
 
-using GarryDB.Platform.Messaging;
-using GarryDB.Platform.Plugins;
-using GarryDB.Plugins;
+using GarryDb.Platform.Messaging;
+using GarryDb.Platform.Plugins;
+using GarryDb.Plugins;
 
-using Address = GarryDB.Platform.Messaging.Address;
+using Address = GarryDb.Platform.Messaging.Address;
 
-namespace GarryDB.Platform.Actors
+namespace GarryDb.Platform.Actors
 {
     /// <summary>
     ///     The plugin context that uses Akka.

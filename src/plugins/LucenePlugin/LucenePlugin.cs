@@ -1,4 +1,4 @@
-using GarryDB.Plugins;
+using GarryDb.Plugins;
 
 namespace LucenePlugin
 {

@@ -29,19 +29,9 @@ csharp_style_implicit_object_creation_when_type_is_apparent = false
 # CA1715: Identifiers should have correct prefix
 dotnet_naming_style.pascal_case_and_prefix_with_I_style.required_prefix =
 
-[*.{cs,vb}]
 dotnet_style_prefer_is_null_check_over_reference_equality_method=false:suggestion
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = true
 
-# Async methods should have "Async" suffix
-dotnet_naming_rule.async_methods_end_in_async.symbols = any_async_methods
-dotnet_naming_rule.async_methods_end_in_async.style = end_in_async
-dotnet_naming_rule.async_methods_end_in_async.severity = warning
-
-dotnet_naming_symbols.any_async_methods.applicable_kinds = method
-dotnet_naming_symbols.any_async_methods.applicable_accessibilities = *
-dotnet_naming_symbols.any_async_methods.required_modifiers = async
-
-dotnet_naming_style.end_in_async.required_suffix = Async
-dotnet_naming_style.end_in_async.capitalization = pascal_case
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = error

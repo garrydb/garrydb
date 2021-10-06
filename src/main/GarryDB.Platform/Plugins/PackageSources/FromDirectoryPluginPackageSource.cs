@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using GarryDB.Platform.Infrastructure;
+using GarryDb.Platform.Infrastructure;
 
-namespace GarryDB.Platform.Plugins.PackageSources
+namespace GarryDb.Platform.Plugins.PackageSources
 {
     /// <summary>
     ///     Finds the plugin packages in a directory on the file system.

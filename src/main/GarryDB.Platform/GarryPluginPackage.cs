@@ -2,20 +2,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-using GarryDB.Platform.Plugins;
-using GarryDB.Plugins;
+using GarryDb.Platform.Plugins;
+using GarryDb.Plugins;
 
 [assembly: StartupOrder(int.MinValue)]
 
-namespace GarryDB.Platform
+namespace GarryDb.Platform
 {
-    internal sealed class GarryPluginPackage : PluginPackage
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class GarryPluginPackage : PluginPackage
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public GarryPluginPackage()
             : base(nameof(GarryPlugin))
         {
         }
 
+        /// <inheritdoc />
         public override IEnumerable<AssemblyName> Assemblies
         {
             get
@@ -24,16 +31,19 @@ namespace GarryDB.Platform
             }
         }
 
+        /// <inheritdoc />
         public override Stream? ResolveAssembly(AssemblyName assemblyName)
         {
             return null;
         }
 
+        /// <inheritdoc />
         public override Stream? ResolveAssemblySymbols(AssemblyName assemblyName)
         {
             return null;
         }
 
+        /// <inheritdoc />
         public override string? ResolveUnmanagedDllPath(string unmanagedDllName)
         {
             return null;

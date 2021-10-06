@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\GarryDb.Platform\GarryDb.Platform.csproj" />
+    <ProjectReference Include="..\..\main\GarryDb.Plugins\GarryDb.Plugins.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Platform\Builders\" />
+  </ItemGroup>
+
+</Project>

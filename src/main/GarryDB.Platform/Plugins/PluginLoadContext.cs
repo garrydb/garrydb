@@ -5,10 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-using GarryDB.Platform.Extensions;
-using GarryDB.Plugins;
+using GarryDb.Platform.Extensions;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     A dedicated <see cref="AssemblyLoadContext" /> for loading assemblies for a <see cref="Plugin" />.

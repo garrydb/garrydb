@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-using GarryDB.Platform.Plugins;
+using GarryDb.Platform.Plugins;
 
 using UIPlugin.Shared;
 

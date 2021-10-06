@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-using GarryDB.Platform.Extensions;
-using GarryDB.Plugins;
+using GarryDb.Platform.Extensions;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     The assembly containing the <see cref="Plugin" />.
@@ -45,7 +45,9 @@ namespace GarryDB.Platform.Plugins
             {
                 AssemblyName assemblyName = assembly.GetName();
 
-                return PluginIdentity.Parse($"{PluginType.Name}:{assemblyName.Version}");
+                string name = PluginType.Name.RemoveSuffix("Plugin", true);
+
+                return PluginIdentity.Parse($"{name}:{assemblyName.Version!.Major}.{assemblyName.Version.Minor}");
             }
         }
     }

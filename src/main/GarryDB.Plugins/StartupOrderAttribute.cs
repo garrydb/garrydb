@@ -1,6 +1,6 @@
 using System;
 
-namespace GarryDB.Plugins
+namespace GarryDb.Plugins
 {
     /// <summary>
     ///     Indicates the startup order of the plugin.

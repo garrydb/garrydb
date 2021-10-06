@@ -4,10 +4,10 @@ using System.Reflection;
 using System.Runtime.Caching;
 using System.Runtime.Loader;
 
-using GarryDB.Platform.Extensions;
-using GarryDB.Platform.Plugins.Extensions;
+using GarryDb.Platform.Extensions;
+using GarryDb.Platform.Plugins.Extensions;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     Provides an <see cref="Assembly" /> to a different <see cref="AssemblyLoadContext" />.

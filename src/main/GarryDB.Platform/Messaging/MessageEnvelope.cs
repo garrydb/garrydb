@@ -1,6 +1,6 @@
-using GarryDB.Platform.Plugins;
+using GarryDb.Platform.Plugins;
 
-namespace GarryDB.Platform.Messaging
+namespace GarryDb.Platform.Messaging
 {
     /// <summary>
     ///     Wrapped around a message and contains metadata about that message.
@@ -50,6 +50,12 @@ namespace GarryDB.Platform.Messaging
         public MessageEnvelope CreateReturnMessage(object message)
         {
             return new MessageEnvelope(Destination.PluginIdentity, new Address(sender, $"{Destination.Handler}/reply"), message);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"{sender} -> {Destination}";
         }
     }
 }

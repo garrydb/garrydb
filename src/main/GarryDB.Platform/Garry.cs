@@ -1,25 +1,29 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-using GarryDB.Platform.Plugins;
-using GarryDB.Plugins;
+using GarryDb.Platform.Plugins;
+using GarryDb.Platform.Plugins.Lifecycles;
 
-namespace GarryDB.Platform
+namespace GarryDb.Platform
 {
     /// <summary>
     ///     The Garry.
     /// </summary>
     public sealed class Garry
     {
+        private readonly PluginLoader pluginLoader;
+        private readonly PluginRegistry pluginRegistry;
         private readonly PluginLifecycle pluginLifecycle;
 
         /// <summary>
         ///     Initializes <see cref="Garry" />.
         /// </summary>
-        /// <param name="pluginLifecycle">The lifecycle of the plugins.</param>
-        public Garry(PluginLifecycle pluginLifecycle)
+        /// <param name="pluginLoader">The plugin loader.</param>
+        /// <param name="pluginRegistry">The plugin registry.</param>
+        /// <param name="pluginLifecycle">The plugin lifecycle.</param>
+        public Garry(PluginLoader pluginLoader, PluginRegistry pluginRegistry, PluginLifecycle pluginLifecycle)
         {
+            this.pluginLoader = pluginLoader;
+            this.pluginRegistry = pluginRegistry;
             this.pluginLifecycle = pluginLifecycle;
         }
 
@@ -28,44 +32,24 @@ namespace GarryDB.Platform
         /// </summary>
         public async Task StartAsync()
         {
-            IReadOnlyList<PluginPackage> pluginPackages = (await pluginLifecycle.FindAsync().ConfigureAwait(false)).ToList();
-            IList<PluginIdentity> pluginIdentities = await LoadAsync(pluginPackages).ToListAsync().ConfigureAwait(false);
-            IDictionary<PluginIdentity, Plugin> plugins = await InstantiateAsync(pluginIdentities).ToDictionaryAsync(x => x.Key, x => x.Value).ConfigureAwait(false);
+            await pluginLoader.LoadAsync().ConfigureAwait(false);
 
-            foreach (PluginIdentity pluginIdentity in plugins.Keys)
+            foreach (PluginIdentity pluginIdentity in pluginRegistry)
             {
                 await pluginLifecycle.ConfigureAsync(pluginIdentity).ConfigureAwait(false);
             }
 
-            await pluginLifecycle.StartAsync().ConfigureAwait(false);
+            foreach (PluginIdentity pluginIdentity in pluginRegistry)
+            {
+                await pluginLifecycle.StartAsync(pluginIdentity).ConfigureAwait(false);
+            }
 
-            GarryPlugin garryPlugin = plugins.Values.OfType<GarryPlugin>().Single();
+            var garryPlugin = (GarryPlugin)pluginRegistry[GarryPlugin.PluginIdentity];
             garryPlugin.WaitUntilShutdownRequested();
 
-            await pluginLifecycle.StopAsync().ConfigureAwait(false);
-        }
-
-        private async IAsyncEnumerable<KeyValuePair<PluginIdentity, Plugin>> InstantiateAsync(IList<PluginIdentity> pluginIdentities)
-        {
-            foreach (PluginIdentity pluginIdentity in pluginIdentities)
+            foreach (PluginIdentity pluginIdentity in pluginRegistry)
             {
-                Plugin? plugin = await pluginLifecycle.InstantiateAsync(pluginIdentity).ConfigureAwait(false);
-                if (plugin != null)
-                {
-                    yield return new KeyValuePair<PluginIdentity, Plugin>(pluginIdentity, plugin);
-                }
-            }
-        }
-
-        private async IAsyncEnumerable<PluginIdentity> LoadAsync(IReadOnlyList<PluginPackage> pluginPackages)
-        {
-            foreach (PluginPackage pluginPackage in pluginPackages)
-            {
-                PluginIdentity? identity = await pluginLifecycle.LoadAsync(pluginPackage).ConfigureAwait(false);
-                if (identity != null)
-                {
-                    yield return identity;
-                }
+                await pluginLifecycle.StopAsync(pluginIdentity).ConfigureAwait(false);
             }
         }
     }

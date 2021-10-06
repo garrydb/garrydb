@@ -1,10 +1,10 @@
-using GarryDB.Platform.Plugins;
-using GarryDB.Plugins;
+using GarryDb.Platform.Plugins;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Actors
+namespace GarryDb.Platform.Actors
 {
     /// <summary>
-    ///     The message that is sent when a <see cref="GarryDB.Plugins.Plugin" /> has been loaded.
+    ///     The message that is sent when a <see cref="GarryDb.Plugins.Plugin" /> has been loaded.
     /// </summary>
     internal sealed class PluginLoaded
     {

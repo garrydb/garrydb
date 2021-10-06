@@ -1,9 +1,9 @@
 using Akka.Actor;
 
-using GarryDB.Platform.Messaging;
-using GarryDB.Plugins;
+using GarryDb.Platform.Messaging;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Actors
+namespace GarryDb.Platform.Actors
 {
     /// <summary>
     ///     The actor responsible for a plugins.

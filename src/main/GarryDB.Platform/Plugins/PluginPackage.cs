@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using GarryDB.Platform.Extensions;
-using GarryDB.Plugins;
+using GarryDb.Platform.Extensions;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     A package containing a <see cref="Plugin" /> and other related files.

@@ -1,35 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-using GarryDB.Plugins;
-
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
-    ///     The lifecycle of the plugins.
+    ///     Manages the lifecycle of the plugins.
     /// </summary>
     public interface PluginLifecycle
     {
-        /// <summary>
-        ///     Finds all the <see cref="PluginPackage" />s.
-        /// </summary>
-        /// <returns>The <see cref="PluginPackage" /> for every plugin.</returns>
-        Task<IEnumerable<PluginPackage>> FindAsync();
-
-        /// <summary>
-        ///     Load the plugin.
-        /// </summary>
-        /// <param name="pluginPackage">The package to register.</param>
-        /// <returns>The identity of the plugin, or <c>null</c> if the package doesn't contain a plugin.</returns>
-        Task<PluginIdentity?> LoadAsync(PluginPackage pluginPackage);
-
-        /// <summary>
-        ///     Instantiate the plugin.
-        /// </summary>
-        /// <param name="pluginIdentity">The identity of the plugin.</param>
-        /// <returns>The plugin, or <c>null</c> if the plugin is not found.</returns>
-        Task<Plugin?> InstantiateAsync(PluginIdentity pluginIdentity);
-
         /// <summary>
         ///     Configure the plugin.
         /// </summary>
@@ -37,13 +14,15 @@ namespace GarryDB.Platform.Plugins
         Task ConfigureAsync(PluginIdentity pluginIdentity);
 
         /// <summary>
-        ///     Starts the plugins.
+        ///     Starts the plugin.
         /// </summary>
-        Task StartAsync();
+        /// <param name="pluginIdentity">The identity of the plugin.</param>
+        Task StartAsync(PluginIdentity pluginIdentity);
 
         /// <summary>
-        ///     Stops the plugins.
+        ///     Stops the plugin.
         /// </summary>
-        Task StopAsync();
+        /// <param name="pluginIdentity">The identity of the plugin.</param>
+        Task StopAsync(PluginIdentity pluginIdentity);
     }
 }

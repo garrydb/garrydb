@@ -1,11 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using GarryDB.Platform.Infrastructure;
+using GarryDb.Platform.Infrastructure;
 
 using SQLite;
 
-namespace GarryDB.Platform.Persistence
+namespace GarryDb.Platform.Persistence
 {
     /// <summary>
     ///     Creates <see cref="SQLiteConnection" />s where the database is stored on disk.

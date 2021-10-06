@@ -2,10 +2,10 @@ using System.Collections.Concurrent;
 
 using Akka.Actor;
 
-using GarryDB.Platform.Messaging;
-using GarryDB.Platform.Plugins;
+using GarryDb.Platform.Messaging;
+using GarryDb.Platform.Plugins;
 
-namespace GarryDB.Platform.Actors
+namespace GarryDb.Platform.Actors
 {
     /// <summary>
     ///     The actor responsible for all plugins.

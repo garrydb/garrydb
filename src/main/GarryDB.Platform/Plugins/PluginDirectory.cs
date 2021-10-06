@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
-using GarryDB.Platform.Infrastructure;
-using GarryDB.Plugins;
+using GarryDb.Platform.Infrastructure;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     Contains information about the directory where a <see cref="Plugin" /> is stored.

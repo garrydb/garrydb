@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 
-using GarryDB.Plugins;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     The identity of a <see cref="Plugin" />.

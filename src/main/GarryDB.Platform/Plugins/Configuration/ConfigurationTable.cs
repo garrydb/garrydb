@@ -1,6 +1,6 @@
 using SQLite;
 
-namespace GarryDB.Platform.Plugins.Configuration
+namespace GarryDb.Platform.Plugins.Configuration
 {
     /// <summary>
     ///     The table with the configuration of plugins.

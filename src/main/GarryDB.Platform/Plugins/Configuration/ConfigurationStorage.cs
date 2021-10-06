@@ -1,15 +1,15 @@
 using System;
 using System.Reflection;
 
-using GarryDB.Platform.Persistence;
-using GarryDB.Platform.Plugins.Extensions;
-using GarryDB.Plugins;
+using GarryDb.Platform.Persistence;
+using GarryDb.Platform.Plugins.Extensions;
+using GarryDb.Plugins;
 
 using SQLite;
 
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace GarryDB.Platform.Plugins.Configuration
+namespace GarryDb.Platform.Plugins.Configuration
 {
     /// <summary>
     ///     Handles the loading and saving of the configuration for plugins.

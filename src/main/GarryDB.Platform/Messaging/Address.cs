@@ -1,8 +1,8 @@
 using System;
 
-using GarryDB.Platform.Plugins;
+using GarryDb.Platform.Plugins;
 
-namespace GarryDB.Platform.Messaging
+namespace GarryDb.Platform.Messaging
 {
     /// <summary>
     ///     The address to a handler of a plugin.

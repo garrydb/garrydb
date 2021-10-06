@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using GarryDB.Platform.Extensions;
+using GarryDb.Platform.Extensions;
 
-namespace GarryDB.Platform.Plugins.PackageSources
+namespace GarryDb.Platform.Plugins.PackageSources
 {
     /// <summary>
     ///     A <see cref="PluginPackageSource" /> where the <see cref="PluginPackage" /> is known at compile time.

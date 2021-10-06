@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-using GarryDB.Platform.Plugins;
-using GarryDB.Plugins;
+using GarryDb.Platform.Plugins;
+using GarryDb.Plugins;
 
-namespace GarryDB.Platform
+namespace GarryDb.Platform
 {
     internal sealed class GarryPlugin : Plugin, IDisposable
     {
@@ -22,6 +22,10 @@ namespace GarryDB.Platform
                 shutdownRequested.Set();
 
                 return Task.CompletedTask;
+            });
+
+            Register("start/reply", (object _) =>
+            {
             });
         }
 

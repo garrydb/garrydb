@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Caching;
 
-namespace GarryDB.Platform.Plugins.Extensions
+namespace GarryDb.Platform.Plugins.Extensions
 {
     internal static class MemoryCacheExtensions
     {

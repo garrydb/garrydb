@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using GarryDB.Platform.Infrastructure;
+using GarryDb.Platform.Infrastructure;
 
 namespace GarryDb.Avalonia.Host
 {

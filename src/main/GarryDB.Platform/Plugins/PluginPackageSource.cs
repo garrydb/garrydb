@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GarryDB.Platform.Plugins
+namespace GarryDb.Platform.Plugins
 {
     /// <summary>
     ///     A source of <see cref="PluginPackage" />s.
