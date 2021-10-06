@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Subjects;
 
 using GarryDb.Plugins;
 
@@ -10,11 +11,12 @@ namespace GarryDb.Platform.Plugins
     /// <summary>
     ///     Contains a list of all loaded <see cref="Plugin" />s.
     /// </summary>
-    public sealed class PluginRegistry : IEnumerable<PluginIdentity>
+    public sealed class PluginRegistry : IEnumerable<PluginIdentity>, IDisposable
     {
         private readonly PluginFactory pluginFactory;
         private readonly IDictionary<PluginIdentity, Plugin> plugins;
         private readonly IDictionary<PluginIdentity, int> startupOrders;
+        private readonly ReplaySubject<PluginIdentity> pluginLoaded;
 
         /// <summary>
         ///     Initializes a new <see cref="PluginRegistry" />.
@@ -26,12 +28,16 @@ namespace GarryDb.Platform.Plugins
             startupOrders = new Dictionary<PluginIdentity, int>();
 
             this.pluginFactory = pluginFactory;
+            pluginLoaded = new ReplaySubject<PluginIdentity>();
         }
 
         /// <summary>
-        ///     Raised when a <see cref="Plugin" /> is loaded.
+        /// 
         /// </summary>
-        public event EventHandler<PluginIdentity> PluginLoaded = delegate { };
+        public IObservable<PluginIdentity> WhenPluginLoaded
+        {
+            get { return pluginLoaded; }
+        }
 
         /// <summary>
         ///     Load the plugin from the <paramref name="pluginAssembly" />.
@@ -44,8 +50,8 @@ namespace GarryDb.Platform.Plugins
 
             plugins[pluginIdentity] = plugin;
             startupOrders[pluginIdentity] = pluginAssembly.StartupOrder;
-            
-            PluginLoaded(this, pluginIdentity);
+
+            pluginLoaded.OnNext(pluginIdentity);
         }
 
         /// <summary>
@@ -66,6 +72,12 @@ namespace GarryDb.Platform.Plugins
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            pluginLoaded.Dispose();
         }
     }
 }

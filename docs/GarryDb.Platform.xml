@@ -776,9 +776,9 @@
             </summary>
             <param name="pluginFactory">The factory for creating plugins.</param>
         </member>
-        <member name="E:GarryDb.Platform.Plugins.PluginRegistry.PluginLoaded">
+        <member name="P:GarryDb.Platform.Plugins.PluginRegistry.WhenPluginLoaded">
             <summary>
-                Raised when a <see cref="T:GarryDb.Plugins.Plugin" /> is loaded.
+            
             </summary>
         </member>
         <member name="M:GarryDb.Platform.Plugins.PluginRegistry.Load(GarryDb.Platform.Plugins.PluginAssembly)">
@@ -794,6 +794,9 @@
             <param name="identity">The identity of the plugin.</param>
         </member>
         <member name="M:GarryDb.Platform.Plugins.PluginRegistry.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Platform.Plugins.PluginRegistry.Dispose">
             <inheritdoc />
         </member>
     </members>

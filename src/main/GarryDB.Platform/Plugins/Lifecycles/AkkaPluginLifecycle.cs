@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Akka.Actor;
 using Akka.Event;
@@ -34,10 +35,10 @@ namespace GarryDb.Platform.Plugins.Lifecycles
 
             PluginRegistry = new PluginRegistry(new AkkaPluginFactory(pluginsActor));
 
-            PluginRegistry.PluginLoaded += (_, identity) =>
+            PluginRegistry.WhenPluginLoaded.Subscribe(identity =>
             {
                 pluginsActor.Tell(new PluginLoaded(identity, PluginRegistry[identity]));
-            };
+            });
 
             MonitorDeadletters();
         }

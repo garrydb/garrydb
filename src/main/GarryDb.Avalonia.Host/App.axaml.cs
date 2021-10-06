@@ -74,8 +74,10 @@ namespace GarryDb.Avalonia.Host
             PluginRegistry pluginRegistry = lifeCycle.PluginRegistry;
             var pluginLoader = new PluginLoader(pluginPackageSources, pluginRegistry);
 
-            pluginRegistry.PluginLoaded += (sender, identity) =>
+            pluginRegistry.WhenPluginLoaded.Subscribe(identity =>
             {
+                Debug.WriteLine($"UI loaded {identity}");
+
                 Dispatcher.UIThread.Post(() =>
                 {
                     Debug.WriteLine($"Loaded {identity}");
@@ -83,7 +85,7 @@ namespace GarryDb.Avalonia.Host
                     splashScreenViewModel.PluginsLoaded++;
                     splashScreenViewModel.CurrentPlugin = identity.Name;
                 });
-            };
+            });
 
             var garry = new Garry(pluginLoader, pluginRegistry, lifeCycle);
 
