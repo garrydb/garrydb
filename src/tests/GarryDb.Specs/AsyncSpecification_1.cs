@@ -11,7 +11,7 @@ namespace GarryDB.Specs
 
         protected virtual Task<TSubject> GivenAsync()
         {
-            return Task.FromResult(default(TSubject));
+            return Task.FromResult(default(TSubject)!);
         }
 
         protected override void When(TSubject subject)

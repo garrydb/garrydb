@@ -9,7 +9,7 @@ namespace GarryDB.Specs
 {
     internal abstract class Specification<TSubject>
     {
-        private TSubject subject;
+        private TSubject? subject;
 
         protected Specification()
         {
@@ -25,7 +25,7 @@ namespace GarryDB.Specs
 
         protected virtual TSubject Given()
         {
-            return default;
+            return default!;
         }
 
         protected virtual void When(TSubject subject)

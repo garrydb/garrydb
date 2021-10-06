@@ -4,8 +4,8 @@ namespace GarryDb.Avalonia.Host.ViewModels
 {
     internal static class DesignData
     {
-        public static readonly MainWindowViewModel MainWindowViewModel;
-        public static readonly FirstViewModel FirstViewModel;
-        public static readonly ChessboardViewModel ChessboardViewModel;
+        public static readonly MainWindowViewModel MainWindowViewModel = null!;
+        public static readonly FirstViewModel FirstViewModel = null!;
+        public static readonly ChessboardViewModel ChessboardViewModel = null!;
     }
 }

@@ -22,7 +22,7 @@ namespace GarryDB.Specs
         /// <param name="asyncMethod">The asynchronous method to execute.</param>
         public static void Run(Action asyncMethod)
         {
-            SynchronizationContext prevCtx = SynchronizationContext.Current;
+            SynchronizationContext prevCtx = SynchronizationContext.Current!;
             try
             {
                 // Establish the new context
@@ -49,7 +49,7 @@ namespace GarryDB.Specs
         /// <param name="asyncMethod">The asynchronous method to execute.</param>
         public static void Run(Func<Task> asyncMethod)
         {
-            SynchronizationContext prevCtx = SynchronizationContext.Current;
+            SynchronizationContext prevCtx = SynchronizationContext.Current!;
             try
             {
                 // Establish the new context
@@ -76,7 +76,7 @@ namespace GarryDB.Specs
         /// <param name="asyncMethod">The asynchronous method to execute.</param>
         public static T Run<T>(Func<Task<T>> asyncMethod)
         {
-            SynchronizationContext prevCtx = SynchronizationContext.Current;
+            SynchronizationContext prevCtx = SynchronizationContext.Current!;
             try
             {
                 // Establish the new context
@@ -100,10 +100,11 @@ namespace GarryDB.Specs
         /// <summary>
         ///     Provides a SynchronizationContext that's single-threaded.
         /// </summary>
-        private sealed class SingleThreadSynchronizationContext : SynchronizationContext
+        private sealed class SingleThreadSynchronizationContext : SynchronizationContext, IDisposable
         {
             /// <summary>The queue of work items.</summary>
-            private readonly BlockingCollection<KeyValuePair<SendOrPostCallback, object>> queue = new();
+            private readonly BlockingCollection<KeyValuePair<SendOrPostCallback, object?>> queue =
+                new BlockingCollection<KeyValuePair<SendOrPostCallback, object?>>();
 
             /// <summary>Whether to track operations operationCount.</summary>
             private readonly bool trackOperations;
@@ -123,15 +124,15 @@ namespace GarryDB.Specs
             /// </summary>
             /// <param name="d">The System.Threading.SendOrPostCallback delegate to call.</param>
             /// <param name="state">The object passed to the delegate.</param>
-            public override void Post(SendOrPostCallback d, object state)
+            public override void Post(SendOrPostCallback d, object? state)
             {
-                queue.Add(new KeyValuePair<SendOrPostCallback, object>(d, state));
+                queue.Add(new KeyValuePair<SendOrPostCallback, object?>(d, state));
             }
 
             /// <summary>
             ///     Not supported.
             /// </summary>
-            public override void Send(SendOrPostCallback d, object state)
+            public override void Send(SendOrPostCallback d, object? state)
             {
                 throw new NotSupportedException("Synchronously sending is not supported.");
             }
@@ -141,7 +142,7 @@ namespace GarryDB.Specs
             /// </summary>
             public void RunOnCurrentThread()
             {
-                foreach (KeyValuePair<SendOrPostCallback, object> workItem in queue.GetConsumingEnumerable())
+                foreach (KeyValuePair<SendOrPostCallback, object?> workItem in queue.GetConsumingEnumerable())
                 {
                     workItem.Key(workItem.Value);
                 }
@@ -175,6 +176,11 @@ namespace GarryDB.Specs
                 {
                     Complete();
                 }
+            }
+
+            public void Dispose()
+            {
+                queue.Dispose();
             }
         }
     }}
