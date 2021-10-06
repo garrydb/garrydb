@@ -8,7 +8,7 @@ using GarryDb.Plugins;
 
 using Address = GarryDb.Platform.Messaging.Address;
 
-namespace GarryDb.Platform.Actors
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
     ///     The plugin context that uses Akka.

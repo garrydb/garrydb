@@ -2,56 +2,47 @@
 using System.Threading.Tasks;
 
 using Akka.Actor;
-using Akka.Event;
 
-using GarryDb.Platform.Actors;
 using GarryDb.Platform.Messaging;
+using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Configuration;
 using GarryDb.Plugins;
 
 using Address = GarryDb.Platform.Messaging.Address;
 
-namespace GarryDb.Platform.Plugins.Lifecycles
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
-    ///     
+    ///     Connects the plugin lifecycle with Akka.NET.
     /// </summary>
-    public sealed class AkkaPluginLifecycle : PluginLifecycle
+    internal sealed class AkkaPluginLifecycle : PluginLifecycle
     {
-        private readonly ActorSystem actorSystem;
         private readonly IActorRef pluginsActor;
         private readonly ConfigurationStorage configurationStorage;
+        private readonly PluginRegistry pluginRegistry;
 
         /// <summary>
-        /// 
+        ///     Initializes a new <see cref="AkkaPluginLifecycle" />.
         /// </summary>
         /// <param name="configurationStorage">The configuration storage.</param>
-        public AkkaPluginLifecycle(ConfigurationStorage configurationStorage)
+        /// <param name="pluginRegistry">The plugin registry.</param>
+        /// <param name="pluginsActor">The <see cref="IActorRef" /> for the plugins.</param>
+        public AkkaPluginLifecycle(ConfigurationStorage configurationStorage, PluginRegistry pluginRegistry, IActorRef pluginsActor)
         {
-            actorSystem = ActorSystem.Create("garry");
-            pluginsActor = actorSystem.ActorOf(PluginsActor.Props(), "plugins");
-
             this.configurationStorage = configurationStorage;
+            this.pluginRegistry = pluginRegistry;
+            this.pluginsActor = pluginsActor;
 
-            PluginRegistry = new PluginRegistry(new AkkaPluginFactory(pluginsActor));
-
-            PluginRegistry.WhenPluginLoaded.Subscribe(identity =>
+            this.pluginRegistry.WhenPluginLoaded.Subscribe(identity =>
             {
-                pluginsActor.Tell(new PluginLoaded(identity, PluginRegistry[identity]));
+                pluginsActor.Tell(new PluginLoaded(identity, this.pluginRegistry[identity]));
             });
-
-            MonitorDeadletters();
         }
-
-        /// <summary>
-        ///     Gets the <see cref="Plugins.PluginRegistry" />.
-        /// </summary>
-        public PluginRegistry PluginRegistry { get; }
 
         /// <inheritdoc />
         public Task ConfigureAsync(PluginIdentity pluginIdentity)
         {
-            Plugin plugin = PluginRegistry[pluginIdentity];
+            Plugin plugin = pluginRegistry[pluginIdentity];
             object? configuration = configurationStorage.FindConfiguration(pluginIdentity, plugin);
 
             if (configuration == null)
@@ -81,13 +72,6 @@ namespace GarryDb.Platform.Plugins.Lifecycles
             var messageEnvelope = new MessageEnvelope(GarryPlugin.PluginIdentity, destination);
 
             return pluginsActor.Ask(messageEnvelope);
-        }
-
-        private void MonitorDeadletters()
-        {
-            var deadletterWatchMonitorProps = Props.Create(() => new DeadletterMonitor());
-            IActorRef deadletterWatchActorRef = actorSystem.ActorOf(deadletterWatchMonitorProps, "DeadLetterMonitoringActor");
-            actorSystem.EventStream.Subscribe(deadletterWatchActorRef, typeof(DeadLetter));
         }
     }
 }

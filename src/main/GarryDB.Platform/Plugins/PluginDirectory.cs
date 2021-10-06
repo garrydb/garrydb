@@ -14,7 +14,7 @@ namespace GarryDb.Platform.Plugins
     /// <summary>
     ///     Contains information about the directory where a <see cref="Plugin" /> is stored.
     /// </summary>
-    public sealed class PluginDirectory : PluginPackage
+    internal sealed class PluginDirectory : PluginPackage
     {
         private readonly FileSystem fileSystem;
         private readonly AssemblyDependencyResolver resolver;

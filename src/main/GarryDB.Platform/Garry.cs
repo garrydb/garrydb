@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 
 using GarryDb.Platform.Plugins;
-using GarryDb.Platform.Plugins.Lifecycles;
 
 namespace GarryDb.Platform
 {

@@ -13,7 +13,7 @@ namespace GarryDb.Platform.Plugins
     /// <summary>
     ///     A dedicated <see cref="AssemblyLoadContext" /> for loading assemblies for a <see cref="Plugin" />.
     /// </summary>
-    public sealed class PluginLoadContext : AssemblyLoadContext
+    internal sealed class PluginLoadContext : AssemblyLoadContext
     {
         private readonly IEnumerable<AssemblyProvider> providers;
         private readonly PluginPackage pluginPackage;

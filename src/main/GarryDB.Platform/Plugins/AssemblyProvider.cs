@@ -12,7 +12,7 @@ namespace GarryDb.Platform.Plugins
     /// <summary>
     ///     Provides an <see cref="Assembly" /> to a different <see cref="AssemblyLoadContext" />.
     /// </summary>
-    public sealed class AssemblyProvider : IDisposable
+    internal sealed class AssemblyProvider : IDisposable
     {
         private readonly MemoryCache cache;
         private readonly AssemblyLoadContext assemblyLoadContext;

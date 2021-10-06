@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -15,11 +16,13 @@ using GarryDb.Avalonia.Host.ViewModels;
 using GarryDb.Avalonia.Host.Views;
 
 using GarryDb.Platform;
+using GarryDb.Platform.Akka;
 using GarryDb.Platform.Persistence;
 using GarryDb.Platform.Plugins;
 using GarryDb.Platform.Plugins.Configuration;
-using GarryDb.Platform.Plugins.Lifecycles;
 using GarryDb.Platform.Plugins.PackageSources;
+
+using ReactiveUI;
 
 using UIPlugin.Shared;
 
@@ -49,18 +52,15 @@ namespace GarryDb.Avalonia.Host
                 
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-                Task.Run(() => TestAsync(splashScreenViewModel, desktop));
+                Task.Run(() => StartGarryAsync(splashScreenViewModel, desktop));
             }
 
             base.OnFrameworkInitializationCompleted();
         }
 
-        private async Task TestAsync(SplashScreenViewModel splashScreenViewModel, IClassicDesktopStyleApplicationLifetime desktop)
+        private async Task StartGarryAsync(SplashScreenViewModel splashScreenViewModel, IClassicDesktopStyleApplicationLifetime desktop)
         {
             var fileSystem = new WindowsFileSystem();
-            string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
-            var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
-
             var pluginPackageSources = new List<PluginPackageSource>
             {
                 new FromDirectoryPluginPackageSource(fileSystem, "C:\\Projects\\GarryDB\\Plugins"),
@@ -68,26 +68,25 @@ namespace GarryDb.Avalonia.Host
                 new HardCodedPluginPackageSource(new GarryPluginPackage())
             };
 
-            await Dispatcher.UIThread.InvokeAsync(() => splashScreenViewModel.Total = pluginPackageSources.SelectMany(x => x.PluginPackages).Count()).ConfigureAwait(false);
+            splashScreenViewModel.Total = pluginPackageSources.SelectMany(x => x.PluginPackages).Count();
 
-            var lifeCycle = new AkkaPluginLifecycle(new ConfigurationStorage(connectionFactory));
-            PluginRegistry pluginRegistry = lifeCycle.PluginRegistry;
-            var pluginLoader = new PluginLoader(pluginPackageSources, pluginRegistry);
+            string databasePath = Path.Combine(Environment.CurrentDirectory, "data");
+            var connectionFactory = new PersistentSqLiteConnectionFactory(fileSystem, databasePath);
 
-            pluginRegistry.WhenPluginLoaded.Subscribe(identity =>
+            var akkaInitializer = new AkkaInitializer(new ConfigurationStorage(connectionFactory));
+
+            PluginRegistry pluginRegistry = akkaInitializer.PluginRegistry;
+
+            pluginRegistry.WhenPluginLoaded.ObserveOn(RxApp.MainThreadScheduler).Subscribe(identity =>
             {
                 Debug.WriteLine($"UI loaded {identity}");
 
-                Dispatcher.UIThread.Post(() =>
-                {
-                    Debug.WriteLine($"Loaded {identity}");
-
-                    splashScreenViewModel.PluginsLoaded++;
-                    splashScreenViewModel.CurrentPlugin = identity.Name;
-                });
+                splashScreenViewModel.PluginsLoaded++;
+                splashScreenViewModel.CurrentPlugin = identity.Name;
             });
 
-            var garry = new Garry(pluginLoader, pluginRegistry, lifeCycle);
+            var pluginLoader = new PluginLoader(pluginPackageSources, pluginRegistry);
+            var garry = new Garry(pluginLoader, pluginRegistry, akkaInitializer.PluginLifecycle);
 
             await garry.StartAsync().ConfigureAwait(false);
             await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown()).ConfigureAwait(false);
@@ -97,11 +96,14 @@ namespace GarryDb.Avalonia.Host
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
-                desktop.MainWindow.Show();
-                desktop.MainWindow.Activate();
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
+                    desktop.MainWindow.Show();
+                    desktop.MainWindow.Activate();
 
-                splashScreen!.Close();
+                    splashScreen!.Close();
+                });
             }
         }
    

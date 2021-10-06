@@ -5,7 +5,7 @@ using Akka.Actor;
 using GarryDb.Platform.Plugins;
 using GarryDb.Plugins;
 
-namespace GarryDb.Platform.Actors
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
     ///     Creates a <see cref="Plugin" /> to use with Akka.

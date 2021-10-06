@@ -3,7 +3,7 @@ using Akka.Actor;
 using GarryDb.Platform.Messaging;
 using GarryDb.Plugins;
 
-namespace GarryDb.Platform.Actors
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
     ///     The actor responsible for a plugins.
@@ -35,7 +35,7 @@ namespace GarryDb.Platform.Actors
         /// <returns>The configuration object for creating <see cref="PluginActor" />.</returns>
         public static Props Props(Plugin plugin)
         {
-            return Akka.Actor.Props.Create(() => new PluginActor(plugin));
+            return global::Akka.Actor.Props.Create(() => new PluginActor(plugin));
         }
     }
 }

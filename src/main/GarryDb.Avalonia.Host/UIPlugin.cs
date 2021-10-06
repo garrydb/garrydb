@@ -1,9 +1,7 @@
 using System;
-using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
 
 using GarryDb.Avalonia.Host.Views;
 
@@ -26,7 +24,7 @@ namespace GarryDb.Avalonia.Host
             get { return (App)Application.Current; }
         }
 
-        protected override Task StartAsync()
+        protected override void Start()
         {
             Window.WindowClosedEvent.Raised.Subscribe(tuple =>
             {
@@ -36,7 +34,7 @@ namespace GarryDb.Avalonia.Host
                 }
             });
 
-            return Dispatcher.UIThread.InvokeAsync(() => CurrentApp.OnStarted());
+            CurrentApp.OnStarted();
         }
     }
 }

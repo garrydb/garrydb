@@ -4,97 +4,140 @@
         <name>GarryDb.Platform</name>
     </assembly>
     <members>
-        <member name="T:GarryDb.Platform.Actors.AkkaPluginContext">
+        <member name="T:GarryDb.Platform.Akka.AkkaInitializer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GarryDb.Platform.Akka.AkkaInitializer.#ctor(GarryDb.Platform.Plugins.Configuration.ConfigurationStorage)">
+            <summary>
+            
+            </summary>
+            <param name="configurationStorage"></param>
+        </member>
+        <member name="P:GarryDb.Platform.Akka.AkkaInitializer.PluginRegistry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GarryDb.Platform.Akka.AkkaInitializer.PluginLifecycle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:GarryDb.Platform.Akka.AkkaPluginContext">
             <summary>
                 The plugin context that uses Akka.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDb.Platform.Plugins.PluginIdentity)">
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginContext.#ctor(Akka.Actor.IActorRef,GarryDb.Platform.Plugins.PluginIdentity)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.AkkaPluginContext" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.AkkaPluginContext" />.
             </summary>
             <param name="pluginsActor">The reference to the plugins actor.</param>
             <param name="pluginIdentity">The identity of the plugin.</param>
         </member>
-        <member name="M:GarryDb.Platform.Actors.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginContext.SendAsync(System.String,System.String,System.Object)">
             <inheritdoc />
         </member>
-        <member name="T:GarryDb.Platform.Actors.AkkaPluginFactory">
+        <member name="T:GarryDb.Platform.Akka.AkkaPluginFactory">
             <summary>
                 Creates a <see cref="T:GarryDb.Plugins.Plugin" /> to use with Akka.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.AkkaPluginFactory.#ctor(Akka.Actor.IActorRef)">
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginFactory.#ctor(Akka.Actor.IActorRef)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.AkkaPluginFactory" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.AkkaPluginFactory" />.
             </summary>
             <param name="pluginsActor">The actor reference to the plugins actor.</param>
         </member>
-        <member name="T:GarryDb.Platform.Actors.DeadletterMonitor">
+        <member name="T:GarryDb.Platform.Akka.AkkaPluginLifecycle">
+            <summary>
+                Connects the plugin lifecycle with Akka.NET.
+            </summary>
+        </member>
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginLifecycle.#ctor(GarryDb.Platform.Plugins.Configuration.ConfigurationStorage,GarryDb.Platform.Plugins.PluginRegistry,Akka.Actor.IActorRef)">
+            <summary>
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.AkkaPluginLifecycle" />.
+            </summary>
+            <param name="configurationStorage">The configuration storage.</param>
+            <param name="pluginRegistry">The plugin registry.</param>
+            <param name="pluginsActor">The <see cref="T:Akka.Actor.IActorRef" /> for the plugins.</param>
+        </member>
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginLifecycle.ConfigureAsync(GarryDb.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginLifecycle.StartAsync(GarryDb.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="M:GarryDb.Platform.Akka.AkkaPluginLifecycle.StopAsync(GarryDb.Platform.Plugins.PluginIdentity)">
+            <inheritdoc />
+        </member>
+        <member name="T:GarryDb.Platform.Akka.DeadletterMonitor">
             <summary>
                 Monitors deadletters in the Akka.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.DeadletterMonitor.#ctor">
+        <member name="M:GarryDb.Platform.Akka.DeadletterMonitor.#ctor">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.DeadletterMonitor" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.DeadletterMonitor" />.
             </summary>
         </member>
-        <member name="T:GarryDb.Platform.Actors.PluginActor">
+        <member name="T:GarryDb.Platform.Akka.PluginActor">
             <summary>
                 The actor responsible for a plugins.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.PluginActor.#ctor(GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDb.Platform.Akka.PluginActor.#ctor(GarryDb.Plugins.Plugin)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.PluginActor" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.PluginActor" />.
             </summary>
             <param name="plugin">The plugin.</param>
         </member>
-        <member name="M:GarryDb.Platform.Actors.PluginActor.Props(GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDb.Platform.Akka.PluginActor.Props(GarryDb.Plugins.Plugin)">
             <summary>
-                Create the <see cref="T:GarryDb.Platform.Actors.PluginActor" />.
+                Create the <see cref="T:GarryDb.Platform.Akka.PluginActor" />.
             </summary>
             <param name="plugin">The plugin.</param>
-            <returns>The configuration object for creating <see cref="T:GarryDb.Platform.Actors.PluginActor" />.</returns>
+            <returns>The configuration object for creating <see cref="T:GarryDb.Platform.Akka.PluginActor" />.</returns>
         </member>
-        <member name="T:GarryDb.Platform.Actors.PluginLoaded">
+        <member name="T:GarryDb.Platform.Akka.PluginLoaded">
             <summary>
                 The message that is sent when a <see cref="T:GarryDb.Plugins.Plugin" /> has been loaded.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.PluginLoaded.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
+        <member name="M:GarryDb.Platform.Akka.PluginLoaded.#ctor(GarryDb.Platform.Plugins.PluginIdentity,GarryDb.Plugins.Plugin)">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.PluginLoaded" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.PluginLoaded" />.
             </summary>
             <param name="pluginIdentity">The identity of the plugin.</param>
             <param name="plugin">The plugin.</param>
         </member>
-        <member name="P:GarryDb.Platform.Actors.PluginLoaded.PluginIdentity">
+        <member name="P:GarryDb.Platform.Akka.PluginLoaded.PluginIdentity">
             <summary>
                 Gets the identity of the plugin.
             </summary>
         </member>
-        <member name="P:GarryDb.Platform.Actors.PluginLoaded.Plugin">
+        <member name="P:GarryDb.Platform.Akka.PluginLoaded.Plugin">
             <summary>
                 Gets the plugin.
             </summary>
         </member>
-        <member name="T:GarryDb.Platform.Actors.PluginsActor">
+        <member name="T:GarryDb.Platform.Akka.PluginsActor">
             <summary>
                 The actor responsible for all plugins.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.PluginsActor.#ctor">
+        <member name="M:GarryDb.Platform.Akka.PluginsActor.#ctor">
             <summary>
-                Initializes a new <see cref="T:GarryDb.Platform.Actors.PluginsActor" />.
+                Initializes a new <see cref="T:GarryDb.Platform.Akka.PluginsActor" />.
             </summary>
         </member>
-        <member name="M:GarryDb.Platform.Actors.PluginsActor.Props">
+        <member name="M:GarryDb.Platform.Akka.PluginsActor.Props">
             <summary>
-                Create the <see cref="T:GarryDb.Platform.Actors.PluginsActor" />.
+                Create the <see cref="T:GarryDb.Platform.Akka.PluginsActor" />.
             </summary>
-            <returns>The configuration object for creating <see cref="T:GarryDb.Platform.Actors.PluginsActor" />.</returns>
+            <returns>The configuration object for creating <see cref="T:GarryDb.Platform.Akka.PluginsActor" />.</returns>
         </member>
         <member name="T:GarryDb.Platform.Extensions.AssemblyNameExtensions">
             <summary>
@@ -455,31 +498,6 @@
                 The type of the configuration, or <c>null</c> if the plugin
                 is not a <see cref="T:GarryDb.Plugins.ConfigurablePlugin`1" />.
             </returns>
-        </member>
-        <member name="T:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle">
-            <summary>
-                
-            </summary>
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.#ctor(GarryDb.Platform.Plugins.Configuration.ConfigurationStorage)">
-            <summary>
-            
-            </summary>
-            <param name="configurationStorage">The configuration storage.</param>
-        </member>
-        <member name="P:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.PluginRegistry">
-            <summary>
-                Gets the <see cref="T:GarryDb.Platform.Plugins.PluginRegistry" />.
-            </summary>
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.ConfigureAsync(GarryDb.Platform.Plugins.PluginIdentity)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.StartAsync(GarryDb.Platform.Plugins.PluginIdentity)">
-            <inheritdoc />
-        </member>
-        <member name="M:GarryDb.Platform.Plugins.Lifecycles.AkkaPluginLifecycle.StopAsync(GarryDb.Platform.Plugins.PluginIdentity)">
-            <inheritdoc />
         </member>
         <member name="T:GarryDb.Platform.Plugins.PackageSources.FromDirectoryPluginPackageSource">
             <summary>

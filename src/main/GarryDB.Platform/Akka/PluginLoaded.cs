@@ -1,7 +1,7 @@
 using GarryDb.Platform.Plugins;
 using GarryDb.Plugins;
 
-namespace GarryDb.Platform.Actors
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
     ///     The message that is sent when a <see cref="GarryDb.Plugins.Plugin" /> has been loaded.

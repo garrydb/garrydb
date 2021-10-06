@@ -3,7 +3,7 @@ using Akka.Event;
 
 using Debug = System.Diagnostics.Debug;
 
-namespace GarryDb.Platform.Actors
+namespace GarryDb.Platform.Akka
 {
     /// <summary>
     ///     Monitors deadletters in the Akka.
